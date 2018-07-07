@@ -7,15 +7,21 @@
 		xmlns:data="clr-namespace:APKViewer;assembly=APKViewer"
         mc:Ignorable="d"
         Title="APKViewer" 
-		Height="450" Width="800">
+		Height="450" Width="450"
+		WindowStartupLocation="CenterScreen">
 
 	<Window.DataContext>
 		<data:APKViewModel />
 	</Window.DataContext>
-	
-	<Grid>
+
+	<Grid
+		Background="Transparent"
+		AllowDrop="True"
+		DragDrop.Drop="FileDrop">
 		<TextBox
-			Text="{Binding Path=rawTest, Mode=OneWay}" />
+			Background="Transparent"
+			Text="{Binding Path=rawTest, Mode=OneWay}"
+			Margin="0,0,0,50" />
 	</Grid>
-	
+
 </Window>

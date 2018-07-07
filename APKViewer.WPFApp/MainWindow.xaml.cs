@@ -17,10 +17,32 @@ namespace APKViewer.WPFApp
 {
 	public partial class MainWindow : Window
 	{
+		private APKViewModel bindedViewModel;
+
 		public MainWindow()
 		{
 			InitializeComponent();
-			((APKViewModel)DataContext).SetDecoder(new WindowsAPKDecoder());
+			bindedViewModel = (APKViewModel)DataContext;
+			bindedViewModel.SetDecoder(new WindowsAPKDecoder());
+		}
+
+		private void FileDrop(object sender, DragEventArgs e)
+		{
+			Console.WriteLine("Test file dropped.");
+			if(e.Data.GetDataPresent(DataFormats.FileDrop))
+			{
+				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+				if(files.Length>0)
+				{
+					foreach (string fileName in files)
+					{
+						if (fileName.EndsWith("apk"))
+						{
+							bindedViewModel.SetNewFile(new Uri(fileName));
+						}
+					}
+				}
+			}
 		}
 	}
 }

@@ -22,7 +22,7 @@ namespace APKViewer
 
 		public APKViewModel()
 		{
-			Test();
+			//Test();
 		}
 
 		public void SetDecoder(IApkDecoder newDecoder)
@@ -30,7 +30,13 @@ namespace APKViewer
 			apkDecoder = newDecoder;
 		}
 
-
+		public void SetNewFile(Uri newFileUri)
+		{
+			FileLocation = newFileUri;
+			apkDecoder.SetApkFilePath(newFileUri);
+			apkDecoder.Decode();
+			targetAPKData = apkDecoder.GetDataModel();
+		}
 
 		private async Task Test()
 		{
