@@ -28,7 +28,7 @@
 				Text="{Binding AppName, Mode=OneWay}"/>
 			<TextBox
 				Style="{StaticResource Textbox_FieldDefault}" 
-				Text="{Binding AppName, Mode=OneWay}"/>
+				Text="{Binding AppVersion, Mode=OneWay}"/>
 			<TextBox 
 				Style="{StaticResource Textbox_FieldDefault}" 
 				Text="{Binding AppName, Mode=OneWay}"/>

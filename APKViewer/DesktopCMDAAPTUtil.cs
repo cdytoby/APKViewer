@@ -12,8 +12,13 @@ namespace APKViewer
 		private const string KEY_PACKAGEGROUP = "package";
 		private const string KEY_MINSDK = "sdkVersion";
 		private const string KEY_TARGETSDK = "targetSdkVersion";
-		private const string KEY_PERMISSION = "uses-permission";
 		private const string KEY_APPLABEL = "application-label";
+		private const string KEY_PERMISSION = "uses-permission";
+
+		private const string SUBKEY_NAME = "name";
+		private const string SUBKEY_VERSIONCODE = "versionCode";
+		private const string SUBKEY_VERSIONNAME = "versionName";
+		private const string SUBKEY_BUILDPLATFORMNAME = "platformBuildVersionName";
 
 		public static void ReadBadging(APKDataModel targetModel, string badgingResult)
 		{
@@ -34,6 +39,12 @@ namespace APKViewer
 
 				switch (key)
 				{
+					case KEY_PACKAGEGROUP:
+						Dictionary<string, string> packageDict = SplitSubDict(value);
+						targetModel.PackageName = packageDict[SUBKEY_NAME];
+						targetModel.VersionCode = int.Parse(packageDict[SUBKEY_VERSIONCODE]);
+						targetModel.VersionString = packageDict[SUBKEY_VERSIONNAME];
+						break;
 					case KEY_MINSDK:
 						targetModel.MinSDKCode = int.Parse(value.Trim('\''));
 						break;
@@ -63,6 +74,21 @@ namespace APKViewer
 			}
 
 			return (lineText, string.Empty);
+		}
+
+		private static Dictionary<string, string> SplitSubDict(string lineValueFull)
+		{
+			Dictionary<string, string> result = new Dictionary<string, string>();
+
+			lineValueFull = lineValueFull.Trim();
+			string[] splitFieldResult = lineValueFull.Split(' ');
+			foreach (string field in splitFieldResult)
+			{
+				string[] fieldKeyValue = field.Split(new string[] { "='" }, 2, StringSplitOptions.RemoveEmptyEntries);
+				result.Add(fieldKeyValue[0], fieldKeyValue[1].Trim('\''));
+			}
+
+			return result;
 		}
 	}
 }

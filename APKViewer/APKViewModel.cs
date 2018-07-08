@@ -14,8 +14,7 @@ namespace APKViewer
 		public Uri FileLocation { get; protected set; }
 
 		public string AppName => targetAPKData?.AppName;
-		public string AppVersion => targetAPKData?.VersionString;
-		public string AppVersionCode => targetAPKData?.VersionCode.ToString();
+		public string AppVersion => targetAPKData?.VersionString +" "+ targetAPKData?.VersionCode;
 		public string PackageName => targetAPKData?.PackageName;
 		public string minSDK => targetAPKData?.MinSDKCode.ToString();
 		public string maxSDK => targetAPKData?.MaxSDKCode.ToString();
