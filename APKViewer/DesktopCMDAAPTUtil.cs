@@ -12,10 +12,13 @@ namespace APKViewer
 		private const string KEY_PACKAGEGROUP = "package";
 		private const string KEY_MINSDK = "sdkVersion";
 		private const string KEY_TARGETSDK = "targetSdkVersion";
+		private const string KEY_APP = "application";
 		private const string KEY_APPLABEL = "application-label";
 		private const string KEY_PERMISSION = "uses-permission";
 
 		private const string SUBKEY_NAME = "name";
+		private const string SUBKEY_LABEL = "label";
+		private const string SUBKEY_ICON = "icon";
 		private const string SUBKEY_VERSIONCODE = "versionCode";
 		private const string SUBKEY_VERSIONNAME = "versionName";
 		private const string SUBKEY_BUILDPLATFORMNAME = "platformBuildVersionName";
@@ -34,8 +37,8 @@ namespace APKViewer
 				string key = splitResult.Item1;
 				string value = splitResult.Item2;
 
-				Console.WriteLine("key=" + key);
-				Console.WriteLine("value=" + value);
+				//Console.WriteLine("key=" + key);
+				//Console.WriteLine("value=" + value);
 
 				switch (key)
 				{
@@ -54,8 +57,13 @@ namespace APKViewer
 					case KEY_APPLABEL:
 						targetModel.AppName = value.Trim('\'');
 						break;
+					case KEY_APP:
+						Dictionary<string, string> labelDict = SplitSubDict(value);
+						targetModel.defaultIconZipEntry = labelDict[SUBKEY_ICON];
+						break;
 					case KEY_PERMISSION:
-						targetModel.Permissions.Add(value);
+						Dictionary<string, string> permissionDict = SplitSubDict(value);
+						targetModel.Permissions.Add(permissionDict[SUBKEY_NAME]);
 						break;
 					default:
 						//Console.WriteLine("Key not processed, key=" + key);
@@ -81,10 +89,10 @@ namespace APKViewer
 			Dictionary<string, string> result = new Dictionary<string, string>();
 
 			lineValueFull = lineValueFull.Trim();
-			string[] splitFieldResult = lineValueFull.Split(' ');
+			string[] splitFieldResult = lineValueFull.Split(new string[] { "\' " }, StringSplitOptions.RemoveEmptyEntries);
 			foreach (string field in splitFieldResult)
 			{
-				string[] fieldKeyValue = field.Split(new string[] { "='" }, 2, StringSplitOptions.RemoveEmptyEntries);
+				string[] fieldKeyValue = field.Split(new char[] { SPLITTER_SUBKEYVALUE }, 2, StringSplitOptions.RemoveEmptyEntries);
 				result.Add(fieldKeyValue[0], fieldKeyValue[1].Trim('\''));
 			}
 

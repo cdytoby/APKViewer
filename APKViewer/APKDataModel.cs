@@ -14,6 +14,8 @@ namespace APKViewer
 		public int MaxSDKCode { get; set; }
 		public List<string> Permissions { get; set; }
 		public string SHA1Hash { get; set; }
+		public string defaultIconZipEntry { get; set; }
+		public byte[] defaultIconContent { get; set; }
 
 		public string RawDumpBadging { get; set; }
 	}

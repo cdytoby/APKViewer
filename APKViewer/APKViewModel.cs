@@ -18,6 +18,8 @@ namespace APKViewer
 		public string PackageName => targetAPKData?.PackageName;
 		public string minSDK => targetAPKData?.MinSDKCode.ToString();
 		public string maxSDK => targetAPKData?.MaxSDKCode.ToString();
+		public string permissions => StringGroupToString(targetAPKData?.Permissions);
+		public byte[] iconPngByte => targetAPKData?.defaultIconContent;
 
 		public string rawTest => targetAPKData?.RawDumpBadging;
 
@@ -37,6 +39,18 @@ namespace APKViewer
 			apkDecoder.SetApkFilePath(newFileUri);
 			apkDecoder.Decode();
 			targetAPKData = apkDecoder.GetDataModel();
+		}
+
+		private string StringGroupToString(IEnumerable<string> stringIEnum)
+		{
+			if (stringIEnum == null)
+				return string.Empty;
+			string result = string.Empty;
+			foreach(string line in stringIEnum)
+			{
+				result += (line + Environment.NewLine);
+			}
+			return result;
 		}
 
 		private async Task Test()
