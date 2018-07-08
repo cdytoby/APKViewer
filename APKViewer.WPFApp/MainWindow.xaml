@@ -7,8 +7,12 @@
 		xmlns:data="clr-namespace:APKViewer;assembly=APKViewer"
         mc:Ignorable="d"
         Title="APKViewer" 
-		Height="450" Width="450"
+		Height="600" Width="450"
 		WindowStartupLocation="CenterScreen">
+
+	<Window.Resources>
+		<ResourceDictionary Source="DefaultStyle.xaml"/>
+	</Window.Resources>
 
 	<Window.DataContext>
 		<data:APKViewModel />
@@ -18,10 +22,29 @@
 		Background="Transparent"
 		AllowDrop="True"
 		DragDrop.Drop="FileDrop">
+		<StackPanel>
+			<TextBox 
+				Style="{StaticResource Textbox_FieldDefault}" 
+				Text="{Binding AppName, Mode=OneWay}"/>
+			<TextBox
+				Style="{StaticResource Textbox_FieldDefault}" 
+				Text="{Binding AppName, Mode=OneWay}"/>
+			<TextBox 
+				Style="{StaticResource Textbox_FieldDefault}" 
+				Text="{Binding AppName, Mode=OneWay}"/>
+			<TextBox 
+				Style="{StaticResource Textbox_FieldDefault}" 
+				Text="{Binding minSDK, Mode=OneWay}"/>
+			<TextBox 
+				Style="{StaticResource Textbox_FieldDefault}" 
+				Text="{Binding maxSDK, Mode=OneWay}"/>
+
+		</StackPanel>
+		
 		<TextBox
 			Background="Transparent"
-			Text="{Binding Path=rawTest, Mode=OneWay}"
-			Margin="0,0,0,50" />
+			Text="{Binding Path=rawTest, Mode=OneWay}" 
+			Margin="0,198,0,50" />
 	</Grid>
 
 </Window>

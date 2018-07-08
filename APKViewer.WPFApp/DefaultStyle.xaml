@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:APKViewer.WPFApp">
+	<Style
+		x:Key="Textbox_FieldDefault"
+		TargetType="TextBox">
+		<Setter 
+			Property="MinHeight"
+			Value="25" />
+		<Setter 
+			Property="VerticalContentAlignment"
+			Value="Center"/>
+		<Setter
+			Property="IsReadOnly"
+			Value="True"/>
+	</Style>
+</ResourceDictionary>

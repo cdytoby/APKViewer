@@ -10,6 +10,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APKViewer.WPFApp", "APKView
 		{2616D812-C1DC-40FA-940C-E07FA830F578} = {2616D812-C1DC-40FA-940C-E07FA830F578}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APKViewer.CoreConsoleTestDraft", "APKViewer.CoreConsoleTestDraft\APKViewer.CoreConsoleTestDraft.csproj", "{3E81D9EE-5C70-41CA-9010-2EF1E61D019C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2616D812-C1DC-40FA-940C-E07FA830F578} = {2616D812-C1DC-40FA-940C-E07FA830F578}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +29,10 @@ Global
 		{04702EE1-CE66-44C6-A632-B3000C0BF0B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04702EE1-CE66-44C6-A632-B3000C0BF0B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04702EE1-CE66-44C6-A632-B3000C0BF0B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E81D9EE-5C70-41CA-9010-2EF1E61D019C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E81D9EE-5C70-41CA-9010-2EF1E61D019C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E81D9EE-5C70-41CA-9010-2EF1E61D019C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E81D9EE-5C70-41CA-9010-2EF1E61D019C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

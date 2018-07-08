@@ -38,11 +38,15 @@ namespace APKViewer.WPFApp
 			cmd.StartInfo.UseShellExecute = false;
 			Console.WriteLine("Decode Test start 2.");
 			cmd.Start();
-			cmd.WaitForExit();
+			cmd.WaitForExit(200);
 			Console.WriteLine("Decode Test start 3.");
 			dataModel = new APKDataModel();
-			dataModel.rawDumpBadging = cmd.StandardOutput.ReadToEnd();
-			Console.WriteLine("Decode Test finished. result="+dataModel.rawDumpBadging);
+			dataModel.RawDumpBadging = cmd.StandardOutput.ReadToEnd();
+			DesktopCMDAAPTUtil.ReadBadging(dataModel, dataModel.RawDumpBadging);
+			Console.WriteLine("Decode Test finished.");
+
+			if (!cmd.HasExited)
+				cmd.Kill();
 
 			decodeFinished?.Invoke();
 		}

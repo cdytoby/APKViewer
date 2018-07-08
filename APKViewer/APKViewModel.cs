@@ -13,12 +13,14 @@ namespace APKViewer
 		public APKDataModel targetAPKData { get; protected set; }
 		public Uri FileLocation { get; protected set; }
 
-		public string AppName => targetAPKData.AppName;
-		public string AppVersion => targetAPKData.VersionString;
-		public int AppVersionCode => targetAPKData.VersionCode;
-		public string PackageName => targetAPKData.PackageName;
+		public string AppName => targetAPKData?.AppName;
+		public string AppVersion => targetAPKData?.VersionString;
+		public string AppVersionCode => targetAPKData?.VersionCode.ToString();
+		public string PackageName => targetAPKData?.PackageName;
+		public string minSDK => targetAPKData?.MinSDKCode.ToString();
+		public string maxSDK => targetAPKData?.MaxSDKCode.ToString();
 
-		public string rawTest => targetAPKData?.rawDumpBadging;
+		public string rawTest => targetAPKData?.RawDumpBadging;
 
 		public APKViewModel()
 		{
