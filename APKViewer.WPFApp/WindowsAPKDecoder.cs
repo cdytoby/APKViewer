@@ -31,13 +31,13 @@ namespace APKViewer.WPFApp
 			//C:\CLIProgram\Android\AndroidSDK\build-tools\27.0.0\aapt.exe
 			//./aapt d badging "D:\Android\YahooWeatherProvider.apk"
 
-			Console.WriteLine("Decode Test start.");
+			Console.WriteLine("WindowsAPKDecoder.Decode() decode start.");
 			dataModel = new APKDataModel();
 
 			Decode_Badging();
 			Decode_Icon();
 
-			Console.WriteLine("Decode Test finished.");
+			Console.WriteLine("WindowsAPKDecoder.Decode() decode finish.");
 			decodeFinished?.Invoke();
 		}
 
@@ -50,10 +50,8 @@ namespace APKViewer.WPFApp
 			cmd.StartInfo.RedirectStandardOutput = true;
 			cmd.StartInfo.CreateNoWindow = true;
 			cmd.StartInfo.UseShellExecute = false;
-			Console.WriteLine("Decode_Badging Test start 2.");
 			cmd.Start();
 			cmd.WaitForExit(200);
-			Console.WriteLine("Decode_Badging Test start 3.");
 			dataModel.RawDumpBadging = cmd.StandardOutput.ReadToEnd();
 			DesktopCMDAAPTUtil.ReadBadging(dataModel, dataModel.RawDumpBadging);
 
@@ -63,19 +61,18 @@ namespace APKViewer.WPFApp
 
 		private void Decode_Icon()
 		{
-			Console.WriteLine("Try get entry, entryName=" + dataModel.defaultIconZipEntry);
-			if (string.IsNullOrEmpty(dataModel.defaultIconZipEntry))
+			if (string.IsNullOrEmpty(dataModel.maxIconZipEntry))
 				return;
 			using (ZipArchive za = ZipFile.Open(targetFilePath.AbsolutePath, ZipArchiveMode.Read))
 			{
-				ZipArchiveEntry iconEntry = za.GetEntry(dataModel.defaultIconZipEntry);
+				ZipArchiveEntry iconEntry = za.GetEntry(dataModel.maxIconZipEntry);
 				Console.WriteLine(iconEntry.FullName);
 
 				using (Stream s = iconEntry.Open())
 				using (MemoryStream ms = new MemoryStream())
 				{
 					s.CopyTo(ms);
-					dataModel.defaultIconContent = ms.ToArray();
+					dataModel.maxIconContent = ms.ToArray();
 				}
 			}
 		}

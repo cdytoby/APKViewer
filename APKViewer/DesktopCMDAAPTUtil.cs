@@ -14,6 +14,7 @@ namespace APKViewer
 		private const string KEY_TARGETSDK = "targetSdkVersion";
 		private const string KEY_APP = "application";
 		private const string KEY_APPLABEL = "application-label";
+		private const string KEY_AppICON = "application-icon";
 		private const string KEY_PERMISSION = "uses-permission";
 
 		private const string SUBKEY_NAME = "name";
@@ -35,10 +36,15 @@ namespace APKViewer
 			{
 				(string, string) splitResult = SplitKeyValue(line);
 				string key = splitResult.Item1;
-				string value = splitResult.Item2;
+				string value = splitResult.Item2.Trim('\'');
 
 				//Console.WriteLine("key=" + key);
 				//Console.WriteLine("value=" + value);
+
+				if (key.StartsWith(KEY_AppICON))
+				{
+					targetModel.maxIconZipEntry = value;
+				}
 
 				switch (key)
 				{
@@ -49,17 +55,16 @@ namespace APKViewer
 						targetModel.VersionString = packageDict[SUBKEY_VERSIONNAME];
 						break;
 					case KEY_MINSDK:
-						targetModel.MinSDKCode = int.Parse(value.Trim('\''));
+						targetModel.MinSDKCode = int.Parse(value);
 						break;
 					case KEY_TARGETSDK:
-						targetModel.MaxSDKCode = int.Parse(value.Trim('\''));
+						targetModel.MaxSDKCode = int.Parse(value);
 						break;
 					case KEY_APPLABEL:
-						targetModel.AppName = value.Trim('\'');
 						break;
 					case KEY_APP:
 						Dictionary<string, string> labelDict = SplitSubDict(value);
-						targetModel.defaultIconZipEntry = labelDict[SUBKEY_ICON];
+						targetModel.AppName = labelDict[SUBKEY_LABEL];
 						break;
 					case KEY_PERMISSION:
 						Dictionary<string, string> permissionDict = SplitSubDict(value);
@@ -93,7 +98,10 @@ namespace APKViewer
 			foreach (string field in splitFieldResult)
 			{
 				string[] fieldKeyValue = field.Split(new char[] { SPLITTER_SUBKEYVALUE }, 2, StringSplitOptions.RemoveEmptyEntries);
-				result.Add(fieldKeyValue[0], fieldKeyValue[1].Trim('\''));
+				if (fieldKeyValue.Length > 1)
+					result.Add(fieldKeyValue[0], fieldKeyValue[1].Trim('\''));
+				else
+					result.Add(fieldKeyValue[0], string.Empty);
 			}
 
 			return result;

@@ -24,15 +24,28 @@ namespace APKViewer.WPFApp
 			InitializeComponent();
 			bindedViewModel = (APKViewModel)DataContext;
 			bindedViewModel.SetDecoder(new WindowsAPKDecoder());
+
+			OpenFileArgProcess();
+		}
+
+		private void OpenFileArgProcess()
+		{
+			string[] envArgs = Environment.GetCommandLineArgs();
+			foreach (string arg in envArgs)
+			{
+				Console.WriteLine("MainWindow.OpenFileArgProcess(), Get arg= " + arg);
+			}
+			if (envArgs.Length > 1)
+				bindedViewModel.SetNewFile(new Uri(envArgs[1]));
 		}
 
 		private void FileDrop(object sender, DragEventArgs e)
 		{
-			Console.WriteLine("Test file dropped.");
-			if(e.Data.GetDataPresent(DataFormats.FileDrop))
+			Console.WriteLine("MainWindow.FileDrop(), something dropped.");
+			if (e.Data.GetDataPresent(DataFormats.FileDrop))
 			{
 				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-				if(files.Length>0)
+				if (files.Length > 0)
 				{
 					foreach (string fileName in files)
 					{

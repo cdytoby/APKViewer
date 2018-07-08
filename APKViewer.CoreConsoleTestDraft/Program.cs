@@ -8,7 +8,7 @@ namespace APKViewer.CoreConsoleTestDraft
 	{
 		private const string sourceTxtFile = @"D:\Android\RawData.txt";
 		private const string sourceAPKFile = @"D:\Android\YahooWeatherProvider.apk";
-		private const string apkIconFile = @"res/mipmap-mdpi-v4/ic_launcher.png";
+		private const string apkIconFile = @"res/mipmap-xxxhdpi-v4/ic_launcher.png";
 
 		static void Main(string[] args)
 		{

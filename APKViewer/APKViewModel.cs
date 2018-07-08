@@ -19,7 +19,7 @@ namespace APKViewer
 		public string minSDK => targetAPKData?.MinSDKCode.ToString();
 		public string maxSDK => targetAPKData?.MaxSDKCode.ToString();
 		public string permissions => StringGroupToString(targetAPKData?.Permissions);
-		public byte[] iconPngByte => targetAPKData?.defaultIconContent;
+		public byte[] iconPngByte => targetAPKData?.maxIconContent;
 
 		public string rawTest => targetAPKData?.RawDumpBadging;
 
