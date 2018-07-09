@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace APKViewer.WPFApp
@@ -43,37 +44,92 @@ namespace APKViewer.WPFApp
 
 		private void Decode_Badging()
 		{
-			Process cmd = new Process();
-			cmd.StartInfo.FileName = ExternalToolBinPath.AAPT;
-			cmd.StartInfo.Arguments = "d badging " + targetFilePath.AbsolutePath;
-			cmd.StartInfo.RedirectStandardInput = true;
-			cmd.StartInfo.RedirectStandardOutput = true;
-			cmd.StartInfo.CreateNoWindow = true;
-			cmd.StartInfo.UseShellExecute = false;
-			cmd.Start();
-			cmd.WaitForExit(200);
-			dataModel.RawDumpBadging = cmd.StandardOutput.ReadToEnd();
-			DesktopCMDAAPTUtil.ReadBadging(dataModel, dataModel.RawDumpBadging);
+			int timeout = 5000;
 
-			if (!cmd.HasExited)
-				cmd.Kill();
+			// https://stackoverflow.com/questions/139593/processstartinfo-hanging-on-waitforexit-why
+			using (Process process = new Process())
+			{
+				process.StartInfo.FileName = ExternalToolBinPath.AAPT;
+				process.StartInfo.Arguments = " d badging \"" + targetFilePath.OriginalString + "\"";
+				Console.WriteLine("WindowsAPKDecoder.Decode_Badging()\r\n" + process.StartInfo.FileName + process.StartInfo.Arguments);
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.CreateNoWindow = true;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.RedirectStandardError = true;
+
+				StringBuilder output = new StringBuilder();
+				StringBuilder error = new StringBuilder();
+
+				using (AutoResetEvent outputWaitHandle = new AutoResetEvent(false))
+				using (AutoResetEvent errorWaitHandle = new AutoResetEvent(false))
+				{
+					process.OutputDataReceived += (sender, e) =>
+					{
+						if (e.Data == null)
+						{
+							outputWaitHandle.Set();
+						}
+						else
+						{
+							output.AppendLine(e.Data);
+						}
+					};
+					process.ErrorDataReceived += (sender, e) =>
+					{
+						if (e.Data == null)
+						{
+							errorWaitHandle.Set();
+						}
+						else
+						{
+							error.AppendLine(e.Data);
+						}
+					};
+
+					process.Start();
+
+					process.BeginOutputReadLine();
+					process.BeginErrorReadLine();
+
+					if (process.WaitForExit(timeout) &&
+						outputWaitHandle.WaitOne(timeout) &&
+						errorWaitHandle.WaitOne(timeout))
+					{
+						dataModel.RawDumpBadging = output.ToString();
+						DesktopCMDAAPTUtil.ReadBadging(dataModel, dataModel.RawDumpBadging);
+					}
+					else
+					{
+						// Timed out.
+					}
+				}
+			}
 		}
 
 		private void Decode_Icon()
 		{
 			if (string.IsNullOrEmpty(dataModel.maxIconZipEntry))
 				return;
-			using (ZipArchive za = ZipFile.Open(targetFilePath.AbsolutePath, ZipArchiveMode.Read))
+			using (ZipArchive za = ZipFile.Open(targetFilePath.OriginalString, ZipArchiveMode.Read))
 			{
-				ZipArchiveEntry iconEntry = za.GetEntry(dataModel.maxIconZipEntry);
-				Console.WriteLine(iconEntry.FullName);
-
-				using (Stream s = iconEntry.Open())
-				using (MemoryStream ms = new MemoryStream())
+				Console.WriteLine("Feature Test try to get entry");
+				try
 				{
-					s.CopyTo(ms);
-					dataModel.maxIconContent = ms.ToArray();
+					ZipArchiveEntry iconEntry = za.GetEntry(dataModel.maxIconZipEntry);
+					Console.WriteLine(iconEntry.FullName);
+					Console.WriteLine("Feature Test try entry got");
+
+					using (Stream s = iconEntry.Open())
+					using (MemoryStream ms = new MemoryStream())
+					{
+						Console.WriteLine("Feature Test ready to copy s");
+						s.CopyTo(ms);
+						dataModel.maxIconContent = ms.ToArray();
+						Console.WriteLine("Feature Test copy finished");
+					}
 				}
+				catch (Exception ee)
+				{ }
 			}
 		}
 

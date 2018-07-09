@@ -86,7 +86,8 @@
 					<Image
 						Width="100"
 						Height="100"
-						Source="{Binding iconPngByte}" />
+						Source="{Binding iconPngByte, Mode=OneWay, 
+							Converter={StaticResource defaultImageConverter}}" />
 				</Canvas>
 			</Grid>
 

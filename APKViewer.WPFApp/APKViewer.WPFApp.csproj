@@ -68,6 +68,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DefaultImageConverter.cs" />
     <Compile Include="ExternalToolBinPath.cs" />
     <Compile Include="WindowsAPKDecoder.cs" />
     <Page Include="DefaultStyle.xaml">

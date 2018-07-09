@@ -14,7 +14,7 @@ namespace APKViewer
 		public Uri FileLocation { get; protected set; }
 
 		public string AppName => targetAPKData?.AppName;
-		public string AppVersion => targetAPKData?.VersionString +" "+ targetAPKData?.VersionCode;
+		public string AppVersion => targetAPKData?.VersionString + " " + targetAPKData?.VersionCode;
 		public string PackageName => targetAPKData?.PackageName;
 		public string minSDK => targetAPKData?.MinSDKCode.ToString();
 		public string maxSDK => targetAPKData?.MaxSDKCode.ToString();
@@ -46,7 +46,7 @@ namespace APKViewer
 			if (stringIEnum == null)
 				return string.Empty;
 			string result = string.Empty;
-			foreach(string line in stringIEnum)
+			foreach (string line in stringIEnum)
 			{
 				result += (line + Environment.NewLine);
 			}
