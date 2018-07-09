@@ -49,7 +49,7 @@ namespace APKViewer.WPFApp
 			// https://stackoverflow.com/questions/139593/processstartinfo-hanging-on-waitforexit-why
 			using (Process process = new Process())
 			{
-				process.StartInfo.FileName = ExternalToolBinPath.AAPT;
+				process.StartInfo.FileName = ExternalToolBinPath.GetAAPTPath();
 				process.StartInfo.Arguments = " d badging \"" + targetFilePath.OriginalString + "\"";
 				Console.WriteLine("WindowsAPKDecoder.Decode_Badging()\r\n" + process.StartInfo.FileName + process.StartInfo.Arguments);
 				process.StartInfo.UseShellExecute = false;
@@ -113,23 +113,19 @@ namespace APKViewer.WPFApp
 			using (ZipArchive za = ZipFile.Open(targetFilePath.OriginalString, ZipArchiveMode.Read))
 			{
 				Console.WriteLine("Feature Test try to get entry");
-				try
-				{
-					ZipArchiveEntry iconEntry = za.GetEntry(dataModel.maxIconZipEntry);
-					Console.WriteLine(iconEntry.FullName);
-					Console.WriteLine("Feature Test try entry got");
 
-					using (Stream s = iconEntry.Open())
-					using (MemoryStream ms = new MemoryStream())
-					{
-						Console.WriteLine("Feature Test ready to copy s");
-						s.CopyTo(ms);
-						dataModel.maxIconContent = ms.ToArray();
-						Console.WriteLine("Feature Test copy finished");
-					}
+				ZipArchiveEntry iconEntry = za.GetEntry(dataModel.maxIconZipEntry);
+				Console.WriteLine(iconEntry.FullName);
+				Console.WriteLine("Feature Test try entry got");
+
+				using (Stream s = iconEntry.Open())
+				using (MemoryStream ms = new MemoryStream())
+				{
+					Console.WriteLine("Feature Test ready to copy s");
+					s.CopyTo(ms);
+					dataModel.maxIconContent = ms.ToArray();
+					Console.WriteLine("Feature Test copy finished");
 				}
-				catch (Exception ee)
-				{ }
 			}
 		}
 
