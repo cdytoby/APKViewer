@@ -1,0 +1,110 @@
+{
+  "1": {
+    "Item1": "1.0",
+    "Item2": "Base"
+  },
+  "2": {
+    "Item1": "1.1",
+    "Item2": "Base 1.1"
+  },
+  "3": {
+    "Item1": "1.5",
+    "Item2": "Cupcake"
+  },
+  "4": {
+    "Item1": "1.6",
+    "Item2": "Donut"
+  },
+  "5": {
+    "Item1": "2.0",
+    "Item2": "Eclair"
+  },
+  "6": {
+    "Item1": "2.0.1",
+    "Item2": "Eclair 0.1"
+  },
+  "7": {
+    "Item1": "2.1",
+    "Item2": "Eclair MR1"
+  },
+  "8": {
+    "Item1": "2.2",
+    "Item2": "Froyo"
+  },
+  "9": {
+    "Item1": "2.3",
+    "Item2": "Gingerbread"
+  },
+  "10": {
+    "Item1": "2.3.3",
+    "Item2": "Gingerbread MR1"
+  },
+  "11": {
+    "Item1": "3.0",
+    "Item2": "Honeycomb"
+  },
+  "12": {
+    "Item1": "3.1",
+    "Item2": "Honeycomb MR1"
+  },
+  "13": {
+    "Item1": "3.2",
+    "Item2": "Honeycomb MR2"
+  },
+  "14": {
+    "Item1": "4.0",
+    "Item2": "Ice Cream Sandwich"
+  },
+  "15": {
+    "Item1": "4.0.3",
+    "Item2": "Ice Cream Sandwich MR1"
+  },
+  "16": {
+    "Item1": "4.1",
+    "Item2": "Jelly Bean"
+  },
+  "17": {
+    "Item1": "4.2",
+    "Item2": "Jelly Bean MR1"
+  },
+  "18": {
+    "Item1": "4.3",
+    "Item2": "Jelly Bean MR2"
+  },
+  "19": {
+    "Item1": "4.4",
+    "Item2": "Kitkat"
+  },
+  "20": {
+    "Item1": "4.4W",
+    "Item2": "Kitkat Watch"
+  },
+  "21": {
+    "Item1": "5.0",
+    "Item2": "Lollipop"
+  },
+  "22": {
+    "Item1": "5.1",
+    "Item2": "Lollipop MR1"
+  },
+  "23": {
+    "Item1": "6.0",
+    "Item2": "Marshmallow"
+  },
+  "24": {
+    "Item1": "7.0",
+    "Item2": "Nougat"
+  },
+  "25": {
+    "Item1": "7.1",
+    "Item2": "Nougat MR1"
+  },
+  "26": {
+    "Item1": "8.0",
+    "Item2": "Oreo"
+  },
+  "27": {
+    "Item1": "8.1",
+    "Item2": "Oreo MR1"
+  }
+}

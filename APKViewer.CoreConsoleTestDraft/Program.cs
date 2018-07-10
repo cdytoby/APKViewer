@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -11,10 +12,11 @@ namespace APKViewer.CoreConsoleTestDraft
 		private const string sourceTxtFile = @"D:\Android\RawData.txt";
 		private const string sourceAPKFile = @"F:\Workspaces\VisualStudio\APKViewer\Release\Amaze File Manager_v3.2.2_apkpure.com.apk";
 		private const string apkIconFile = @"res/mipmap-xxxhdpi-v4/ic_launcher.png";
+		private const string jsonFile = "result.json";
 
 		static void Main(string[] args)
 		{
-			Test2();
+			Test3();
 		}
 
 		private static void Test1()
@@ -43,6 +45,13 @@ namespace APKViewer.CoreConsoleTestDraft
 			cmd.StartInfo.FileName = AAPT;
 			cmd.StartInfo.Arguments = "d badging " + Uri.UnescapeDataString(targetFilePath.AbsolutePath);
 			Console.WriteLine("WindowsAPKDecoder.Decode_Badging() Full CMD= " + cmd.StartInfo.Arguments);
+		}
+
+		private static void Test3()
+		{
+			string result = JsonConvert.SerializeObject(AndroidSDKData.defaultTableDict, Formatting.Indented);
+			Console.WriteLine(result);
+			File.WriteAllText(Path.Combine(Environment.CurrentDirectory, jsonFile), result);
 		}
 	}
 }

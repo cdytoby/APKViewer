@@ -16,8 +16,8 @@ namespace APKViewer
 		public string AppName => targetAPKData?.AppName;
 		public string AppVersion => targetAPKData?.VersionString + " " + targetAPKData?.VersionCode;
 		public string PackageName => targetAPKData?.PackageName;
-		public string minSDK => targetAPKData?.MinSDKCode.ToString();
-		public string maxSDK => targetAPKData?.MaxSDKCode.ToString();
+		public string minSDK => AndroidSDKData.GetFullString(targetAPKData?.MinSDKCode ?? 0);
+		public string maxSDK => AndroidSDKData.GetFullString(targetAPKData?.MaxSDKCode ?? 0);
 		public string screenSize => StringGroupToString(targetAPKData?.ScreenSize, false);
 		public string densities => StringGroupToString(targetAPKData?.Densities, false);
 		public string permissions => StringGroupToString(targetAPKData?.Permissions);
