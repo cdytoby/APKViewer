@@ -18,8 +18,16 @@ namespace APKViewer
 		public string PackageName => targetAPKData?.PackageName;
 		public string minSDK => targetAPKData?.MinSDKCode.ToString();
 		public string maxSDK => targetAPKData?.MaxSDKCode.ToString();
+		public string screenSize => StringGroupToString(targetAPKData?.ScreenSize, false);
+		public string densities => StringGroupToString(targetAPKData?.Densities, false);
 		public string permissions => StringGroupToString(targetAPKData?.Permissions);
-		public byte[] iconPngByte => targetAPKData?.maxIconContent;
+		public string features =>
+			"Required: " + Environment.NewLine +
+			StringGroupToString(targetAPKData?.Feature_Require) +
+			Environment.NewLine + "Not Required: " + Environment.NewLine +
+			StringGroupToString(targetAPKData?.Feature_NotRequire);
+		public string imgToolTip => targetAPKData?.MaxIconZipEntry;
+		public byte[] iconPngByte => targetAPKData?.MaxIconContent;
 
 		public string rawTest => targetAPKData?.RawDumpBadging;
 
@@ -41,14 +49,14 @@ namespace APKViewer
 			targetAPKData = apkDecoder.GetDataModel();
 		}
 
-		private string StringGroupToString(IEnumerable<string> stringIEnum)
+		private string StringGroupToString(IEnumerable<string> stringIEnum, bool newLine = true)
 		{
 			if (stringIEnum == null)
 				return string.Empty;
 			string result = string.Empty;
 			foreach (string line in stringIEnum)
 			{
-				result += (line + Environment.NewLine);
+				result += (line + (newLine ? Environment.NewLine : " "));
 			}
 			return result;
 		}

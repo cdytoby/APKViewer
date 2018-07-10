@@ -108,13 +108,13 @@ namespace APKViewer.WPFApp
 
 		private void Decode_Icon()
 		{
-			if (string.IsNullOrEmpty(dataModel.maxIconZipEntry))
+			if (string.IsNullOrEmpty(dataModel.MaxIconZipEntry))
 				return;
 			using (ZipArchive za = ZipFile.Open(targetFilePath.OriginalString, ZipArchiveMode.Read))
 			{
 				Console.WriteLine("Feature Test try to get entry");
 
-				ZipArchiveEntry iconEntry = za.GetEntry(dataModel.maxIconZipEntry);
+				ZipArchiveEntry iconEntry = za.GetEntry(dataModel.MaxIconZipEntry);
 				Console.WriteLine(iconEntry.FullName);
 				Console.WriteLine("Feature Test try entry got");
 
@@ -123,7 +123,7 @@ namespace APKViewer.WPFApp
 				{
 					Console.WriteLine("Feature Test ready to copy s");
 					s.CopyTo(ms);
-					dataModel.maxIconContent = ms.ToArray();
+					dataModel.MaxIconContent = ms.ToArray();
 					Console.WriteLine("Feature Test copy finished");
 				}
 			}

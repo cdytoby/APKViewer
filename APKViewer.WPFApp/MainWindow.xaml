@@ -29,9 +29,9 @@
 			<Grid>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition
-						Width="*" />
+						Width="4*" />
 					<ColumnDefinition
-						Width="150" />
+						Width="*" />
 				</Grid.ColumnDefinitions>
 
 				<StackPanel>
@@ -81,16 +81,35 @@
 							Text="{Binding maxSDK, Mode=OneWay}" />
 					</DockPanel>
 				</StackPanel>
-				<Canvas
+				<StackPanel
 					Grid.Column="1">
 					<Image
-						Width="100"
-						Height="100"
+						Height="80"
+						ToolTip="{Binding imgToolTip, Mode=OneWay}"
 						Source="{Binding iconPngByte, Mode=OneWay, 
 							Converter={StaticResource defaultImageConverter}}" />
-				</Canvas>
+				</StackPanel>
 			</Grid>
 
+			<DockPanel
+				Style="{StaticResource RowPanel_Default}">
+				<Label
+					Style="{StaticResource Label_FieldDefault}"
+					Content="ScreenSize" />
+				<TextBox
+					Style="{StaticResource Textbox_FieldDefault}"
+					Text="{Binding screenSize, Mode=OneWay}" />
+			</DockPanel>
+			<DockPanel
+				Style="{StaticResource RowPanel_Default}">
+				<Label
+					Style="{StaticResource Label_FieldDefault}"
+					Content="Densities" />
+				<TextBox
+					Style="{StaticResource Textbox_FieldDefault}"
+					Text="{Binding densities, Mode=OneWay}" />
+			</DockPanel>
+			
 			<DockPanel
 				Style="{StaticResource RowPanel_Default}"
 				Height="120">
@@ -103,11 +122,24 @@
 					VerticalScrollBarVisibility="Auto"
 					HorizontalScrollBarVisibility="Auto" />
 			</DockPanel>
+			<DockPanel
+				Style="{StaticResource RowPanel_Default}"
+				Height="120">
+				<Label
+					Style="{StaticResource Label_FieldDefault}"
+					Content="Features" />
+				<TextBox
+					IsReadOnly="true"
+					Text="{Binding features, Mode=OneWay}"
+					VerticalScrollBarVisibility="Auto"
+					HorizontalScrollBarVisibility="Auto" />
+			</DockPanel>
+
 
 			<TextBox
 				Background="Transparent"
 				Text="{Binding Path=rawTest, Mode=OneWay}"
-				Height="250" />
+				Height="150" />
 
 		</StackPanel>
 
