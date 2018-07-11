@@ -144,7 +144,8 @@
 					IsReadOnly="true"
 					Text="{Binding signature, Mode=OneWay}"
 					VerticalScrollBarVisibility="Auto"
-					HorizontalScrollBarVisibility="Auto" />
+					HorizontalScrollBarVisibility="Auto" 
+					TextWrapping="Wrap"/>
 			</DockPanel>
 
 			<TextBox

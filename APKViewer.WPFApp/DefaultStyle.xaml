@@ -37,7 +37,10 @@
 			Value="12"/>
 		<Setter
 			Property="MinWidth"
-			Value="100"/>
+			Value="100" />
+		<Setter
+			Property="VerticalAlignment"
+			Value="Center" />
 	</Style>
 
 </ResourceDictionary>
