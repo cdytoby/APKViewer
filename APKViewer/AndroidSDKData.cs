@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 
 namespace APKViewer
@@ -38,20 +37,18 @@ namespace APKViewer
 			{26, ("8.0", "Oreo") },
 			{27, ("8.1", "Oreo MR1") },
 		};
-
 		public const string FILE_ANDROIDTABLE = "AndroidVersionTable.json";
+
 		private static Dictionary<int, (string, string)> tableDictionary = new Dictionary<int, (string, string)>();
 
 		static AndroidSDKData()
 		{
-			string filePath = Path.Combine(Environment.CurrentDirectory, FILE_ANDROIDTABLE);
-			if (File.Exists(filePath))
-			{
-				tableDictionary = JsonConvert.DeserializeObject<Dictionary<int, (string, string)>>(
-					File.ReadAllText(filePath));
-			}
-			else
-				tableDictionary = defaultTableDict;
+			tableDictionary = defaultTableDict;
+		}
+
+		public static void SetTableFullString(string sourceTable)
+		{
+			tableDictionary = JsonConvert.DeserializeObject<Dictionary<int, (string, string)>>(sourceTable);
 		}
 
 		public static string GetFullString(int sdkInt)
