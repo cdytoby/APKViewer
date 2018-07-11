@@ -8,7 +8,7 @@
 	xmlns:data="clr-namespace:APKViewer;assembly=APKViewer"
 	mc:Ignorable="d"
 	Title="APKViewer"
-	Height="600"
+	Height="650"
 	Width="600"
 	WindowStartupLocation="CenterScreen">
 
@@ -84,7 +84,7 @@
 				<StackPanel
 					Grid.Column="1">
 					<Image
-						Height="80"
+						Height="90"
 						ToolTip="{Binding imgToolTip, Mode=OneWay}"
 						Source="{Binding iconPngByte, Mode=OneWay, 
 							Converter={StaticResource defaultImageConverter}}" />
@@ -112,7 +112,7 @@
 			
 			<DockPanel
 				Style="{StaticResource RowPanel_Default}"
-				Height="120">
+				Height="100">
 				<Label
 					Style="{StaticResource Label_FieldDefault}"
 					Content="Permissions" />
@@ -134,7 +134,18 @@
 					VerticalScrollBarVisibility="Auto"
 					HorizontalScrollBarVisibility="Auto" />
 			</DockPanel>
-
+			<DockPanel
+				Style="{StaticResource RowPanel_Default}"
+				Height="100">
+				<Label
+					Style="{StaticResource Label_FieldDefault}"
+					Content="Signature" />
+				<TextBox
+					IsReadOnly="true"
+					Text="{Binding signature, Mode=OneWay}"
+					VerticalScrollBarVisibility="Auto"
+					HorizontalScrollBarVisibility="Auto" />
+			</DockPanel>
 
 			<TextBox
 				Background="Transparent"

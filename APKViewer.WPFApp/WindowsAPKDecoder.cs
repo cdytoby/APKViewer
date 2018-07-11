@@ -15,7 +15,7 @@ namespace APKViewer.WPFApp
 		private Uri targetFilePath;
 		private APKDataModel dataModel;
 
-		public event Action decodeFinished;
+		public event Action decodeFinishedEvent;
 
 		public WindowsAPKDecoder()
 		{
@@ -27,7 +27,7 @@ namespace APKViewer.WPFApp
 			targetFilePath = fileUri;
 		}
 
-		public void Decode()
+		public async Task Decode()
 		{
 			//C:\CLIProgram\Android\AndroidSDK\build-tools\27.0.0\aapt.exe
 			//./aapt d badging "D:\Android\YahooWeatherProvider.apk"
@@ -35,78 +35,28 @@ namespace APKViewer.WPFApp
 			Console.WriteLine("WindowsAPKDecoder.Decode() decode start.");
 			dataModel = new APKDataModel();
 
-			Decode_Badging();
-			Decode_Icon();
+			await Decode_Badging();
+			await Decode_Icon();
+			await Decode_Signature();
 
 			Console.WriteLine("WindowsAPKDecoder.Decode() decode finish.");
-			decodeFinished?.Invoke();
+			decodeFinishedEvent?.Invoke();
 		}
 
-		private void Decode_Badging()
+		private async Task Decode_Badging()
 		{
-			int timeout = 5000;
-
-			// https://stackoverflow.com/questions/139593/processstartinfo-hanging-on-waitforexit-why
-			using (Process process = new Process())
+			ProcessStartInfo psi = new ProcessStartInfo()
 			{
-				process.StartInfo.FileName = ExternalToolBinPath.GetAAPTPath();
-				process.StartInfo.Arguments = " d badging \"" + targetFilePath.OriginalString + "\"";
-				Console.WriteLine("WindowsAPKDecoder.Decode_Badging()\r\n" + process.StartInfo.FileName + process.StartInfo.Arguments);
-				process.StartInfo.UseShellExecute = false;
-				process.StartInfo.CreateNoWindow = true;
-				process.StartInfo.RedirectStandardOutput = true;
-				process.StartInfo.RedirectStandardError = true;
+				FileName = ExternalToolBinPath.GetAAPTPath(),
+				Arguments = " d badging \"" + targetFilePath.OriginalString + "\""
+			};
+			string processResult = await ExecuteProcess(psi);
 
-				StringBuilder output = new StringBuilder();
-				StringBuilder error = new StringBuilder();
-
-				using (AutoResetEvent outputWaitHandle = new AutoResetEvent(false))
-				using (AutoResetEvent errorWaitHandle = new AutoResetEvent(false))
-				{
-					process.OutputDataReceived += (sender, e) =>
-					{
-						if (e.Data == null)
-						{
-							outputWaitHandle.Set();
-						}
-						else
-						{
-							output.AppendLine(e.Data);
-						}
-					};
-					process.ErrorDataReceived += (sender, e) =>
-					{
-						if (e.Data == null)
-						{
-							errorWaitHandle.Set();
-						}
-						else
-						{
-							error.AppendLine(e.Data);
-						}
-					};
-
-					process.Start();
-
-					process.BeginOutputReadLine();
-					process.BeginErrorReadLine();
-
-					if (process.WaitForExit(timeout) &&
-						outputWaitHandle.WaitOne(timeout) &&
-						errorWaitHandle.WaitOne(timeout))
-					{
-						dataModel.RawDumpBadging = output.ToString();
-						DesktopCMDAAPTUtil.ReadBadging(dataModel, dataModel.RawDumpBadging);
-					}
-					else
-					{
-						// Timed out.
-					}
-				}
-			}
+			dataModel.RawDumpBadging = processResult;
+			DesktopCMDAAPTUtil.ReadBadging(dataModel, dataModel.RawDumpBadging);
 		}
 
-		private void Decode_Icon()
+		private async Task Decode_Icon()
 		{
 			if (string.IsNullOrEmpty(dataModel.MaxIconZipEntry))
 				return;
@@ -122,10 +72,100 @@ namespace APKViewer.WPFApp
 				using (MemoryStream ms = new MemoryStream())
 				{
 					Console.WriteLine("Feature Test ready to copy s");
-					s.CopyTo(ms);
+					Task copyTask = s.CopyToAsync(ms);
+					await copyTask;
 					dataModel.MaxIconContent = ms.ToArray();
 					Console.WriteLine("Feature Test copy finished");
 				}
+			}
+		}
+
+		private async Task Decode_Signature()
+		{
+			string processResult;
+
+			// java -jar apksigner.jar verify --verbose --print-certs FDroid.apk
+			// java -version
+
+			ProcessStartInfo psiJavaVersion = new ProcessStartInfo()
+			{
+				FileName = "cmd.exe",
+				Arguments = "/c java -version"
+			};
+			processResult = await ExecuteProcess(psiJavaVersion, 100, true);
+			if (!processResult.StartsWith("java version"))
+			{
+				dataModel.Signature = "Java is not found, can't read apk signature.";
+				return;
+			}
+
+			ProcessStartInfo psiAPKSigner = new ProcessStartInfo()
+			{
+				FileName = "java.exe",
+				Arguments = "-jar " + ExternalToolBinPath.GETAPKSignerPath() +
+					" verify --verbose --print-certs" +
+					" \"" + targetFilePath.OriginalString + "\"",
+			};
+			processResult = await ExecuteProcess(psiAPKSigner);
+
+			dataModel.Signature = processResult.ToString();
+		}
+
+		private async Task<string> ExecuteProcess(ProcessStartInfo startInfo, int timeout = 5000, bool useError = false)
+		{
+			string result = string.Empty;
+
+			using (Process process = new Process())
+			{
+				process.StartInfo = startInfo;
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.CreateNoWindow = true;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.RedirectStandardError = true;
+				process.EnableRaisingEvents = true;
+				Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() setup: \r\n" + process.StartInfo.FileName + " " + process.StartInfo.Arguments);
+
+				StringBuilder output = new StringBuilder();
+				TaskCompletionSource<string> tcs = new TaskCompletionSource<string>();
+				if (!useError)
+				{
+					process.OutputDataReceived +=
+						(sender, e) =>
+						{
+							if (e.Data != null)
+							{
+								//Console.WriteLine("WindowsAPKDecoder.ExecuteProcess(): process.OutputDataReceived=\r\n" + e.Data);
+								output.AppendLine(e.Data);
+							}
+						};
+				}
+				else
+				{
+					process.ErrorDataReceived +=
+						(sender, e) =>
+						{
+							if (e.Data != null)
+							{
+								//Console.WriteLine("WindowsAPKDecoder.ExecuteProcess(): process.OutputDataReceived=\r\n" + e.Data);
+								output.AppendLine(e.Data);
+							}
+						};
+				}
+				process.Exited +=
+					(sender, e) =>
+					{
+						tcs.SetResult(output.ToString());
+					};
+
+				process.Start();
+				process.BeginOutputReadLine();
+				process.BeginErrorReadLine();
+
+				await tcs.Task;
+
+				Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() Final result=\r\n" + output.ToString());
+
+				return output.ToString();
 			}
 		}
 

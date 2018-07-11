@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace APKViewer
 {
     public interface IApkDecoder
     {
-		event Action decodeFinished;
+		event Action decodeFinishedEvent;
 
 		void SetApkFilePath(Uri fileUri);
-		void Decode();
+		Task Decode();
 
 		APKDataModel GetDataModel();
 	}

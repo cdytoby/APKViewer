@@ -10,6 +10,7 @@ namespace APKViewer.WPFApp
 	{
 		public const string FOLDER_EXTERNAL_TOOL = "ExternalTools";
 		public const string EXE_AAPT = "aapt.exe";
+		public const string JAR_APKSIGNER = "apksigner.jar";
 
 		public const string MY_AAPT = @"C:\CLIProgram\Android\AndroidSDK\build-tools\27.0.0\aapt.exe";
 		public const string MY_ADB = @"C:\CLIProgram\Android\AndroidSDK\platform-tools\adb.exe";
@@ -17,6 +18,10 @@ namespace APKViewer.WPFApp
 		public static string GetAAPTPath()
 		{
 			return Path.Combine(Environment.CurrentDirectory, FOLDER_EXTERNAL_TOOL, EXE_AAPT);
+		}
+		public static string GETAPKSignerPath()
+		{
+			return Path.Combine(Environment.CurrentDirectory, FOLDER_EXTERNAL_TOOL, JAR_APKSIGNER);
 		}
 	}
 }

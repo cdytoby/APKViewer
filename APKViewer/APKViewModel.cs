@@ -26,6 +26,7 @@ namespace APKViewer
 			StringGroupToString(targetAPKData?.Feature_Require) +
 			Environment.NewLine + "Not Required: " + Environment.NewLine +
 			StringGroupToString(targetAPKData?.Feature_NotRequire);
+		public string signature => targetAPKData?.Signature;
 		public string imgToolTip => targetAPKData?.MaxIconZipEntry;
 		public byte[] iconPngByte => targetAPKData?.MaxIconContent;
 
@@ -39,6 +40,7 @@ namespace APKViewer
 		public void SetDecoder(IApkDecoder newDecoder)
 		{
 			apkDecoder = newDecoder;
+			apkDecoder.decodeFinishedEvent += GetDataFromDecoder;
 		}
 
 		public void SetNewFile(Uri newFileUri)
@@ -46,6 +48,10 @@ namespace APKViewer
 			FileLocation = newFileUri;
 			apkDecoder.SetApkFilePath(newFileUri);
 			apkDecoder.Decode();
+		}
+
+		private void GetDataFromDecoder()
+		{
 			targetAPKData = apkDecoder.GetDataModel();
 		}
 
