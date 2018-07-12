@@ -34,7 +34,6 @@ namespace APKViewer
 
 		public APKViewModel()
 		{
-			//Test();
 		}
 
 		public void SetDecoder(IApkDecoder newDecoder)
@@ -66,22 +65,6 @@ namespace APKViewer
 			}
 			return result;
 		}
-
-		private async Task Test()
-		{
-			Console.WriteLine("APKViewModel Test start");
-			while (apkDecoder == null)
-			{
-				Console.WriteLine("apkDecoder is null");
-				await Task.Delay(25);
-			}
-			Console.WriteLine("APKViewModel Test start 2");
-			apkDecoder.SetApkFilePath(new Uri(@"D:\Android\YahooWeatherProvider.apk"));
-			Console.WriteLine("APKViewModel Test 2");
-			apkDecoder.Decode();
-			Console.WriteLine("APKViewModel Test 3");
-			targetAPKData = apkDecoder.GetDataModel();
-			Console.WriteLine("APKViewModel Test end");
-		}
+		
 	}
 }
