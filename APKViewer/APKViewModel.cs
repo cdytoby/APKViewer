@@ -65,7 +65,8 @@ namespace APKViewer
 			}
 			if (targetAPKData.Feature_NotRequire.Count > 0)
 			{
-				builder.AppendLine();
+				if (builder.Length != 0)
+					builder.AppendLine();
 				builder.AppendLine(StringConstant.Permission_NotRequired);
 				builder.AppendLine(StringGroupToString(targetAPKData?.Feature_NotRequire));
 			}
