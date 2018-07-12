@@ -23,5 +23,6 @@ namespace APKViewer
 		public byte[] MaxIconContent { get; set; }
 
 		public string RawDumpBadging { get; set; }
+		public string RawDumpSignature { get; set; }
 	}
 }

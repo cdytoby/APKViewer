@@ -43,4 +43,15 @@
 			Value="Center" />
 	</Style>
 
+	<Style
+		x:Key="Button_ActionBottom"
+		TargetType="Button">
+		<Setter
+			Property="Width"
+			Value="120" />
+		<Setter
+			Property="Margin"
+			Value="5" />
+	</Style>
+
 </ResourceDictionary>

@@ -32,6 +32,8 @@ namespace APKViewer
 
 		public string rawTest => targetAPKData?.RawDumpBadging;
 
+		public Command openPlayStore => new Command(OpenGooglePlayStore, CanExecutionActionBase);
+
 		public APKViewModel()
 		{
 		}
@@ -52,6 +54,16 @@ namespace APKViewer
 		private void GetDataFromDecoder()
 		{
 			targetAPKData = apkDecoder.GetDataModel();
+		}
+
+		private void OpenGooglePlayStore()
+		{
+			Process.Start("https://play.google.com/store/apps/details?id="+targetAPKData.PackageName);
+		}
+
+		private bool CanExecutionActionBase()
+		{
+			return targetAPKData != null;
 		}
 
 		private string StringGroupToString(IEnumerable<string> stringIEnum, bool newLine = true)

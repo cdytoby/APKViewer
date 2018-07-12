@@ -25,7 +25,8 @@
 		Background="Transparent"
 		AllowDrop="True"
 		DragDrop.Drop="FileDrop">
-		<StackPanel>
+		<StackPanel
+			Margin="0,0,0,50">
 			<Grid>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition
@@ -84,6 +85,7 @@
 				<StackPanel
 					Grid.Column="1">
 					<Image
+						Margin="3"
 						Height="90"
 						ToolTip="{Binding imgToolTip, Mode=OneWay}"
 						Source="{Binding iconPngByte, Mode=OneWay, 
@@ -155,6 +157,20 @@
 
 		</StackPanel>
 
+		<StackPanel
+			VerticalAlignment="Bottom"
+			HorizontalAlignment="Center"
+			Orientation="Horizontal"
+			Margin="3"
+			Height="45">
+			<Button
+				Style="{StaticResource Button_ActionBottom}"
+				Content="Search PlayStore" 
+				Command="{Binding openPlayStore}"/>
+			<Button
+				Style="{StaticResource Button_ActionBottom}"
+				Content="View Raw" />
+		</StackPanel>
 	</Grid>
 
 </Window>

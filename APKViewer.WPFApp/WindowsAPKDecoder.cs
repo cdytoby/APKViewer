@@ -12,6 +12,9 @@ namespace APKViewer.WPFApp
 {
 	public class WindowsAPKDecoder : IApkDecoder
 	{
+		public static bool javaTested;
+		public static bool javaExist;
+
 		private Uri targetFilePath;
 		private APKDataModel dataModel;
 
@@ -20,6 +23,7 @@ namespace APKViewer.WPFApp
 		public WindowsAPKDecoder()
 		{
 			dataModel = null;
+			javaTested = javaExist = false;
 		}
 
 		public void SetApkFilePath(Uri fileUri)
@@ -62,20 +66,15 @@ namespace APKViewer.WPFApp
 				return;
 			using (ZipArchive za = ZipFile.Open(targetFilePath.OriginalString, ZipArchiveMode.Read))
 			{
-				Console.WriteLine("Feature Test try to get entry");
-
 				ZipArchiveEntry iconEntry = za.GetEntry(dataModel.MaxIconZipEntry);
-				Console.WriteLine(iconEntry.FullName);
-				Console.WriteLine("Feature Test try entry got");
+				Console.WriteLine("WindowsAPKDecoder.Decode_Icon() zip entry get." + iconEntry.FullName);
 
 				using (Stream s = iconEntry.Open())
 				using (MemoryStream ms = new MemoryStream())
 				{
-					Console.WriteLine("Feature Test ready to copy s");
 					Task copyTask = s.CopyToAsync(ms);
 					await copyTask;
 					dataModel.MaxIconContent = ms.ToArray();
-					Console.WriteLine("Feature Test copy finished");
 				}
 			}
 		}
@@ -84,16 +83,29 @@ namespace APKViewer.WPFApp
 		{
 			string processResult;
 
-			// java -jar apksigner.jar verify --verbose --print-certs FDroid.apk
-			// java -version
-
-			ProcessStartInfo psiJavaVersion = new ProcessStartInfo()
+			if (!javaTested)
 			{
-				FileName = "cmd.exe",
-				Arguments = "/c java -version"
-			};
-			processResult = await ExecuteProcess(psiJavaVersion, 100, true);
-			if (!processResult.StartsWith("java version"))
+				// java -jar apksigner.jar verify --verbose --print-certs FDroid.apk
+				// java -version
+
+				ProcessStartInfo psiJavaVersion = new ProcessStartInfo()
+				{
+					FileName = "cmd.exe",
+					Arguments = "/c java -version"
+				};
+				processResult = await ExecuteProcess(psiJavaVersion, 100, true);
+				if (!processResult.StartsWith("java version"))
+				{
+					javaTested = true;
+					javaExist = false;
+				}
+				else
+				{
+					javaExist = true;
+				}
+			}
+
+			if (!javaExist)
 			{
 				dataModel.Signature = "Java is not found, can't read apk signature.";
 				return;
@@ -108,7 +120,8 @@ namespace APKViewer.WPFApp
 			};
 			processResult = await ExecuteProcess(psiAPKSigner);
 
-			dataModel.Signature = processResult.ToString();
+			dataModel.RawDumpSignature = processResult;
+			DesktopCMDAPKSignerUtil.ReadAPKSignature(dataModel, processResult);
 		}
 
 		private async Task<string> ExecuteProcess(ProcessStartInfo startInfo, int timeout = 5000, bool useError = false)
