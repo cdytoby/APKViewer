@@ -107,7 +107,7 @@ namespace APKViewer.WPFApp
 
 			if (!javaExist)
 			{
-				dataModel.Signature = "Java is not found, can't read apk signature.";
+				dataModel.Signature = StringConstant.Msg_JavaNotFound;
 				return;
 			}
 

@@ -7,7 +7,7 @@ namespace APKViewer
 {
 	public static class AndroidSDKData
 	{
-		public static Dictionary<int, (string, string)> defaultTableDict = new Dictionary<int, (string, string)>()
+		private static Dictionary<int, (string, string)> defaultTableDict = new Dictionary<int, (string, string)>()
 		{
 			{1, ("1.0", "Base") },
 			{2, ("1.1", "Base 1.1") },
@@ -58,6 +58,11 @@ namespace APKViewer
 			if (!tableDictionary.ContainsKey(sdkInt))
 				return "API " + sdkInt;
 			return "API " + sdkInt + " Android " + tableDictionary[sdkInt].Item1 + " " + tableDictionary[sdkInt].Item2;
+		}
+
+		public static string RequestTableJsonString()
+		{
+			return JsonConvert.SerializeObject(defaultTableDict, Formatting.Indented);
 		}
 	}
 }

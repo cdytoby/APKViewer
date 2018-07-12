@@ -21,11 +21,7 @@ namespace APKViewer
 		public string screenSize => StringGroupToString(targetAPKData?.ScreenSize, false);
 		public string densities => StringGroupToString(targetAPKData?.Densities, false);
 		public string permissions => StringGroupToString(targetAPKData?.Permissions);
-		public string features =>
-			"Required: " + Environment.NewLine +
-			StringGroupToString(targetAPKData?.Feature_Require) +
-			Environment.NewLine + "Not Required: " + Environment.NewLine +
-			StringGroupToString(targetAPKData?.Feature_NotRequire);
+		public string features => GetFormattedFeatureString();
 		public string signature => targetAPKData?.Signature;
 		public string imgToolTip => targetAPKData?.MaxIconZipEntry;
 		public byte[] iconPngByte => targetAPKData?.MaxIconContent;
@@ -56,9 +52,30 @@ namespace APKViewer
 			targetAPKData = apkDecoder.GetDataModel();
 		}
 
+		private string GetFormattedFeatureString()
+		{
+			if (targetAPKData == null)
+				return string.Empty;
+
+			StringBuilder builder = new StringBuilder();
+			if (targetAPKData.Feature_Require.Count > 0)
+			{
+				builder.AppendLine(StringConstant.Permission_Required);
+				builder.AppendLine(StringGroupToString(targetAPKData?.Feature_Require));
+			}
+			if (targetAPKData.Feature_NotRequire.Count > 0)
+			{
+				builder.AppendLine();
+				builder.AppendLine(StringConstant.Permission_NotRequired);
+				builder.AppendLine(StringGroupToString(targetAPKData?.Feature_NotRequire));
+			}
+
+			return builder.ToString();
+		}
+
 		private void OpenGooglePlayStore()
 		{
-			Process.Start("https://play.google.com/store/apps/details?id="+targetAPKData.PackageName);
+			Process.Start(StringConstant.Url_Play + targetAPKData.PackageName);
 		}
 
 		private bool CanExecutionActionBase()
@@ -71,12 +88,23 @@ namespace APKViewer
 			if (stringIEnum == null)
 				return string.Empty;
 			string result = string.Empty;
-			foreach (string line in stringIEnum)
+			using (IEnumerator<string> enumerator = stringIEnum.GetEnumerator())
 			{
-				result += (line + (newLine ? Environment.NewLine : " "));
+				bool last = !enumerator.MoveNext();
+				while (!last)
+				{
+					result += enumerator.Current;
+					last = !enumerator.MoveNext();
+					if (!last)
+						result += newLine ? Environment.NewLine : " ";
+				}
 			}
+			//foreach (string line in stringIEnum)
+			//{
+			//	result += (line + (newLine ? Environment.NewLine : " "));
+			//}
 			return result;
 		}
-		
+
 	}
 }

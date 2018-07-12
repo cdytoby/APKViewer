@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -49,7 +48,7 @@ namespace APKViewer.CoreConsoleTestDraft
 
 		private static void Test3()
 		{
-			string result = JsonConvert.SerializeObject(AndroidSDKData.defaultTableDict, Formatting.Indented);
+			string result = AndroidSDKData.RequestTableJsonString();
 			Console.WriteLine(result);
 			File.WriteAllText(Path.Combine(Environment.CurrentDirectory, jsonFile), result);
 		}
