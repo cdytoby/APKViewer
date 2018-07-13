@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace APKViewer.WPFApp
 {
-	public partial class MainWindow : Window
+	public partial class MainWindow : Window, IOpenRawDialogService
 	{
 		private APKViewModel bindedViewModel;
 
@@ -16,6 +16,7 @@ namespace APKViewer.WPFApp
 			InitializeComponent();
 			bindedViewModel = (APKViewModel)DataContext;
 			bindedViewModel.SetDecoder(new WindowsAPKDecoder());
+			bindedViewModel.SetDialogService(this);
 
 			OpenFileArgProcess();
 		}
@@ -48,6 +49,12 @@ namespace APKViewer.WPFApp
 					}
 				}
 			}
+		}
+
+		public void OpenViewRawDialog()
+		{
+			RawDataDialog dialog = new RawDataDialog(bindedViewModel);
+			dialog.ShowDialog();
 		}
 	}
 }

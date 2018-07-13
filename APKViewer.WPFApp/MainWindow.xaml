@@ -149,12 +149,6 @@
 					HorizontalScrollBarVisibility="Auto" 
 					TextWrapping="Wrap"/>
 			</DockPanel>
-
-			<TextBox
-				Background="Transparent"
-				Text="{Binding Path=rawTest, Mode=OneWay}"
-				Height="150" />
-
 		</StackPanel>
 
 		<StackPanel
@@ -169,7 +163,8 @@
 				Command="{Binding openPlayStore}"/>
 			<Button
 				Style="{StaticResource Button_ActionBottom}"
-				Content="View Raw" />
+				Content="View Raw"
+				Command="{Binding openRawView}"/>
 		</StackPanel>
 	</Grid>
 

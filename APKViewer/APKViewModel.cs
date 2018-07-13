@@ -9,6 +9,7 @@ namespace APKViewer
 	public class APKViewModel : BindableModelBase
 	{
 		private IApkDecoder apkDecoder;
+		private IOpenRawDialogService dialogService;
 
 		public APKDataModel targetAPKData { get; protected set; }
 		public Uri FileLocation { get; protected set; }
@@ -26,9 +27,11 @@ namespace APKViewer
 		public string imgToolTip => targetAPKData?.MaxIconZipEntry;
 		public byte[] iconPngByte => targetAPKData?.MaxIconContent;
 
-		public string rawTest => targetAPKData?.RawDumpBadging;
+		public string rawBadging => targetAPKData?.RawDumpBadging;
+		public string rawSignature => targetAPKData?.RawDumpSignature;
 
 		public Command openPlayStore => new Command(OpenGooglePlayStore, CanExecutionActionBase);
+		public Command openRawView => new Command(OpenRawViewDialog, CanExecutionActionBase);
 
 		public APKViewModel()
 		{
@@ -38,6 +41,10 @@ namespace APKViewer
 		{
 			apkDecoder = newDecoder;
 			apkDecoder.decodeFinishedEvent += GetDataFromDecoder;
+		}
+		public void SetDialogService(IOpenRawDialogService newService)
+		{
+			dialogService = newService;
 		}
 
 		public void SetNewFile(Uri newFileUri)
@@ -72,6 +79,11 @@ namespace APKViewer
 			}
 
 			return builder.ToString();
+		}
+
+		private void OpenRawViewDialog()
+		{
+			dialogService?.OpenViewRawDialog();
 		}
 
 		private void OpenGooglePlayStore()
