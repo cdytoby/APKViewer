@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -130,12 +131,16 @@ namespace APKViewer.WPFApp
 
 			using (Process process = new Process())
 			{
+				//CultureInfo.CurrentCulture.TextInfo.OEMCodePage
+				startInfo.StandardOutputEncoding = Encoding.UTF8;
+
 				process.StartInfo = startInfo;
 				process.StartInfo.UseShellExecute = false;
 				process.StartInfo.CreateNoWindow = true;
 				process.StartInfo.RedirectStandardOutput = true;
 				process.StartInfo.RedirectStandardError = true;
 				process.EnableRaisingEvents = true;
+
 				Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() setup: \r\n" + process.StartInfo.FileName + " " + process.StartInfo.Arguments);
 
 				StringBuilder output = new StringBuilder();
