@@ -14,6 +14,7 @@ namespace APKViewer
 		public APKDataModel targetAPKData { get; protected set; }
 		public Uri FileLocation { get; protected set; }
 		public bool isDecoding { get; protected set; }
+		public bool isNotDecoding => !isDecoding;
 
 		public bool isDataEmpty => targetAPKData == null;
 

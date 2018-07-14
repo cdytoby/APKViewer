@@ -177,13 +177,55 @@
 			x:Name="DropOverlay"
 			Panel.ZIndex="1000"
 			Visibility="{Binding Path=isDataEmpty, Mode=OneWay,
-			Converter={StaticResource booleanToVisibilityConverter}}">
+				Converter={StaticResource booleanToVisibilityConverter}}">
 			<Grid.Background>
 				<SolidColorBrush
 					Color="Black"
 					Opacity="0.3" />
 			</Grid.Background>
-			
+
+			<Label
+				Content="Drag and drop apk here."
+				Foreground="White"
+				FontWeight="Bold"
+				FontSize="40"
+				HorizontalAlignment="Center"
+				Margin="0,100,0,0"
+				Visibility="{Binding Path=isNotDecoding, Mode=OneWay,
+					Converter={StaticResource booleanToVisibilityConverter}}"
+				/>
+
+			<Image
+				VerticalAlignment="Center"
+				HorizontalAlignment="Center"
+				Source="/ImageAssets/Loading.png"
+				RenderTransformOrigin="0.5,0.5"
+				Height="128"
+				Width="128"
+				Visibility="{Binding Path=isDecoding, Mode=OneWay,
+					Converter={StaticResource booleanToVisibilityConverter}}">
+				<Image.RenderTransform>
+					<RotateTransform
+						Angle="0" />
+				</Image.RenderTransform>
+				<Image.Triggers>
+					<EventTrigger
+						RoutedEvent="Loaded">
+						<BeginStoryboard>
+							<Storyboard>
+								<DoubleAnimation
+									Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
+									By="0"
+									To="360"
+									Duration="0:0:1"
+									FillBehavior="Stop"
+									RepeatBehavior="Forever" />
+							</Storyboard>
+						</BeginStoryboard>
+					</EventTrigger>
+				</Image.Triggers>
+			</Image>
+
 			<!--<Label
 				Content="{Binding FileLocation}" 
 				HorizontalAlignment="Center"
