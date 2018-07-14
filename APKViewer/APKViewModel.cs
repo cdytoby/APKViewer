@@ -14,6 +14,8 @@ namespace APKViewer
 		public APKDataModel targetAPKData { get; protected set; }
 		public Uri FileLocation { get; protected set; }
 
+		public bool isDataEmpty => targetAPKData == null;
+
 		public string AppName => targetAPKData?.AppName;
 		public string AppVersion => targetAPKData?.VersionString + " " + targetAPKData?.VersionCode;
 		public string PackageName => targetAPKData?.PackageName;
@@ -50,6 +52,7 @@ namespace APKViewer
 		public void SetNewFile(Uri newFileUri)
 		{
 			FileLocation = newFileUri;
+			targetAPKData = null;
 			apkDecoder.SetApkFilePath(newFileUri);
 			apkDecoder.Decode();
 		}

@@ -10,7 +10,15 @@
 	Title="APKViewer"
 	Height="650"
 	Width="600"
-	WindowStartupLocation="CenterScreen">
+	WindowStartupLocation="CenterScreen"
+	AllowDrop="True"
+	DragDrop.Drop="FileDrop"
+	DragDrop.DragEnter="FileDragEnter"
+	DragDrop.DragLeave="FileDragLeave">
+	<!--
+	
+	DragDrop.DragOver="FileDragEnter"
+	-->
 
 	<Window.Resources>
 		<ResourceDictionary
@@ -22,9 +30,7 @@
 	</Window.DataContext>
 
 	<Grid
-		Background="Transparent"
-		AllowDrop="True"
-		DragDrop.Drop="FileDrop">
+		Background="Transparent">
 		<StackPanel
 			Margin="0,0,0,50">
 			<Grid>
@@ -111,7 +117,7 @@
 					Style="{StaticResource Textbox_FieldDefault}"
 					Text="{Binding densities, Mode=OneWay}" />
 			</DockPanel>
-			
+
 			<DockPanel
 				Style="{StaticResource RowPanel_Default}"
 				Height="100">
@@ -146,8 +152,8 @@
 					IsReadOnly="true"
 					Text="{Binding signature, Mode=OneWay}"
 					VerticalScrollBarVisibility="Auto"
-					HorizontalScrollBarVisibility="Auto" 
-					TextWrapping="Wrap"/>
+					HorizontalScrollBarVisibility="Auto"
+					TextWrapping="Wrap" />
 			</DockPanel>
 		</StackPanel>
 
@@ -159,13 +165,25 @@
 			Height="45">
 			<Button
 				Style="{StaticResource Button_ActionBottom}"
-				Content="Search PlayStore" 
-				Command="{Binding openPlayStore}"/>
+				Content="Search PlayStore"
+				Command="{Binding openPlayStore}" />
 			<Button
 				Style="{StaticResource Button_ActionBottom}"
 				Content="View Raw"
-				Command="{Binding openRawView}"/>
+				Command="{Binding openRawView}" />
 		</StackPanel>
+
+		<Grid
+			x:Name="DropOverlay"
+			Panel.ZIndex="1000"
+			Visibility="{Binding Path=isDataEmpty, Mode=OneWay,
+			Converter={StaticResource booleanToVisibilityConverter}}">
+			<Grid.Background>
+				<SolidColorBrush
+					Color="Black"
+					Opacity="0.3" />
+			</Grid.Background>
+		</Grid>
 	</Grid>
 
 </Window>

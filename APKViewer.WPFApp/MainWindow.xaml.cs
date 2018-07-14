@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace APKViewer.WPFApp
 {
 	public partial class MainWindow : Window, IOpenRawDialogService
 	{
 		private APKViewModel bindedViewModel;
+		private BindingExpression overlayVisibilityBindingExpress;
 
 		public MainWindow()
 		{
@@ -17,6 +20,7 @@ namespace APKViewer.WPFApp
 			bindedViewModel = (APKViewModel)DataContext;
 			bindedViewModel.SetDecoder(new WindowsAPKDecoder());
 			bindedViewModel.SetDialogService(this);
+			overlayVisibilityBindingExpress = DropOverlay.GetBindingExpression(Grid.VisibilityProperty);
 
 			OpenFileArgProcess();
 		}
@@ -49,6 +53,19 @@ namespace APKViewer.WPFApp
 					}
 				}
 			}
+
+			DropOverlay.SetBinding(Grid.VisibilityProperty, overlayVisibilityBindingExpress.ParentBinding);
+		}
+
+		private void FileDragEnter(object sender, DragEventArgs e)
+		{
+			DropOverlay.Visibility = Visibility.Visible;
+			//DropOverlay.SetBinding(Grid.VisibilityProperty, overlayVisibilityBindingExpress.ParentBinding);
+		}
+		private void FileDragLeave(object sender, DragEventArgs e)
+		{
+			//DropOverlay.Visibility = bindedViewModel.isDataEmpty ? Visibility.Visible : Visibility.Collapsed;
+			DropOverlay.SetBinding(Grid.VisibilityProperty, overlayVisibilityBindingExpress.ParentBinding);
 		}
 
 		public void OpenViewRawDialog()
@@ -56,5 +73,6 @@ namespace APKViewer.WPFApp
 			RawDataDialog dialog = new RawDataDialog(bindedViewModel);
 			dialog.ShowDialog();
 		}
+
 	}
 }

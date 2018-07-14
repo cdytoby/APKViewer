@@ -2,8 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:APKViewer.WPFApp">
 
-	<local:DefaultImageConverter x:Key="defaultImageConverter" />
+	<local:DefaultImageConverter
+		x:Key="defaultImageConverter" />
 	
+	<BooleanToVisibilityConverter
+		x:Key="booleanToVisibilityConverter" />
+
 	<Style
 		x:Key="RowPanel_Default"
 		TargetType="DockPanel">

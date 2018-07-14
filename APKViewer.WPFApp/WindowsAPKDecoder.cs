@@ -181,7 +181,8 @@ namespace APKViewer.WPFApp
 
 				await tcs.Task;
 
-				Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() Final result=\r\n" + output.ToString());
+				//Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() Final result=\r\n" + output.ToString());
+				Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() finish.");
 
 				return output.ToString();
 			}
