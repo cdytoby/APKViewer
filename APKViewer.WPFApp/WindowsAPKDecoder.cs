@@ -20,6 +20,7 @@ namespace APKViewer.WPFApp
 		private APKDataModel dataModel;
 
 		public event Action decodeFinishedEvent;
+		public event Action<string> statusReportEvent;
 
 		public WindowsAPKDecoder()
 		{
@@ -38,13 +39,18 @@ namespace APKViewer.WPFApp
 			//./aapt d badging "D:\Android\YahooWeatherProvider.apk"
 
 			Console.WriteLine("WindowsAPKDecoder.Decode() decode start.");
+			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() decode start.");
 			dataModel = new APKDataModel();
 
+			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() Decode_Badging start.");
 			await Decode_Badging();
+			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() Decode_Icon start.");
 			await Decode_Icon();
+			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() Decode_Signature start.");
 			await Decode_Signature();
 
 			Console.WriteLine("WindowsAPKDecoder.Decode() decode finish.");
+			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() decode finish.");
 			decodeFinishedEvent?.Invoke();
 		}
 
@@ -55,8 +61,9 @@ namespace APKViewer.WPFApp
 				FileName = ExternalToolBinPath.GetAAPTPath(),
 				Arguments = " d badging \"" + targetFilePath.OriginalString + "\""
 			};
+			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode_Badging(), path=" + targetFilePath.OriginalString);
 			string processResult = await ExecuteProcess(psi);
-
+			
 			dataModel.RawDumpBadging = processResult;
 			DesktopCMDAAPTUtil.ReadBadging(dataModel, dataModel.RawDumpBadging);
 		}
@@ -141,7 +148,11 @@ namespace APKViewer.WPFApp
 				process.StartInfo.RedirectStandardError = true;
 				process.EnableRaisingEvents = true;
 
-				Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() setup: \r\n" + process.StartInfo.FileName + " " + process.StartInfo.Arguments);
+				statusReportEvent?.Invoke("WindowsAPKDecoder.ExecuteProcess() setup: \r\n" +
+					process.StartInfo.FileName + " " + process.StartInfo.Arguments);
+
+				Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() setup: \r\n" + 
+					process.StartInfo.FileName + " " + process.StartInfo.Arguments);
 
 				StringBuilder output = new StringBuilder();
 				TaskCompletionSource<string> tcs = new TaskCompletionSource<string>();
@@ -179,11 +190,13 @@ namespace APKViewer.WPFApp
 				process.BeginOutputReadLine();
 				process.BeginErrorReadLine();
 
-				await tcs.Task;
+				statusReportEvent?.Invoke("WindowsAPKDecoder.ExecuteProcess() process started.");
 
+				await tcs.Task;
+				
 				//Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() Final result=\r\n" + output.ToString());
 				Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() finish.");
-
+				
 				return output.ToString();
 			}
 		}

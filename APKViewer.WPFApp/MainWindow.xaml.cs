@@ -18,12 +18,20 @@ namespace APKViewer.WPFApp
 		{
 			InitializeComponent();
 			bindedViewModel = (APKViewModel)DataContext;
-			bindedViewModel.SetDecoder(new WindowsAPKDecoder());
+			WindowsAPKDecoder decoder = new WindowsAPKDecoder();
+			//decoder.statusReportEvent += ShowTestLog;
+			bindedViewModel.SetDecoder(decoder);
 			bindedViewModel.SetDialogService(this);
 			overlayVisibilityBindingExpress = DropOverlay.GetBindingExpression(Grid.VisibilityProperty);
 
 			OpenFileArgProcess();
 		}
+
+		//private void ShowTestLog(string x)
+		//{
+		//	if (!StatusTestLabel.Content.ToString().Contains("error"))
+		//		StatusTestLabel.Content = x;
+		//}
 
 		private void OpenFileArgProcess()
 		{
@@ -49,6 +57,7 @@ namespace APKViewer.WPFApp
 						if (fileName.EndsWith("apk"))
 						{
 							bindedViewModel.SetNewFile(new Uri(fileName));
+							break;
 						}
 					}
 				}
@@ -60,11 +69,9 @@ namespace APKViewer.WPFApp
 		private void FileDragEnter(object sender, DragEventArgs e)
 		{
 			DropOverlay.Visibility = Visibility.Visible;
-			//DropOverlay.SetBinding(Grid.VisibilityProperty, overlayVisibilityBindingExpress.ParentBinding);
 		}
 		private void FileDragLeave(object sender, DragEventArgs e)
 		{
-			//DropOverlay.Visibility = bindedViewModel.isDataEmpty ? Visibility.Visible : Visibility.Collapsed;
 			DropOverlay.SetBinding(Grid.VisibilityProperty, overlayVisibilityBindingExpress.ParentBinding);
 		}
 

@@ -183,6 +183,19 @@
 					Color="Black"
 					Opacity="0.3" />
 			</Grid.Background>
+			
+			<!--<Label
+				Content="{Binding FileLocation}" 
+				HorizontalAlignment="Center"
+				VerticalAlignment="Center"
+				Foreground="White" />-->
+			<!--<Label
+				x:Name="StatusTestLabel"
+				Content="Test"
+				HorizontalAlignment="Center"
+				VerticalAlignment="Center"
+				Foreground="White"
+				Margin=" 0,345,0,10" />-->
 		</Grid>
 	</Grid>
 
