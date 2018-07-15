@@ -10,5 +10,6 @@ namespace APKViewer
 		public const string Permission_Required = "Required:";
 		public const string Permission_NotRequired = "Not Required:";
 		public const string Msg_JavaNotFound = "Java is not found, can't read apk signature.";
+		public const string LangCode_Key_Default = "";
 	}
 }

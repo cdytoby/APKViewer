@@ -7,6 +7,7 @@ namespace APKViewer
     public class APKDataModel
     {
 		public string AppName { get; set; }
+		public Dictionary<string, string> AppNameLangDict { get; set; }
 		public string PackageName { get; set; }
 		public string VersionString { get; set; }
 		public int VersionCode { get; set; }

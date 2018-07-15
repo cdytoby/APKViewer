@@ -44,6 +44,8 @@ namespace APKViewer
 				targetModel.Feature_Require = new List<string>();
 			if (targetModel.Feature_NotRequire == null)
 				targetModel.Feature_NotRequire = new List<string>();
+			if (targetModel.AppNameLangDict == null)
+				targetModel.AppNameLangDict = new Dictionary<string, string>();
 
 			string[] textLines = badgingResult.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 			foreach (string line in textLines)
@@ -64,6 +66,18 @@ namespace APKViewer
 						targetModel.MaxIconZipEntry = value;
 					}
 				}
+				if (key.StartsWith(KEY_APPLABEL))
+				{
+					if (key.Equals(KEY_APPLABEL))
+					{
+						targetModel.AppNameLangDict.Add(StringConstant.LangCode_Key_Default, value);
+					}
+					else if (targetModel.AppNameLangDict.ContainsKey(StringConstant.LangCode_Key_Default) &&
+						!value.Equals(targetModel.AppNameLangDict[StringConstant.LangCode_Key_Default]))
+					{
+						targetModel.AppNameLangDict.Add(key.Substring(KEY_APPLABEL.Length + 1), value);
+					}
+				}
 
 				switch (key)
 				{
@@ -78,8 +92,6 @@ namespace APKViewer
 						break;
 					case KEY_TARGETSDK:
 						targetModel.MaxSDKCode = int.Parse(value);
-						break;
-					case KEY_APPLABEL:
 						break;
 					case KEY_APP:
 						Dictionary<string, string> labelDict = SplitSubDict(value);

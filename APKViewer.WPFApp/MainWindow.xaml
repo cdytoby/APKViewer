@@ -36,7 +36,7 @@
 			<Grid>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition
-						Width="4*" />
+						Width="2*" />
 					<ColumnDefinition
 						Width="*" />
 				</Grid.ColumnDefinitions>
@@ -96,6 +96,14 @@
 						ToolTip="{Binding imgToolTip, Mode=OneWay}"
 						Source="{Binding iconPngByte, Mode=OneWay, 
 							Converter={StaticResource defaultImageConverter}}" />
+					<ComboBox
+						Height="25"
+						IsEditable="True"
+						IsReadOnly="True"
+						Focusable="False"
+						SelectedItem="{Binding selectedAppName, Mode=OneWay}"
+						ItemsSource="{Binding appNameList}"
+						/>
 				</StackPanel>
 			</Grid>
 

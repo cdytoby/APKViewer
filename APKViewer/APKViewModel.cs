@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace APKViewer
 {
@@ -31,6 +34,10 @@ namespace APKViewer
 		public string imgToolTip => targetAPKData?.MaxIconZipEntry;
 		public byte[] iconPngByte => targetAPKData?.MaxIconContent;
 
+		private ObservableCollection<string> m_appNameList;
+		public string selectedAppName { get; protected set; }
+		public ObservableCollection<string> appNameList => GetAppNameList();
+
 		public string rawBadging => targetAPKData?.RawDumpBadging;
 		public string rawSignature => targetAPKData?.RawDumpSignature;
 
@@ -39,6 +46,29 @@ namespace APKViewer
 
 		public APKViewModel()
 		{
+			m_appNameList = new ObservableCollection<string>();
+		}
+
+		private void SetupMockupDataModel()
+		{
+			//targetAPKData = new APKDataModel();
+			//if (targetAPKData.Permissions == null)
+			//	targetAPKData.Permissions = new List<string>();
+			//if (targetAPKData.Densities == null)
+			//	targetAPKData.Densities = new List<string>();
+			//if (targetAPKData.ScreenSize == null)
+			//	targetAPKData.ScreenSize = new List<string>();
+			//if (targetAPKData.Feature_Require == null)
+			//	targetAPKData.Feature_Require = new List<string>();
+			//if (targetAPKData.Feature_NotRequire == null)
+			//	targetAPKData.Feature_NotRequire = new List<string>();
+			//if (targetAPKData.AppNameLangDict == null)
+			//	targetAPKData.AppNameLangDict = new Dictionary<string, string>();
+
+			//targetAPKData.AppNameLangDict.Add("key1", "value1");
+			//targetAPKData.AppNameLangDict.Add("key2", "value2");
+			//targetAPKData.AppNameLangDict.Add("key3", "value3");
+			//targetAPKData.AppNameLangDict.Add("key4", "value4");
 		}
 
 		public void SetDecoder(IApkDecoder newDecoder)
@@ -86,6 +116,32 @@ namespace APKViewer
 			}
 
 			return builder.ToString();
+		}
+
+		private ObservableCollection<string> GetAppNameList()
+		{
+			m_appNameList.Clear();
+			if (targetAPKData != null)
+			{
+				IEnumerable<string> newStringIEnum = targetAPKData.AppNameLangDict.Select((x) =>
+				{
+					if (string.IsNullOrEmpty(x.Key))
+						return x.Value;
+					return x.Key + ": " + x.Value;
+				}
+				);
+				foreach (string s in newStringIEnum)
+				{
+					m_appNameList.Add(s);
+				}
+			}
+
+			if (m_appNameList.Count > 0)
+				selectedAppName = m_appNameList[0];
+			else
+				selectedAppName = string.Empty;
+
+			return m_appNameList;
 		}
 
 		private void OpenRawViewDialog()
