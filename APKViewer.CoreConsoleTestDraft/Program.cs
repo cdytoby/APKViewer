@@ -15,7 +15,21 @@ namespace APKViewer.CoreConsoleTestDraft
 
 		static void Main(string[] args)
 		{
-			Test3();
+			Test4();
+		}
+
+		private static void Test4()
+		{
+			string numberA = "0x30000";
+			string numberB = "0x00030000";
+			string numberC = "0x00150015";
+			string numberD = "00030000";
+			int valueE = Convert.ToInt32(numberC, 16);
+
+			var result = valueE >> 0x00000010;
+			var result2 = valueE & 0xFFFF;
+
+			Console.WriteLine("result=" + result + "." + result2);
 		}
 
 		private static void Test1()

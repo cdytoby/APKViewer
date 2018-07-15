@@ -8,8 +8,10 @@
 	xmlns:data="clr-namespace:APKViewer;assembly=APKViewer"
 	mc:Ignorable="d"
 	Title="APKViewer"
-	Height="650"
+	Height="680"
+	MinHeight="650"
 	Width="600"
+	MinWidth="600"
 	WindowStartupLocation="CenterScreen"
 	AllowDrop="True"
 	DragDrop.Drop="FileDrop"
@@ -89,10 +91,11 @@
 					</DockPanel>
 				</StackPanel>
 				<StackPanel
+					Margin="3,0,3,0"
 					Grid.Column="1">
 					<Image
 						Margin="3"
-						Height="90"
+						Height="121"
 						ToolTip="{Binding imgToolTip, Mode=OneWay}"
 						Source="{Binding iconPngByte, Mode=OneWay, 
 							Converter={StaticResource defaultImageConverter}}" />
@@ -124,6 +127,17 @@
 				<TextBox
 					Style="{StaticResource Textbox_FieldDefault}"
 					Text="{Binding densities, Mode=OneWay}" />
+			</DockPanel>
+			<DockPanel
+				Visibility="{Binding openGLExist,
+					Converter={StaticResource booleanToVisibilityConverter}}"
+				Style="{StaticResource RowPanel_Default}">
+				<Label
+					Style="{StaticResource Label_FieldDefault}"
+					Content="OpenGL" />
+				<TextBox
+					Style="{StaticResource Textbox_FieldDefault}"
+					Text="{Binding openGLString, Mode=OneWay}" />
 			</DockPanel>
 
 			<DockPanel

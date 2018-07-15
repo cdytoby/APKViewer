@@ -20,6 +20,7 @@ namespace APKViewer
 		private const string KEY_SCREENSIZE = "supports-screens";
 		private const string KEY_DENSITY = "densities";
 		private const string KEY_DENSITY_ANY = "supports-any-density";
+		private const string KEY_GLES = "uses-gl-es";
 		private const string KEY_FEATURE_REQUIRED = "uses-feature";
 		private const string KEY_FEATURE_NOTREQUIRED = "uses-feature-not-required";
 
@@ -118,6 +119,12 @@ namespace APKViewer
 					case KEY_FEATURE_NOTREQUIRED:
 						Dictionary<string, string> featureNRDict = SplitSubDict(value);
 						targetModel.Feature_NotRequire.Add(featureNRDict[SUBKEY_NAME]);
+						break;
+					case KEY_GLES:
+						int hexValue = Convert.ToInt32(value, 16);
+						int versionMain = hexValue >> 0x00000010;
+						int versionSub = hexValue & 0xFFFF;
+						targetModel.OpenGLVersion = StringConstant.FieldHead_OpenGL + versionMain + "." + versionSub;
 						break;
 					default:
 						//Console.WriteLine("Key not processed, key=" + key);

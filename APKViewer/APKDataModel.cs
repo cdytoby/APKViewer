@@ -18,6 +18,7 @@ namespace APKViewer
 		public List<string> Permissions { get; set; }
 		public List<string> Feature_Require { get; set; }
 		public List<string> Feature_NotRequire { get; set; }
+		public string OpenGLVersion { get; set; }
 		public string Signature { get; set; }
 		public string SHA1Hash { get; set; }
 		public string MaxIconZipEntry { get; set; }
