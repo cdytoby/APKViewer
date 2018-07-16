@@ -48,6 +48,8 @@ namespace APKViewer.WPFApp
 			await Decode_Icon();
 			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() Decode_Signature start.");
 			await Decode_Signature();
+			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() Decode_Hash start.");
+			Decode_Hash();
 
 			Console.WriteLine("WindowsAPKDecoder.Decode() decode finish.");
 			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() decode finish.");
@@ -130,6 +132,11 @@ namespace APKViewer.WPFApp
 
 			dataModel.RawDumpSignature = processResult;
 			DesktopCMDAPKSignerUtil.ReadAPKSignature(dataModel, processResult);
+		}
+
+		private void Decode_Hash()
+		{
+			FileHashCalcUtil.CalculateSHA1(targetFilePath, dataModel);
 		}
 
 		private async Task<string> ExecuteProcess(ProcessStartInfo startInfo, int timeout = 5000, bool useError = false)

@@ -33,6 +33,7 @@ namespace APKViewer
 		public string openGLString => targetAPKData?.OpenGLVersion;
 		public bool openGLExist => openGLString != null;
 		public string signature => targetAPKData?.Signature;
+		public string hashString => targetAPKData?.SHA1Hash;
 		public string imgToolTip => targetAPKData?.MaxIconZipEntry;
 		public byte[] iconPngByte => targetAPKData?.MaxIconContent;
 

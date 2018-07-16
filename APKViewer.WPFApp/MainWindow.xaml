@@ -8,8 +8,8 @@
 	xmlns:data="clr-namespace:APKViewer;assembly=APKViewer"
 	mc:Ignorable="d"
 	Title="APKViewer"
-	Height="680"
-	MinHeight="650"
+	Height="690"
+	MinHeight="660"
 	Width="600"
 	MinWidth="600"
 	WindowStartupLocation="CenterScreen"
@@ -103,7 +103,6 @@
 						Height="25"
 						IsEditable="True"
 						IsReadOnly="True"
-						Focusable="False"
 						SelectedItem="{Binding selectedAppName, Mode=OneWay}"
 						ItemsSource="{Binding appNameList}"
 						/>
@@ -154,7 +153,7 @@
 			</DockPanel>
 			<DockPanel
 				Style="{StaticResource RowPanel_Default}"
-				Height="120">
+				Height="100">
 				<Label
 					Style="{StaticResource Label_FieldDefault}"
 					Content="Features" />
@@ -176,6 +175,15 @@
 					VerticalScrollBarVisibility="Auto"
 					HorizontalScrollBarVisibility="Auto"
 					TextWrapping="Wrap" />
+			</DockPanel>
+			<DockPanel
+				Style="{StaticResource RowPanel_Default}">
+				<Label
+					Style="{StaticResource Label_FieldDefault}"
+					Content="SHA1 Hash" />
+				<TextBox
+					Style="{StaticResource Textbox_FieldDefault}"
+					Text="{Binding hashString, Mode=OneWay}"/>
 			</DockPanel>
 		</StackPanel>
 
