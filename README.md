@@ -17,7 +17,7 @@ There is already a very good APK-Info out there, and it contains more features.
 The reason I do this because:
 - I don't have any GitHub open source project experience, and this is my very first one.
 - I don't trust AutoIt, I noticed that many exes export from it will be recognised as virus. That's probably faulty report, but I still don't trust this tool.
-- I'm using .Net Standard for potencial multiplatform approach. I want it go multiplatform. And the reason I don't use other framework is just because I don't know how to do them. I can only do good programming c#.
+- I'm using .Net Standard for potencial multiplatform approach. I want it go multiplatform. And c# with .Net Standard is the only knowledge I have to create a multiplatform app with good UI.
 
 ### My Plan
 
