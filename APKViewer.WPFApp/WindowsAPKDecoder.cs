@@ -103,7 +103,7 @@ namespace APKViewer.WPFApp
 					FileName = "cmd.exe",
 					Arguments = "/c java -version"
 				};
-				processResult = await ExecuteProcess(psiJavaVersion, 100, true);
+				processResult = await ExecuteProcess(psiJavaVersion, true);
 				if (!processResult.StartsWith("java version"))
 				{
 					javaTested = true;
@@ -139,7 +139,7 @@ namespace APKViewer.WPFApp
 			FileHashCalcUtil.CalculateSHA1(targetFilePath, dataModel);
 		}
 
-		private async Task<string> ExecuteProcess(ProcessStartInfo startInfo, int timeout = 5000, bool useError = false)
+		private async Task<string> ExecuteProcess(ProcessStartInfo startInfo, bool useError = false)
 		{
 			string result = string.Empty;
 
@@ -200,6 +200,7 @@ namespace APKViewer.WPFApp
 				statusReportEvent?.Invoke("WindowsAPKDecoder.ExecuteProcess() process started.");
 
 				await tcs.Task;
+				await Task.Delay(50);
 				
 				//Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() Final result=\r\n" + output.ToString());
 				Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() finish.");
