@@ -1,16 +1,18 @@
 # APKViewer
 
-Work in Progress APK Viewer, using .Net Standard and .Net Framework.
+A still Work in Progress APK Viewer, using .Net Standard and .Net Framework. Currently in Beta release.
+
+![alt text](/ReadmeAssets/ScreenShot_Main.png)
 
 ### To all passerby
 
-Please try not to create any issue tickets before the tool is proper released, unless the unactive time is more than 2 months, or the topic is rather urgent. 
+Free to create issues for bug-report, feature-request, improvement-suggestion and so on. Especially if the project is many years old and has issue with newer OS or special apks.
 
-Once it's released, feel free to create any issue for bug-report, feature-request, improvement-suggestion. 
+I need help for making macOS version. If you think you can do this and want to support this project, go for it and feel free to make Pull requests. I have a macOS machine to test in my workplace, and we appretiate your support.
 
-### Reason I do this:
+### About this project
 
-There is already a very good APK-Info out there, https://github.com/Enyby/APK-Info It's a good one, and it already contains much more features. So if you're looking for such tools, be sure to check that out.
+There is already a very good APK-Info out there, and it contains more features.
 
 The reason I do this because:
 - I don't have any GitHub open source project experience, and this is my very first one.
