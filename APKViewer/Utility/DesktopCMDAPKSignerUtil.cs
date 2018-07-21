@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace APKViewer
+namespace APKViewer.Utility
 {
 	public static class DesktopCMDAPKSignerUtil
 	{

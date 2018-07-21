@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace APKViewer
+namespace APKViewer.Utility
 {
 	public static class DesktopCMDAAPTUtil
 	{

@@ -4,7 +4,7 @@ using System.Text;
 using System.Security.Cryptography;
 using System.IO;
 
-namespace APKViewer
+namespace APKViewer.Utility
 {
 	public static class FileHashCalcUtil
 	{
