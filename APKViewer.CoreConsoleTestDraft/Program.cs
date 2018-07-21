@@ -2,11 +2,13 @@
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using APKViewer.Localize;
 
 namespace APKViewer.CoreConsoleTestDraft
 {
 	class Program
 	{
+		private const string WorkingDirectory = @"D:\Android";
 		private const string AAPT = @"C:\CLIProgram\Android\AndroidSDK\build-tools\27.0.0\aapt.exe";
 		private const string sourceTxtFile = @"D:\Android\RawData.txt";
 		private const string sourceAPKFile = @"F:\Workspaces\VisualStudio\APKViewer\Release\Amaze File Manager_v3.2.2_apkpure.com.apk";
@@ -15,7 +17,17 @@ namespace APKViewer.CoreConsoleTestDraft
 
 		static void Main(string[] args)
 		{
-			Test4();
+			Test6();
+		}
+
+		private static void Test6()
+		{
+			Console.WriteLine("Result=" + LocalizationCenter.currentDataModel.Head_AppName);
+		}
+
+		private static void Test5()
+		{
+			File.WriteAllText(Path.Combine(WorkingDirectory, "defaultJson.json"), LocalizationCenter.RequestModelJson());
 		}
 
 		private static void Test4()
