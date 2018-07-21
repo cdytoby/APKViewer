@@ -10,6 +10,7 @@ namespace APKViewer.Localize
 {
 	public static class LocalizationCenter
 	{
+		public const string FOLDER_LOCALIZATION = "Local";
 		private const string DEFAULT_LOCALIZATION_RESOURCE_NAME = "APKViewer.Localize.Default.json";
 		private const string DEFAULT_LOCALIZATION_RESOURCE_LANGCODE = "en-us";
 
@@ -23,9 +24,17 @@ namespace APKViewer.Localize
 			using (Stream stream = assembly.GetManifestResourceStream(DEFAULT_LOCALIZATION_RESOURCE_NAME))
 			using (StreamReader reader = new StreamReader(stream))
 			{
-				string result = reader.ReadToEnd();
-				currentDataModel = JsonConvert.DeserializeObject<LocalizeTextDataModel>(result);
-				currentLangCode = DEFAULT_LOCALIZATION_RESOURCE_LANGCODE;
+				SetLocalizationData(DEFAULT_LOCALIZATION_RESOURCE_LANGCODE, reader.ReadToEnd());
+			}
+		}
+
+		public static void SetLocalizationData(string newLangCode, string newLangJsonStr)
+		{
+			LocalizeTextDataModel newModel = JsonConvert.DeserializeObject<LocalizeTextDataModel>(newLangJsonStr);
+			if (newModel != null)
+			{
+				currentDataModel = newModel;
+				currentLangCode = newLangCode;
 			}
 		}
 

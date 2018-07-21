@@ -1,0 +1,8 @@
+{
+  "LanguageName": "Deutsch",
+  "Head_AppName": "App Name",
+  "Head_PackageName": "Paket Name",
+  "Head_AppVersion": "Version",
+  "Field_Permission_Required": "Erforderlich:",
+  "Field_Permission_NotRequired": "Nicht erforderlich:"
+}

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Linq;
 using System.Collections.ObjectModel;
+using APKViewer.Localize;
 
 namespace APKViewer
 {
@@ -13,6 +14,8 @@ namespace APKViewer
 	{
 		private IApkDecoder apkDecoder;
 		private IOpenRawDialogService dialogService;
+
+		public LocalizeTextDataModel localizeModel => LocalizationCenter.currentDataModel;
 
 		public APKDataModel targetAPKData { get; protected set; }
 		public Uri FileLocation { get; protected set; }
@@ -115,14 +118,14 @@ namespace APKViewer
 			StringBuilder builder = new StringBuilder();
 			if (targetAPKData.Feature_Require.Count > 0)
 			{
-				builder.AppendLine(StringConstant.Permission_Required);
+				builder.AppendLine(localizeModel.Field_Permission_Required);
 				builder.AppendLine(StringGroupToString(targetAPKData?.Feature_Require));
 			}
 			if (targetAPKData.Feature_NotRequire.Count > 0)
 			{
 				if (builder.Length != 0)
 					builder.AppendLine();
-				builder.AppendLine(StringConstant.Permission_NotRequired);
+				builder.AppendLine(localizeModel.Field_Permission_NotRequired);
 				builder.AppendLine(StringGroupToString(targetAPKData?.Feature_NotRequire));
 			}
 

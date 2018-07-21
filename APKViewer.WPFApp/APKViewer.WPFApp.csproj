@@ -92,6 +92,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppUtility.cs" />
     <Compile Include="DefaultImageConverter.cs" />
     <Compile Include="ExternalToolBinPath.cs" />
     <Compile Include="RawDataDialog.xaml.cs">
@@ -191,7 +192,7 @@
 MOVE "$(SolutionDir)\Release\$(TargetFileName)" "$(SolutionDir)\Release\APKViewer.exe"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>XCOPY /Y /R "$(SolutionDir)\OtherAssets\*" "$(TargetDir)"
+    <PreBuildEvent>XCOPY /S /Y /R "$(SolutionDir)\OtherAssets\*" "$(TargetDir)"
 XCOPY /Y /R "$(SolutionDir)\ExternalTools\Windows\*" "$(TargetDir)\ExternalTools\"</PreBuildEvent>
   </PropertyGroup>
 </Project>

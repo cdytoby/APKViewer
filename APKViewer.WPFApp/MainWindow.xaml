@@ -48,7 +48,7 @@
 						Style="{StaticResource RowPanel_Default}">
 						<Label
 							Style="{StaticResource Label_FieldDefault}"
-							Content="AppName" />
+							Content="{Binding localizeModel.Head_AppName}" />
 						<TextBox
 							Style="{StaticResource Textbox_FieldDefault}"
 							Text="{Binding AppName, Mode=OneWay}" />
@@ -57,7 +57,7 @@
 						Style="{StaticResource RowPanel_Default}">
 						<Label
 							Style="{StaticResource Label_FieldDefault}"
-							Content="PackageName" />
+							Content="{Binding localizeModel.Head_PackageName}" />
 						<TextBox
 							Style="{StaticResource Textbox_FieldDefault}"
 							Text="{Binding PackageName, Mode=OneWay}" />
@@ -66,7 +66,7 @@
 						Style="{StaticResource RowPanel_Default}">
 						<Label
 							Style="{StaticResource Label_FieldDefault}"
-							Content="AppVersion" />
+							Content="{Binding localizeModel.Head_AppVersion}" />
 						<TextBox
 							Style="{StaticResource Textbox_FieldDefault}"
 							Text="{Binding AppVersion, Mode=OneWay}" />
