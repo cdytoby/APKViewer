@@ -9,10 +9,15 @@
 	"Head_Densities": "Densities",
 	"Head_Permission": "Permissions",
 	"Head_Features": "Features",
+	"Head_OpenGL": "OpenGL Version",
 	"Head_Signature": "Signature",
 	"Head_Hash_SHA1": "SHA1 Hash",
+	"Head_Raw_Badging": "Raw Badging",
+	"Head_Raw_Signature": "Raw Signature",
 	"Button_SearchPlayStore": "Search PlayStore",
 	"Button_ViewRawDump": "View Raw",
-	"Field_Permission_Required": "Required:",
-	"Field_Permission_NotRequired": "Not required:"
+	"Field_Feature_Required": "Required:",
+	"Field_Feature_NotRequired": "Not required:",
+	"Msg_DragDropHere": "Drag and drop apk here.",
+	"Msg_JavaNotFound": "Java is not found, can't read apk signature."
 }

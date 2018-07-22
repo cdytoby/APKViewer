@@ -3,13 +3,14 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using APKViewer.Localize;
+using Newtonsoft.Json;
 
 namespace APKViewer.CoreConsoleTestDraft
 {
 	class Program
 	{
 		private const string WorkingDirectory = @"D:\Android";
-		private const string AAPT = @"C:\CLIProgram\Android\AndroidSDK\build-tools\27.0.0\aapt.exe";
+		private const string localizationPath = @"F:\Workspaces\VisualStudio\APKViewer\OtherAssets\Local";
 		private const string sourceTxtFile = @"D:\Android\RawData.txt";
 		private const string sourceAPKFile = @"F:\Workspaces\VisualStudio\APKViewer\Release\Amaze File Manager_v3.2.2_apkpure.com.apk";
 		private const string apkIconFile = @"res/mipmap-xxxhdpi-v4/ic_launcher.png";
@@ -17,7 +18,20 @@ namespace APKViewer.CoreConsoleTestDraft
 
 		static void Main(string[] args)
 		{
-			Test6();
+			Test7();
+		}
+
+		private static void Test7()
+		{
+			string[] fileList = Directory.GetFiles(localizationPath);
+			foreach (string filePath in fileList)
+			{
+				Console.WriteLine("processing " + filePath);
+				LocalizeTextDataModel ltdm = JsonConvert.DeserializeObject<LocalizeTextDataModel>(File.ReadAllText(filePath));
+
+				File.WriteAllText(filePath, JsonConvert.SerializeObject(ltdm, Formatting.Indented));
+				Console.WriteLine("processing finish. path=" + filePath);
+			}
 		}
 
 		private static void Test6()
@@ -61,15 +75,6 @@ namespace APKViewer.CoreConsoleTestDraft
 					Console.WriteLine("Feature Test copy finished");
 				}
 			}
-		}
-
-		private static void Test2()
-		{
-			Uri targetFilePath = new Uri(sourceAPKFile);
-			Process cmd = new Process();
-			cmd.StartInfo.FileName = AAPT;
-			cmd.StartInfo.Arguments = "d badging " + Uri.UnescapeDataString(targetFilePath.AbsolutePath);
-			Console.WriteLine("WindowsAPKDecoder.Decode_Badging() Full CMD= " + cmd.StartInfo.Arguments);
 		}
 
 		private static void Test3()

@@ -118,14 +118,14 @@ namespace APKViewer
 			StringBuilder builder = new StringBuilder();
 			if (targetAPKData.Feature_Require.Count > 0)
 			{
-				builder.AppendLine(localizeModel.Field_Permission_Required);
+				builder.AppendLine(localizeModel.Field_Feature_Required);
 				builder.AppendLine(StringGroupToString(targetAPKData?.Feature_Require));
 			}
 			if (targetAPKData.Feature_NotRequire.Count > 0)
 			{
 				if (builder.Length != 0)
 					builder.AppendLine();
-				builder.AppendLine(localizeModel.Field_Permission_NotRequired);
+				builder.AppendLine(localizeModel.Field_Feature_NotRequired);
 				builder.AppendLine(StringGroupToString(targetAPKData?.Feature_NotRequire));
 			}
 

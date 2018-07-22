@@ -1,4 +1,5 @@
-﻿using APKViewer.Utility;
+﻿using APKViewer.Localize;
+using APKViewer.Utility;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -66,7 +67,7 @@ namespace APKViewer.WPFApp
 			};
 			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode_Badging(), path=" + targetFilePath.OriginalString);
 			string processResult = await ExecuteProcess(psi);
-			
+
 			dataModel.RawDumpBadging = processResult;
 			DesktopCMDAAPTUtil.ReadBadging(dataModel, dataModel.RawDumpBadging);
 		}
@@ -118,7 +119,7 @@ namespace APKViewer.WPFApp
 
 			if (!javaExist)
 			{
-				dataModel.Signature = StringConstant.Msg_JavaNotFound;
+				dataModel.Signature = LocalizationCenter.currentDataModel.Msg_JavaNotFound;
 				return;
 			}
 
@@ -159,7 +160,7 @@ namespace APKViewer.WPFApp
 				statusReportEvent?.Invoke("WindowsAPKDecoder.ExecuteProcess() setup: \r\n" +
 					process.StartInfo.FileName + " " + process.StartInfo.Arguments);
 
-				Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() setup: \r\n" + 
+				Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() setup: \r\n" +
 					process.StartInfo.FileName + " " + process.StartInfo.Arguments);
 
 				StringBuilder output = new StringBuilder();
@@ -202,10 +203,10 @@ namespace APKViewer.WPFApp
 
 				await tcs.Task;
 				await Task.Delay(50);
-				
+
 				//Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() Final result=\r\n" + output.ToString());
 				Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() finish.");
-				
+
 				return output.ToString();
 			}
 		}

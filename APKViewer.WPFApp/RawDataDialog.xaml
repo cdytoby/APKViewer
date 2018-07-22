@@ -16,7 +16,10 @@
 		<ResourceDictionary
 			Source="DefaultStyle.xaml" />
 	</Window.Resources>
-
+	
+	<!--<Window.DataContext>
+		<data:APKViewModel />
+	</Window.DataContext>-->
 
 	<Grid>
 
@@ -32,7 +35,7 @@
 			Height="Auto">
 			<Label
 				Style="{StaticResource Label_FieldDefault}"
-				Content="Raw Badging" />
+				Content="{Binding localizeModel.Head_Raw_Badging, Mode=OneWay}" />
 			<TextBox
 				IsReadOnly="true"
 				Text="{Binding rawBadging, Mode=OneWay}"
@@ -45,7 +48,7 @@
 			Grid.Row="1">
 			<Label
 				Style="{StaticResource Label_FieldDefault}"
-				Content="Raw Signature" />
+				Content="{Binding localizeModel.Head_Raw_Signature, Mode=OneWay}" />
 			<TextBox
 				IsReadOnly="true"
 				Text="{Binding rawSignature, Mode=OneWay}"
