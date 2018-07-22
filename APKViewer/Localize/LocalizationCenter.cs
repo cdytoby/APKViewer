@@ -11,8 +11,8 @@ namespace APKViewer.Localize
 	public static class LocalizationCenter
 	{
 		public const string FOLDER_LOCALIZATION = "Local";
+		public const string DEFAULT_LOCALIZATION_RESOURCE_LANGCODE = "en-us";
 		private const string DEFAULT_LOCALIZATION_RESOURCE_NAME = "APKViewer.Localize.Default.json";
-		private const string DEFAULT_LOCALIZATION_RESOURCE_LANGCODE = "en-us";
 
 		public static string currentLangCode { get; private set; }
 		public static LocalizeTextDataModel currentDataModel { get; private set; }
@@ -45,7 +45,7 @@ namespace APKViewer.Localize
 				ContractResolver = new JsonCustomization.NullToEmptyStringResolver()
 			};
 
-			return JsonConvert.SerializeObject(new LocalizeTextDataModel(), Formatting.Indented, settings);
+			return JsonConvert.SerializeObject(currentDataModel, Formatting.Indented, settings);
 		}
 	}
 }

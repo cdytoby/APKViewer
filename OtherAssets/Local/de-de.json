@@ -2,7 +2,17 @@
   "LanguageName": "Deutsch",
   "Head_AppName": "App Name",
   "Head_PackageName": "Paket Name",
-  "Head_AppVersion": "Version",
+  "Head_AppVersion": "Version",	
+  "Head_MinSDK": "Min SDK",
+	"Head_MaxSDK": "Max SDK",
+	"Head_ScreenSize": "Screen Size",
+	"Head_Densities": "Densities",
+	"Head_Permission": "Permissions",
+	"Head_Features": "Features",
+	"Head_Signature": "Signatur",
+	"Head_Hash_SHA1": "SHA1 Hash",
+	"Button_SearchPlayStore": "Suche PlayStore",
+	"Button_ViewRawDump": "View Raw",
   "Field_Permission_Required": "Erforderlich:",
   "Field_Permission_NotRequired": "Nicht erforderlich:"
 }

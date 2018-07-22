@@ -11,6 +11,16 @@ namespace APKViewer.Localize
 		public string Head_AppName { get; set; }
 		public string Head_PackageName { get; set; }
 		public string Head_AppVersion { get; set; }
+		public string Head_MinSDK { get; set; }
+		public string Head_MaxSDK { get; set; }
+		public string Head_ScreenSize { get; set; }
+		public string Head_Densities { get; set; }
+		public string Head_Permission { get; set; }
+		public string Head_Features { get; set; }
+		public string Head_Signature { get; set; }
+		public string Head_Hash_SHA1 { get; set; }
+		public string Button_SearchPlayStore { get; set; }
+		public string Button_ViewRawDump { get; set; }
 
 		public string Field_Permission_Required { get; set; }
 		public string Field_Permission_NotRequired { get; set; }

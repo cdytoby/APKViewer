@@ -22,7 +22,7 @@ namespace APKViewer.CoreConsoleTestDraft
 
 		private static void Test6()
 		{
-			Console.WriteLine("Result=" + LocalizationCenter.currentDataModel.Head_AppName);
+			Console.WriteLine("Result=" + System.Globalization.CultureInfo.CurrentCulture.Name);
 		}
 
 		private static void Test5()

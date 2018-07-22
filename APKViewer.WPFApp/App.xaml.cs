@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Navigation;
 
@@ -35,8 +36,8 @@ namespace APKViewer.WPFApp
 			string langCode = string.Empty;
 			if (!File.Exists(settingFilePath))
 			{
-				File.WriteAllText(settingFilePath, "en-us");
-				langCode = "en-us";
+				File.WriteAllText(settingFilePath, CultureInfo.CurrentCulture.Name);
+				langCode = CultureInfo.CurrentCulture.Name;
 			}
 			else
 			{
@@ -46,6 +47,8 @@ namespace APKViewer.WPFApp
 			string localFilePath = Path.Combine(AppUtility.GetCurrentExePath(), LocalizationCenter.FOLDER_LOCALIZATION, langCode + ".json");
 			if (!File.Exists(localFilePath))
 			{
+				File.WriteAllText(settingFilePath, LocalizationCenter.DEFAULT_LOCALIZATION_RESOURCE_LANGCODE);
+				langCode = LocalizationCenter.DEFAULT_LOCALIZATION_RESOURCE_LANGCODE;
 				return;
 			}
 
