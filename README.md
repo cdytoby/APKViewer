@@ -39,3 +39,15 @@ Things I don't think I'll do
 - open in other apk website like apkpure
 - Hash Compare
 - Decompile or unpack apk.
+
+### License
+
+This software is licensed under MIT License. 
+
+https://github.com/cdytoby/APKViewer/blob/master/LICENSE
+
+The app icon is from ionic-team, and it is modified by me.
+
+https://github.com/ionic-team/ionicons
+
+https://ionicons.com/
