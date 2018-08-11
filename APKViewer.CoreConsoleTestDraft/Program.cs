@@ -18,7 +18,7 @@ namespace APKViewer.CoreConsoleTestDraft
 
 		static void Main(string[] args)
 		{
-			Test7();
+			Test3();
 		}
 
 		private static void Test7()
@@ -81,7 +81,7 @@ namespace APKViewer.CoreConsoleTestDraft
 		{
 			string result = AndroidSDKData.RequestTableJsonString();
 			Console.WriteLine(result);
-			File.WriteAllText(Path.Combine(Environment.CurrentDirectory, jsonFile), result);
+			File.WriteAllText(Path.Combine(WorkingDirectory, jsonFile), result);
 		}
 	}
 }

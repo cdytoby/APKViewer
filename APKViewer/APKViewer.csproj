@@ -6,10 +6,12 @@
 
   <ItemGroup>
     <None Remove="Localize\Default.json" />
+    <None Remove="SDKData\DefaultData.json" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Localize\Default.json" />
+    <EmbeddedResource Include="SDKData\DefaultData.json" />
   </ItemGroup>
 
   <ItemGroup>

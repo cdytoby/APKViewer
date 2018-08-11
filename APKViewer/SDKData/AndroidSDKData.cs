@@ -1,12 +1,16 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace APKViewer
 {
 	public static class AndroidSDKData
 	{
+		private const string DEFAULT_SDK_RESOURCE_NAME = "APKViewer.SDKData.DefaultData.json";
+
 		private static Dictionary<int, (string, string)> defaultTableDict = new Dictionary<int, (string, string)>()
 		{
 			{1, ("1.0", "Base") },
@@ -36,6 +40,7 @@ namespace APKViewer
 			{25, ("7.1", "Nougat MR1") },
 			{26, ("8.0", "Oreo") },
 			{27, ("8.1", "Oreo MR1") },
+			{28, ("9.0", "Pie") }
 		};
 		public const string FILE_ANDROIDTABLE = "AndroidVersionTable.json";
 
@@ -43,7 +48,13 @@ namespace APKViewer
 
 		static AndroidSDKData()
 		{
-			tableDictionary = defaultTableDict;
+			Assembly assembly = Assembly.GetExecutingAssembly();
+
+			using (Stream stream = assembly.GetManifestResourceStream(DEFAULT_SDK_RESOURCE_NAME))
+			using (StreamReader reader = new StreamReader(stream))
+			{
+				SetTableFullString(reader.ReadToEnd());
+			}
 		}
 
 		public static void SetTableFullString(string sourceTable)
@@ -62,7 +73,13 @@ namespace APKViewer
 
 		public static string RequestTableJsonString()
 		{
-			return JsonConvert.SerializeObject(defaultTableDict, Formatting.Indented);
+			Assembly assembly = Assembly.GetExecutingAssembly();
+
+			using (Stream stream = assembly.GetManifestResourceStream(DEFAULT_SDK_RESOURCE_NAME))
+			using (StreamReader reader = new StreamReader(stream))
+			{
+				return reader.ReadToEnd();
+			}
 		}
 	}
 }
