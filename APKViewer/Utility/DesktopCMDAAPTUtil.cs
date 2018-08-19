@@ -121,16 +121,21 @@ namespace APKViewer.Utility
 						targetModel.Feature_NotRequire.Add(featureNRDict[SUBKEY_NAME]);
 						break;
 					case KEY_GLES:
-						int hexValue = Convert.ToInt32(value, 16);
-						int versionMain = hexValue >> 0x00000010;
-						int versionSub = hexValue & 0xFFFF;
-						targetModel.OpenGLVersion = StringConstant.FieldHead_OpenGL + versionMain + "." + versionSub;
+						targetModel.OpenGLVersion = StringConstant.FieldHead_OpenGL + OpenGLVersionParse(value);
 						break;
 					default:
 						//Console.WriteLine("Key not processed, key=" + key);
 						break;
 				}
 			}
+		}
+
+		public static string OpenGLVersionParse(string originalValue)
+		{
+			int hexValue = Convert.ToInt32(originalValue, 16);
+			int versionMain = hexValue >> 0x00000010;
+			int versionSub = hexValue & 0xFFFF;
+			return versionMain + "." + versionSub;
 		}
 
 		private static (string, string) SplitKeyValue(string lineText)
