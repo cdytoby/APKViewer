@@ -1,7 +1,7 @@
 {
   "LanguageName": "Deutsch",
   "Head_AppName": "App Name",
-  "Head_PackageName": "Paket Name",
+  "Head_PackageName": "Package Name",
   "Head_AppVersion": "Version",
   "Head_MinSDK": "Min SDK",
   "Head_MaxSDK": "Max SDK",
@@ -15,9 +15,9 @@
   "Head_Raw_Badging": "Raw Badging",
   "Head_Raw_Signature": "Raw Signature",
   "Button_SearchPlayStore": "Suche PlayStore",
-  "Button_ViewRawDump": "View Raw",
+  "Button_ViewRawDump": "Rohdaten",
   "Field_Feature_Required": "Erforderlich:",
   "Field_Feature_NotRequired": "Nicht erforderlich:",
-  "Msg_DragDropHere": "Drag and drop apk here.",
+  "Msg_DragDropHere": "Drag & Drop apk hierhin.",
   "Msg_JavaNotFound": "Java wird nicht gefunden."
 }
