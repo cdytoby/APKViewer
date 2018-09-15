@@ -1,6 +1,6 @@
 # APKViewer
 
-A simple APK Viewer, using .Net Standard and .Net Framework.
+A simple APK Viewer, developed using .Net Standard and .Net Framework.
 
 ![alt text](/ReadmeAssets/ScreenShot_Main.png)
 
@@ -14,7 +14,7 @@ A simple APK Viewer, using .Net Standard and .Net Framework.
 
 ### To all passerby
 
-Free to create issues for bug-report, feature-request, improvement-suggestion and so on. Especially if the project is many years old and has issue with newer OS or special apks.
+Feel free to create issues for bug-report, feature-request, improvement-suggestion and so on. Especially if the project is many years old and has issue with newer OS or some special apks.
 
 I need help for making macOS version. If you think you can do this and want to support this project, go for it and feel free to make Pull requests. I have a macOS machine to test in my workplace, and I appretiate your support.
 
