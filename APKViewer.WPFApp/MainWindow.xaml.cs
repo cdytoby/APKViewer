@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,7 +39,7 @@ namespace APKViewer.WPFApp
 			string[] envArgs = Environment.GetCommandLineArgs();
 			foreach (string arg in envArgs)
 			{
-				Console.WriteLine("MainWindow.OpenFileArgProcess(), Get arg= " + arg);
+				Debug.WriteLine("MainWindow.OpenFileArgProcess(), Get arg= " + arg);
 			}
 			if (envArgs.Length > 1)
 				bindedViewModel.SetNewFile(new Uri(envArgs[1]));
@@ -46,7 +47,7 @@ namespace APKViewer.WPFApp
 
 		private void FileDrop(object sender, DragEventArgs e)
 		{
-			Console.WriteLine("MainWindow.FileDrop(), something dropped.");
+			Debug.WriteLine("MainWindow.FileDrop(), something dropped.");
 			if (e.Data.GetDataPresent(DataFormats.FileDrop))
 			{
 				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);

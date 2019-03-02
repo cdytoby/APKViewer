@@ -239,8 +239,8 @@
 						Angle="0" />
 				</Image.RenderTransform>
 				<Image.Triggers>
-					<EventTrigger
-						RoutedEvent="Loaded">
+					<EventTrigger>
+						<EventTrigger.RoutedEvent>Loaded</EventTrigger.RoutedEvent>
 						<BeginStoryboard>
 							<Storyboard>
 								<DoubleAnimation

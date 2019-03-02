@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace APKViewer.WPFApp
 {
-	public class WindowsAPKDecoder : IApkDecoder
+	public class WindowsAPKDecoder: IApkDecoder
 	{
 		public static bool javaTested;
 		public static bool javaExist;
@@ -40,7 +40,7 @@ namespace APKViewer.WPFApp
 			//C:\CLIProgram\Android\AndroidSDK\build-tools\27.0.0\aapt.exe
 			//./aapt d badging "D:\Android\YahooWeatherProvider.apk"
 
-			Console.WriteLine("WindowsAPKDecoder.Decode() decode start.");
+			Debug.WriteLine("WindowsAPKDecoder.Decode() decode start.");
 			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() decode start.");
 			dataModel = new APKDataModel();
 
@@ -53,7 +53,7 @@ namespace APKViewer.WPFApp
 			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() Decode_Hash start.");
 			Decode_Hash();
 
-			Console.WriteLine("WindowsAPKDecoder.Decode() decode finish.");
+			Debug.WriteLine("WindowsAPKDecoder.Decode() decode finish.");
 			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() decode finish.");
 			decodeFinishedEvent?.Invoke();
 		}
@@ -79,7 +79,7 @@ namespace APKViewer.WPFApp
 			using (ZipArchive za = ZipFile.Open(targetFilePath.OriginalString, ZipArchiveMode.Read))
 			{
 				ZipArchiveEntry iconEntry = za.GetEntry(dataModel.MaxIconZipEntry);
-				Console.WriteLine("WindowsAPKDecoder.Decode_Icon() zip entry get." + iconEntry.FullName);
+				Debug.WriteLine("WindowsAPKDecoder.Decode_Icon() zip entry get. " + iconEntry.FullName);
 
 				using (Stream s = iconEntry.Open())
 				using (MemoryStream ms = new MemoryStream())
@@ -106,15 +106,8 @@ namespace APKViewer.WPFApp
 					Arguments = "/c java -version"
 				};
 				processResult = await ExecuteProcess(psiJavaVersion, true);
-				if (!processResult.StartsWith("java version"))
-				{
-					javaTested = true;
-					javaExist = false;
-				}
-				else
-				{
-					javaExist = true;
-				}
+				javaExist = DesktopCMDAPKSignerUtil.JavaExist(processResult);
+				javaTested = true;
 			}
 
 			if (!javaExist)
@@ -123,7 +116,7 @@ namespace APKViewer.WPFApp
 				return;
 			}
 
-			ProcessStartInfo psiAPKSigner = new ProcessStartInfo()
+			ProcessStartInfo psiAPKSigner = new ProcessStartInfo
 			{
 				FileName = "java.exe",
 				Arguments = "-jar " + ExternalToolBinPath.GETAPKSignerPath() +
@@ -143,7 +136,7 @@ namespace APKViewer.WPFApp
 
 		private async Task<string> ExecuteProcess(ProcessStartInfo startInfo, bool useError = false)
 		{
-			string result = string.Empty;
+			// string result = string.Empty;
 
 			using (Process process = new Process())
 			{
@@ -160,7 +153,7 @@ namespace APKViewer.WPFApp
 				statusReportEvent?.Invoke("WindowsAPKDecoder.ExecuteProcess() setup: \r\n" +
 					process.StartInfo.FileName + " " + process.StartInfo.Arguments);
 
-				Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() setup: \r\n" +
+				Debug.WriteLine("WindowsAPKDecoder.ExecuteProcess() setup: \r\n" +
 					process.StartInfo.FileName + " " + process.StartInfo.Arguments);
 
 				StringBuilder output = new StringBuilder();
@@ -204,8 +197,8 @@ namespace APKViewer.WPFApp
 				await tcs.Task;
 				await Task.Delay(50);
 
-				//Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() Final result=\r\n" + output.ToString());
-				Console.WriteLine("WindowsAPKDecoder.ExecuteProcess() finish.");
+				Debug.WriteLine("WindowsAPKDecoder.ExecuteProcess() Final result=\r\n" + output.ToString());
+				Debug.WriteLine("WindowsAPKDecoder.ExecuteProcess() finish.");
 
 				return output.ToString();
 			}
