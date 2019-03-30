@@ -19,10 +19,10 @@ namespace APKViewer.WPFApp
 		{
 			InitializeComponent();
 			bindedViewModel = (APKViewModel)DataContext;
-			WindowsAPKDecoder decoder = new WindowsAPKDecoder();
 			//decoder.statusReportEvent += ShowTestLog;
-			bindedViewModel.SetDecoder(decoder);
+			bindedViewModel.SetDecoder(new WindowsAPKDecoder());
 			bindedViewModel.SetDialogService(this);
+			bindedViewModel.SetInstaller(new WindowsApkInstaller());
 			overlayVisibilityBindingExpress = DropOverlay.GetBindingExpression(Grid.VisibilityProperty);
 
 			OpenFileArgProcess();

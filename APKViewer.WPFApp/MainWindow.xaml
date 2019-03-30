@@ -201,6 +201,10 @@
 				Style="{StaticResource Button_ActionBottom}"
 				Content="{Binding localizeModel.Button_ViewRawDump, Mode=OneWay}"
 				Command="{Binding openRawView}" />
+			<Button
+				Style="{StaticResource Button_ActionBottom}"
+				Content="{Binding localizeModel.Button_InstallApk, Mode=OneWay}"
+				Command="{Binding installApk}" />
 		</StackPanel>
 
 		<Grid

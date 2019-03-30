@@ -14,14 +14,21 @@ namespace APKViewer.WPFApp
 		public const string FOLDER_EXTERNAL_TOOL = "ExternalTools";
 		public const string EXE_AAPT = "aapt.exe";
 		public const string JAR_APKSIGNER = "apksigner.jar";
+		public const string EXE_ADB = "adb.exe";
 
 		public static string GetAAPTPath()
 		{
 			return Path.Combine(AppUtility.GetCurrentExePath(), FOLDER_EXTERNAL_TOOL, EXE_AAPT);
 		}
-		public static string GETAPKSignerPath()
+
+		public static string GetAPKSignerPath()
 		{
 			return Path.Combine(AppUtility.GetCurrentExePath(), FOLDER_EXTERNAL_TOOL, JAR_APKSIGNER);
+		}
+
+		public static string GetADBPath()
+		{
+			return Path.Combine(AppUtility.GetCurrentExePath(), FOLDER_EXTERNAL_TOOL, EXE_ADB);
 		}
 	}
 }

@@ -16,6 +16,7 @@
 	"Head_Raw_Signature": "Raw Signature",
 	"Button_SearchPlayStore": "Search PlayStore",
 	"Button_ViewRawDump": "View Raw",
+	"Button_InstallApk": "Install APK",
 	"Field_Feature_Required": "Required:",
 	"Field_Feature_NotRequired": "Not required:",
 	"Msg_DragDropHere": "Drag and drop apk here.",

@@ -16,6 +16,7 @@
   "Head_Raw_Signature": "原始签名数据",
   "Button_SearchPlayStore": "在应用商店查找",
   "Button_ViewRawDump": "查看原始数据",
+  "Button_InstallApk": "安装apk",
   "Field_Feature_Required": "必需的：",
   "Field_Feature_NotRequired": "不必需的：",
   "Msg_DragDropHere": "把apk文件拖放到此处.",

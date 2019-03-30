@@ -13,12 +13,13 @@ namespace APKViewer
 	public class APKViewModel : BindableModelBase
 	{
 		private IApkDecoder apkDecoder;
+		private IApkInstaller apkInstaller;
 		private IOpenRawDialogService dialogService;
 
 		public LocalizeTextDataModel localizeModel => LocalizationCenter.currentDataModel;
 
 		public APKDataModel targetAPKData { get; protected set; }
-		public Uri FileLocation { get; protected set; }
+		public Uri fileLocation { get; protected set; }
 		public bool isDecoding { get; protected set; }
 		public bool isNotDecoding => !isDecoding;
 
@@ -49,6 +50,7 @@ namespace APKViewer
 
 		public Command openPlayStore => new Command(OpenGooglePlayStore, CanExecutionActionBase);
 		public Command openRawView => new Command(OpenRawViewDialog, CanExecutionActionBase);
+		public Command installApk => new Command(InstallApk, CanExecutionActionBase);
 
 		public APKViewModel()
 		{
@@ -83,14 +85,26 @@ namespace APKViewer
 			apkDecoder = newDecoder;
 			apkDecoder.decodeFinishedEvent += GetDataFromDecoder;
 		}
+
+		public void SetInstaller(IApkInstaller newInstaller)
+		{
+			apkInstaller = newInstaller;
+			apkInstaller.installFinishedEvent+=ApkInstallFinished;
+		}
+
 		public void SetDialogService(IOpenRawDialogService newService)
 		{
 			dialogService = newService;
 		}
 
+		private void ApkInstallFinished(bool success, string message)
+		{
+			Debug.WriteLine("Install finished, success=" + success + " msg=" + message);
+		}
+
 		public void SetNewFile(Uri newFileUri)
 		{
-			FileLocation = newFileUri;
+			fileLocation = newFileUri;
 			targetAPKData = null;
 			apkDecoder.SetApkFilePath(newFileUri);
 			apkDecoder.Decode();
@@ -166,6 +180,11 @@ namespace APKViewer
 		private void OpenGooglePlayStore()
 		{
 			Process.Start(StringConstant.Url_Play + targetAPKData.PackageName);
+		}
+
+		private void InstallApk()
+		{
+			apkInstaller?.InstallApk(fileLocation);
 		}
 
 		private bool CanExecutionActionBase()

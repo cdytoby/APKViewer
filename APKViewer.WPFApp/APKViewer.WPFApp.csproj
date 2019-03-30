@@ -96,10 +96,12 @@
     <Compile Include="AppUtility.cs" />
     <Compile Include="DefaultImageConverter.cs" />
     <Compile Include="ExternalToolBinPath.cs" />
+    <Compile Include="ProcessExecuter.cs" />
     <Compile Include="RawDataDialog.xaml.cs">
       <DependentUpon>RawDataDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowsAPKDecoder.cs" />
+    <Compile Include="WindowsApkInstaller.cs" />
     <Page Include="DefaultStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

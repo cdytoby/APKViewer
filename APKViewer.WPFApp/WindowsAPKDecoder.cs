@@ -66,7 +66,7 @@ namespace APKViewer.WPFApp
 				Arguments = " d badging \"" + targetFilePath.OriginalString + "\""
 			};
 			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode_Badging(), path=" + targetFilePath.OriginalString);
-			string processResult = await ExecuteProcess(psi);
+			string processResult = await ProcessExecuter.ExecuteProcess(psi, false, statusReportEvent);
 
 			dataModel.RawDumpBadging = processResult;
 			DesktopCMDAAPTUtil.ReadBadging(dataModel, dataModel.RawDumpBadging);
@@ -105,7 +105,7 @@ namespace APKViewer.WPFApp
 					FileName = "cmd.exe",
 					Arguments = "/c java -version"
 				};
-				processResult = await ExecuteProcess(psiJavaVersion, true);
+				processResult = await ProcessExecuter.ExecuteProcess(psiJavaVersion, true, statusReportEvent);
 				javaExist = DesktopCMDAPKSignerUtil.JavaExist(processResult);
 				javaTested = true;
 			}
@@ -119,11 +119,11 @@ namespace APKViewer.WPFApp
 			ProcessStartInfo psiAPKSigner = new ProcessStartInfo
 			{
 				FileName = "java.exe",
-				Arguments = "-jar " + ExternalToolBinPath.GETAPKSignerPath() +
+				Arguments = "-jar " + ExternalToolBinPath.GetAPKSignerPath() +
 					" verify --verbose --print-certs" +
 					" \"" + targetFilePath.OriginalString + "\"",
 			};
-			processResult = await ExecuteProcess(psiAPKSigner);
+			processResult = await ProcessExecuter.ExecuteProcess(psiAPKSigner, false, statusReportEvent);
 
 			dataModel.RawDumpSignature = processResult;
 			DesktopCMDAPKSignerUtil.ReadAPKSignature(dataModel, processResult);
@@ -132,76 +132,6 @@ namespace APKViewer.WPFApp
 		private void Decode_Hash()
 		{
 			FileHashCalcUtil.CalculateSHA1(targetFilePath, dataModel);
-		}
-
-		private async Task<string> ExecuteProcess(ProcessStartInfo startInfo, bool useError = false)
-		{
-			// string result = string.Empty;
-
-			using (Process process = new Process())
-			{
-				//CultureInfo.CurrentCulture.TextInfo.OEMCodePage
-				startInfo.StandardOutputEncoding = Encoding.UTF8;
-
-				process.StartInfo = startInfo;
-				process.StartInfo.UseShellExecute = false;
-				process.StartInfo.CreateNoWindow = true;
-				process.StartInfo.RedirectStandardOutput = true;
-				process.StartInfo.RedirectStandardError = true;
-				process.EnableRaisingEvents = true;
-
-				statusReportEvent?.Invoke("WindowsAPKDecoder.ExecuteProcess() setup: \r\n" +
-					process.StartInfo.FileName + " " + process.StartInfo.Arguments);
-
-				Debug.WriteLine("WindowsAPKDecoder.ExecuteProcess() setup: \r\n" +
-					process.StartInfo.FileName + " " + process.StartInfo.Arguments);
-
-				StringBuilder output = new StringBuilder();
-				TaskCompletionSource<string> tcs = new TaskCompletionSource<string>();
-				if (!useError)
-				{
-					process.OutputDataReceived +=
-						(sender, e) =>
-						{
-							if (e.Data != null)
-							{
-								//Console.WriteLine("WindowsAPKDecoder.ExecuteProcess(): process.OutputDataReceived=\r\n" + e.Data);
-								output.AppendLine(e.Data);
-							}
-						};
-				}
-				else
-				{
-					process.ErrorDataReceived +=
-						(sender, e) =>
-						{
-							if (e.Data != null)
-							{
-								//Console.WriteLine("WindowsAPKDecoder.ExecuteProcess(): process.OutputDataReceived=\r\n" + e.Data);
-								output.AppendLine(e.Data);
-							}
-						};
-				}
-				process.Exited +=
-					(sender, e) =>
-					{
-						tcs.SetResult(output.ToString());
-					};
-
-				process.Start();
-				process.BeginOutputReadLine();
-				process.BeginErrorReadLine();
-
-				statusReportEvent?.Invoke("WindowsAPKDecoder.ExecuteProcess() process started.");
-
-				await tcs.Task;
-				await Task.Delay(50);
-
-				Debug.WriteLine("WindowsAPKDecoder.ExecuteProcess() Final result=\r\n" + output.ToString());
-				Debug.WriteLine("WindowsAPKDecoder.ExecuteProcess() finish.");
-
-				return output.ToString();
-			}
 		}
 
 		public APKDataModel GetDataModel()

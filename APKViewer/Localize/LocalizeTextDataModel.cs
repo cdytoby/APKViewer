@@ -25,6 +25,7 @@ namespace APKViewer.Localize
 
 		public string Button_SearchPlayStore { get; set; }
 		public string Button_ViewRawDump { get; set; }
+		public string Button_InstallApk { get; set; }
 
 		public string Field_Feature_Required { get; set; }
 		public string Field_Feature_NotRequired { get; set; }
