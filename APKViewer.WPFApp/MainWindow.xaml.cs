@@ -10,7 +10,7 @@ using System.Windows.Data;
 
 namespace APKViewer.WPFApp
 {
-	public partial class MainWindow : Window, IOpenRawDialogService
+	public partial class MainWindow: Window, IOpenRawDialogService, IMessageBoxService
 	{
 		private APKViewModel bindedViewModel;
 		private BindingExpression overlayVisibilityBindingExpress;
@@ -23,6 +23,7 @@ namespace APKViewer.WPFApp
 			bindedViewModel.SetDecoder(new WindowsAPKDecoder());
 			bindedViewModel.SetDialogService(this);
 			bindedViewModel.SetInstaller(new WindowsApkInstaller());
+			bindedViewModel.SetMessageDialog(this);
 			overlayVisibilityBindingExpress = DropOverlay.GetBindingExpression(Grid.VisibilityProperty);
 
 			OpenFileArgProcess();
@@ -71,6 +72,7 @@ namespace APKViewer.WPFApp
 		{
 			DropOverlay.Visibility = Visibility.Visible;
 		}
+
 		private void FileDragLeave(object sender, DragEventArgs e)
 		{
 			DropOverlay.SetBinding(Grid.VisibilityProperty, overlayVisibilityBindingExpress.ParentBinding);
@@ -82,5 +84,10 @@ namespace APKViewer.WPFApp
 			dialog.ShowDialog();
 		}
 
+		public bool OpenDialog(string message)
+		{
+			MessageBoxResult result = MessageBox.Show(message, String.Empty, MessageBoxButton.OK);
+			return result == MessageBoxResult.Yes || result == MessageBoxResult.OK;
+		}
 	}
 }

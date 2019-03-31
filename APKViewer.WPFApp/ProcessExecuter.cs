@@ -7,8 +7,8 @@ namespace APKViewer.WPFApp
 {
 	public static class ProcessExecuter
 	{
-		public static async Task<string> ExecuteProcess(ProcessStartInfo startInfo, bool useError = false,
-			Action<string> statusReportEvent=null)
+		public static async Task<string> ExecuteProcess(ProcessStartInfo startInfo, bool useBothErrorAndNormal = false,
+			Action<string> statusReportEvent = null)
 		{
 			// string result = string.Empty;
 
@@ -32,19 +32,18 @@ namespace APKViewer.WPFApp
 
 				StringBuilder output = new StringBuilder();
 				TaskCompletionSource<string> tcs = new TaskCompletionSource<string>();
-				if (!useError)
-				{
-					process.OutputDataReceived +=
-						(sender, e) =>
+
+				process.OutputDataReceived +=
+					(sender, e) =>
+					{
+						if (e.Data != null)
 						{
-							if (e.Data != null)
-							{
-								//Console.WriteLine("ProcessExecuter.ExecuteProcess(): process.OutputDataReceived=\r\n" + e.Data);
-								output.AppendLine(e.Data);
-							}
-						};
-				}
-				else
+							//Console.WriteLine("ProcessExecuter.ExecuteProcess(): process.OutputDataReceived=\r\n" + e.Data);
+							output.AppendLine(e.Data);
+						}
+					};
+
+				if (useBothErrorAndNormal)
 				{
 					process.ErrorDataReceived +=
 						(sender, e) =>

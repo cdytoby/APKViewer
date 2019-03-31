@@ -15,6 +15,7 @@ namespace APKViewer
 		private IApkDecoder apkDecoder;
 		private IApkInstaller apkInstaller;
 		private IOpenRawDialogService dialogService;
+		private IMessageBoxService messageBoxService;
 
 		public LocalizeTextDataModel localizeModel => LocalizationCenter.currentDataModel;
 
@@ -22,6 +23,7 @@ namespace APKViewer
 		public Uri fileLocation { get; protected set; }
 		public bool isDecoding { get; protected set; }
 		public bool isNotDecoding => !isDecoding;
+		public bool isInstalling { get; protected set; }
 
 		public bool isDataEmpty => targetAPKData == null;
 
@@ -50,7 +52,7 @@ namespace APKViewer
 
 		public Command openPlayStore => new Command(OpenGooglePlayStore, CanExecutionActionBase);
 		public Command openRawView => new Command(OpenRawViewDialog, CanExecutionActionBase);
-		public Command installApk => new Command(InstallApk, CanExecutionActionBase);
+		public Command installApk => new Command(InstallApk, CanInstallApk);
 
 		public APKViewModel()
 		{
@@ -97,9 +99,16 @@ namespace APKViewer
 			dialogService = newService;
 		}
 
+		public void SetMessageDialog(IMessageBoxService newMessageBoxService)
+		{
+			messageBoxService = newMessageBoxService;
+		}
+
 		private void ApkInstallFinished(bool success, string message)
 		{
 			Debug.WriteLine("Install finished, success=" + success + " msg=" + message);
+			messageBoxService?.OpenDialog(message);
+			isInstalling = false;
 		}
 
 		public void SetNewFile(Uri newFileUri)
@@ -184,12 +193,18 @@ namespace APKViewer
 
 		private void InstallApk()
 		{
+			isInstalling = true;
 			apkInstaller?.InstallApk(fileLocation);
 		}
 
 		private bool CanExecutionActionBase()
 		{
 			return targetAPKData != null;
+		}
+
+		private bool CanInstallApk()
+		{
+			return CanExecutionActionBase() && !isInstalling;
 		}
 
 		private string StringGroupToString(IEnumerable<string> stringIEnum, bool newLine = true)

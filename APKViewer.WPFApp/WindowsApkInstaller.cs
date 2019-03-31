@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace APKViewer.WPFApp
 {
-	public class WindowsApkInstaller:IApkInstaller
+	public class WindowsApkInstaller: IApkInstaller
 	{
 		public event Action<bool, string> installFinishedEvent;
 
@@ -13,9 +13,15 @@ namespace APKViewer.WPFApp
 			ProcessStartInfo psi = new ProcessStartInfo()
 			{
 				FileName = ExternalToolBinPath.GetADBPath(),
-				Arguments = " install " +fileUri.OriginalString
+				Arguments = " install " + fileUri.OriginalString
 			};
-			string processResult = await ProcessExecuter.ExecuteProcess(psi, false);
+			string processResult = await ProcessExecuter.ExecuteProcess(psi, true);
+
+			string[] resultArray = processResult?.Split(
+				new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
+			if (resultArray != null)
+				processResult = resultArray[resultArray.Length - 1];
 
 			installFinishedEvent?.Invoke(true, processResult);
 		}
