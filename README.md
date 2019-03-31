@@ -11,6 +11,7 @@ A simple APK Viewer, developed using .Net Standard and .Net Framework.
 - View Sign signiture
 - View APK hash
 - Open in Google Play Store
+- install using adb
 
 ### To all passerby
 
@@ -25,7 +26,6 @@ All bug fix will be done as soon as possible if I have time. Here are the featur
 - Multi-platform Support for MacOS and Linux. (I have zero experience on MacOS and Linux development)
 - UI Multi-language
 - xapk file support
-- install using adb
 
 But I don't think I'll do the following features.
 - Rename file
