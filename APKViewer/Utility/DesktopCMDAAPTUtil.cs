@@ -85,7 +85,9 @@ namespace APKViewer.Utility
 					case KEY_PACKAGEGROUP:
 						Dictionary<string, string> packageDict = SplitSubDict(value);
 						targetModel.PackageName = packageDict[SUBKEY_NAME];
-						targetModel.VersionCode = int.Parse(packageDict[SUBKEY_VERSIONCODE]);
+						int tempVC = 0;
+						int.TryParse(packageDict[SUBKEY_VERSIONCODE], out tempVC);
+						targetModel.VersionCode = tempVC;
 						targetModel.VersionString = packageDict[SUBKEY_VERSIONNAME];
 						break;
 					case KEY_MINSDK:

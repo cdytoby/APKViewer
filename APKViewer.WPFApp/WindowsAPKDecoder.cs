@@ -78,15 +78,26 @@ namespace APKViewer.WPFApp
 				return;
 			using (ZipArchive za = ZipFile.Open(targetFilePath.OriginalString, ZipArchiveMode.Read))
 			{
-				ZipArchiveEntry iconEntry = za.GetEntry(dataModel.MaxIconZipEntry);
+				ZipArchiveEntry iconEntry = null;
+				try
+				{
+					iconEntry = za.GetEntry(dataModel.MaxIconZipEntry);
+				}
+				catch (Exception)
+				{
+					//do nothing
+				}
 				Debug.WriteLine("WindowsAPKDecoder.Decode_Icon() zip entry get. " + iconEntry.FullName);
 
-				using (Stream s = iconEntry.Open())
-				using (MemoryStream ms = new MemoryStream())
+				if (iconEntry != null)
 				{
-					Task copyTask = s.CopyToAsync(ms);
-					await copyTask;
-					dataModel.MaxIconContent = ms.ToArray();
+					using (Stream s = iconEntry.Open())
+					using (MemoryStream ms = new MemoryStream())
+					{
+						Task copyTask = s.CopyToAsync(ms);
+						await copyTask;
+						dataModel.MaxIconContent = ms.ToArray();
+					}
 				}
 			}
 		}
