@@ -1,5 +1,6 @@
 using APKViewer.Utility;
 using System;
+using System.IO;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
@@ -10,6 +11,24 @@ namespace APKViewer.XUnitTest
 	{
 		public DefaultTest(ITestOutputHelper output) : base(output)
 		{
+		}
+
+		//Path.GetExtension
+
+		[Fact]
+		public void Test()
+		{
+			//"D:\Download\aabplayground\CAI_dev_android-2019-04-23_14-31.apk"
+
+			string result = Path.GetExtension(@"D:\Download\aabplayground\CAI_dev_android-2019-04-23_14-31.apk");
+			Console.WriteLine("result=" + result);
+		}
+
+		[Fact]
+		public void TestAABManifest()
+		{
+			string result= File.ReadAllText(@"D:\Download\aabplayground\dumpmanifest.xml");
+			DesktopCMDAABUtil.ReadManifest(null, result);
 		}
 
 		[Fact]

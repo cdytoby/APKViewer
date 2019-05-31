@@ -9,11 +9,6 @@ namespace APKViewer.Utility
 		private const char SPLITTER_MAINKEYVALUE = ':';
 		private const string SIGNATURE_HEAD = "Verifies";
 
-		public static bool JavaExist(string javaVersionResult)
-		{
-			return javaVersionResult.Contains("java version") || javaVersionResult.Contains("jdk version");
-		}
-
 		public static void ReadAPKSignature(APKDataModel targetModel, string signResult)
 		{
 			StringBuilder finalResult=new StringBuilder();

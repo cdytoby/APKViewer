@@ -13,10 +13,8 @@ using System.Threading.Tasks;
 
 namespace APKViewer.WPFApp
 {
-	public class WindowsAPKDecoder: IApkDecoder
+	public class WindowsAPKDecoder: IFileDecoder
 	{
-		public static bool javaTested;
-		public static bool javaExist;
 
 		private Uri targetFilePath;
 		private APKDataModel dataModel;
@@ -27,10 +25,9 @@ namespace APKViewer.WPFApp
 		public WindowsAPKDecoder()
 		{
 			dataModel = null;
-			javaTested = javaExist = false;
 		}
 
-		public void SetApkFilePath(Uri fileUri)
+		public void SetFilePath(Uri fileUri)
 		{
 			targetFilePath = fileUri;
 		}
@@ -43,6 +40,7 @@ namespace APKViewer.WPFApp
 			Debug.WriteLine("WindowsAPKDecoder.Decode() decode start.");
 			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() decode start.");
 			dataModel = new APKDataModel();
+			dataModel.FileExtension = StringConstant.FileExtension_APK;
 
 			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() Decode_Badging start.");
 			await Decode_Badging();
@@ -106,7 +104,7 @@ namespace APKViewer.WPFApp
 		{
 			string processResult;
 
-			if (!javaTested)
+			if (!AppUtility.javaTested)
 			{
 				// java -jar apksigner.jar verify --verbose --print-certs FDroid.apk
 				// java -version
@@ -117,11 +115,11 @@ namespace APKViewer.WPFApp
 					Arguments = "/c java -version"
 				};
 				processResult = await ProcessExecuter.ExecuteProcess(psiJavaVersion, true, statusReportEvent);
-				javaExist = DesktopCMDAPKSignerUtil.JavaExist(processResult);
-				javaTested = true;
+				AppUtility.javaExist = AppUtility.JavaExist(processResult);
+				AppUtility.javaTested = true;
 			}
 
-			if (!javaExist)
+			if (!AppUtility.javaExist)
 			{
 				dataModel.Signature = LocalizationCenter.currentDataModel.Msg_JavaNotFound;
 				return;

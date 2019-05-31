@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Linq;
 using System.Collections.ObjectModel;
+using System.IO;
 using APKViewer.Localize;
 
 namespace APKViewer
 {
-	public class APKViewModel : BindableModelBase
+	public class APKViewModel: BindableModelBase
 	{
-		private IApkDecoder apkDecoder;
+		private IFileDecoder apkDecoder;
+		private IFileDecoder aabDecoder;
 		private IApkInstaller apkInstaller;
 		private IOpenRawDialogService dialogService;
 		private IMessageBoxService messageBoxService;
@@ -21,6 +23,7 @@ namespace APKViewer
 
 		public APKDataModel targetAPKData { get; protected set; }
 		public Uri fileLocation { get; protected set; }
+		public string fileExtension { get; protected set; }
 		public bool isDecoding { get; protected set; }
 		public bool isNotDecoding => !isDecoding;
 		public bool isInstalling { get; protected set; }
@@ -63,6 +66,7 @@ namespace APKViewer
 		private void SetupMockupDataModel()
 		{
 			targetAPKData = new APKDataModel();
+			targetAPKData.FileExtension = StringConstant.FileExtension_APK;
 			if (targetAPKData.Permissions == null)
 				targetAPKData.Permissions = new List<string>();
 			if (targetAPKData.Densities == null)
@@ -82,16 +86,18 @@ namespace APKViewer
 			targetAPKData.AppNameLangDict.Add("key4", "value4");
 		}
 
-		public void SetDecoder(IApkDecoder newDecoder)
+		public void SetDecoder(IFileDecoder newApkDecoder, IFileDecoder newAabDecoder)
 		{
-			apkDecoder = newDecoder;
+			apkDecoder = newApkDecoder;
 			apkDecoder.decodeFinishedEvent += GetDataFromDecoder;
+			aabDecoder = newAabDecoder;
+			aabDecoder.decodeFinishedEvent += GetDataFromDecoder;
 		}
 
 		public void SetInstaller(IApkInstaller newInstaller)
 		{
 			apkInstaller = newInstaller;
-			apkInstaller.installFinishedEvent+=ApkInstallFinished;
+			apkInstaller.installFinishedEvent += ApkInstallFinished;
 		}
 
 		public void SetDialogService(IOpenRawDialogService newService)
@@ -115,14 +121,35 @@ namespace APKViewer
 		{
 			fileLocation = newFileUri;
 			targetAPKData = null;
-			apkDecoder.SetApkFilePath(newFileUri);
-			apkDecoder.Decode();
-			isDecoding = true;
+			fileExtension = Path.GetExtension(newFileUri.AbsolutePath);
+			fileExtension = fileExtension.Trim('.');
+			if (string.IsNullOrEmpty(fileExtension))
+				return;
+
+			if (fileExtension.Equals(StringConstant.FileExtension_APK))
+			{
+				apkDecoder.SetFilePath(newFileUri);
+				apkDecoder.Decode();
+				isDecoding = true;
+			}
+			else if (fileExtension.Equals(StringConstant.FileExtension_AAB))
+			{
+				aabDecoder.SetFilePath(newFileUri);
+				aabDecoder.Decode();
+				isDecoding = true;
+			}
 		}
 
 		private void GetDataFromDecoder()
 		{
-			targetAPKData = apkDecoder.GetDataModel();
+			if (fileExtension.Equals(StringConstant.FileExtension_APK))
+			{
+				targetAPKData = apkDecoder.GetDataModel();
+			}
+			else if (fileExtension.Equals(StringConstant.FileExtension_AAB))
+			{
+				targetAPKData = aabDecoder.GetDataModel();
+			}
 			isDecoding = false;
 		}
 
@@ -161,11 +188,11 @@ namespace APKViewer
 			if (targetAPKData != null)
 			{
 				IEnumerable<string> newStringIEnum = targetAPKData.AppNameLangDict.Select((x) =>
-				{
-					if (string.IsNullOrEmpty(x.Key))
-						return x.Value;
-					return x.Key + ": " + x.Value;
-				}
+					{
+						if (string.IsNullOrEmpty(x.Key))
+							return x.Value;
+						return x.Key + ": " + x.Value;
+					}
 				);
 				foreach (string s in newStringIEnum)
 				{
@@ -204,7 +231,9 @@ namespace APKViewer
 
 		private bool CanInstallApk()
 		{
-			return CanExecutionActionBase() && !isInstalling;
+			return CanExecutionActionBase() && !isInstalling &&
+				targetAPKData.FileExtension.Equals(StringConstant.FileExtension_APK) &&
+				!string.IsNullOrEmpty(targetAPKData.PackageName);
 		}
 
 		private string StringGroupToString(IEnumerable<string> stringIEnum, bool newLine = true)

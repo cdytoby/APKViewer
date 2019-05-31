@@ -20,7 +20,7 @@ namespace APKViewer.WPFApp
 			InitializeComponent();
 			bindedViewModel = (APKViewModel)DataContext;
 			//decoder.statusReportEvent += ShowTestLog;
-			bindedViewModel.SetDecoder(new WindowsAPKDecoder());
+			bindedViewModel.SetDecoder(new WindowsAPKDecoder(), new WindowsAABDecoder());
 			bindedViewModel.SetDialogService(this);
 			bindedViewModel.SetInstaller(new WindowsApkInstaller());
 			bindedViewModel.SetMessageDialog(this);
@@ -56,7 +56,8 @@ namespace APKViewer.WPFApp
 				{
 					foreach (string fileName in files)
 					{
-						if (fileName.EndsWith("apk"))
+						if (fileName.EndsWith(StringConstant.FileExtension_APK)||
+							fileName.EndsWith(StringConstant.FileExtension_AAB))
 						{
 							bindedViewModel.SetNewFile(new Uri(fileName));
 							break;
