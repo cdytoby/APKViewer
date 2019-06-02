@@ -1,6 +1,6 @@
 # APKViewer
 
-A simple APK Viewer, developed using .Net Standard and .Net Framework.
+A simple APK and AAB file viewer, developed using .Net Standard and .Net Framework.
 
 ![alt text](/ReadmeAssets/ScreenShot_Main.png)
 
@@ -10,7 +10,7 @@ A simple APK Viewer, developed using .Net Standard and .Net Framework.
 - Drag and Drop file to open it
 - View basic information incl. package name, icon, version, sdk, etc
 - View Sign signiture
-- View APK hash
+- View file hash
 - Open in Google Play Store
 - install apk file using adb
 
@@ -32,6 +32,8 @@ But I don't think I'll do the following features.
 - open in other apk website like apkpure
 - Hash Compare
 - Decompile or unpack apk
+- sign or resign apk or aab file
+- extract apk or aab file content
 
 ### About this project
 
@@ -56,7 +58,7 @@ ADB and AAPT is licensed under Apache License 2.0
 
 https://github.com/cdytoby/APKViewer/blob/master/ExternalTools/Windows/NOTICE.txt
 
-The app icon is from ionic-team, and it is modified by me.
+The app icon is from ionic-team, and it is modified by me, the color is changed to green.
 
 https://github.com/ionic-team/ionicons
 
