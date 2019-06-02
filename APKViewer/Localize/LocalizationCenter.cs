@@ -11,6 +11,7 @@ namespace APKViewer.Localize
 	public static class LocalizationCenter
 	{
 		public const string FOLDER_LOCALIZATION = "Local";
+		public const string DEFAULT_LOCALIZATION_NOTSET = "default";
 		public const string DEFAULT_LOCALIZATION_RESOURCE_LANGCODE = "en-us";
 		private const string DEFAULT_LOCALIZATION_RESOURCE_NAME = "APKViewer.Localize.Default.json";
 
