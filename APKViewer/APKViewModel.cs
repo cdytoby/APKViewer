@@ -67,7 +67,6 @@ namespace APKViewer
 		private void SetupMockupDataModel()
 		{
 			targetAPKData = new APKDataModel();
-			targetAPKData.FileExtension = StringConstant.FileExtension_APK;
 
 			targetAPKData.AppNameLangDict.Add("key1", "value1");
 			targetAPKData.AppNameLangDict.Add("key2", "value2");
@@ -221,7 +220,7 @@ namespace APKViewer
 		private bool CanInstallApk()
 		{
 			return CanExecutionActionBase() && !isInstalling &&
-				targetAPKData.FileExtension.Equals(StringConstant.FileExtension_APK) &&
+				fileExtension.Equals(StringConstant.FileExtension_APK) &&
 				!string.IsNullOrEmpty(targetAPKData.PackageName);
 		}
 

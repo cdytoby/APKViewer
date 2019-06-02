@@ -39,12 +39,11 @@ namespace APKViewer.WPFApp
 
 			statusReportEvent?.Invoke("WindowsAABDecoder.Decode() decode start.");
 			dataModel = new APKDataModel();
-			dataModel.FileExtension = StringConstant.FileExtension_AAB;
 
 			statusReportEvent?.Invoke("WindowsAABDecoder.Decode() start test java.");
 			await Decode_JavaTest();
 
-			if (AppUtility.javaTested && AppUtility.javaExist)
+			if (DesktopJavaUtil.javaTested && DesktopJavaUtil.javaExist)
 			{
 				statusReportEvent?.Invoke("WindowsAABDecoder.Decode() Decode_Manifest start.");
 				await Decode_Manifest();
@@ -60,6 +59,9 @@ namespace APKViewer.WPFApp
 			statusReportEvent?.Invoke("WindowsAABDecoder.Decode() Decode_Hash start.");
 			Decode_Hash();
 
+			dataModel.Signature = LocalizationCenter.currentDataModel.Msg_AABNotSupport;
+			dataModel.RawDumpSignature = LocalizationCenter.currentDataModel.Msg_AABNotSupport;
+
 			statusReportEvent?.Invoke("WindowsAABDecoder.Decode() decode finish.");
 			decodeFinishedEvent?.Invoke();
 		}
@@ -68,7 +70,7 @@ namespace APKViewer.WPFApp
 		{
 			string processResult = string.Empty;
 
-			if (!AppUtility.javaTested)
+			if (!DesktopJavaUtil.javaTested)
 			{
 				// java -jar apksigner.jar verify --verbose --print-certs FDroid.apk
 				// java -version
@@ -79,11 +81,10 @@ namespace APKViewer.WPFApp
 					Arguments = "/c java -version"
 				};
 				processResult = await ProcessExecuter.ExecuteProcess(psiJavaVersion, true, statusReportEvent);
-				AppUtility.javaExist = AppUtility.JavaExist(processResult);
-				AppUtility.javaTested = true;
+				DesktopJavaUtil.SetJavaExist(processResult);
 			}
 
-			if (!AppUtility.javaExist)
+			if (!DesktopJavaUtil.javaExist)
 			{
 				dataModel.RawDumpBadging = LocalizationCenter.currentDataModel.Msg_JavaNotFound;
 				dataModel.RawDumpSignature = LocalizationCenter.currentDataModel.Msg_JavaNotFound;
@@ -164,35 +165,7 @@ namespace APKViewer.WPFApp
 
 		private async Task Decode_Icon()
 		{
-			if (string.IsNullOrEmpty(dataModel.MaxIconZipEntry))
-				return;
-
-			Debug.WriteLine("WindowsAABDecoder.Decode_Icon entry=" + dataModel.MaxIconZipEntry);
-
-			using (ZipArchive za = ZipFile.Open(targetFilePath.OriginalString, ZipArchiveMode.Read))
-			{
-				ZipArchiveEntry iconEntry = null;
-				try
-				{
-					iconEntry = za.GetEntry(dataModel.MaxIconZipEntry);
-				}
-				catch (Exception)
-				{
-					//do nothing
-				}
-				Debug.WriteLine("WindowsAPKDecoder.Decode_Icon() zip entry get. " + iconEntry.FullName);
-
-				if (iconEntry != null)
-				{
-					using (Stream s = iconEntry.Open())
-					using (MemoryStream ms = new MemoryStream())
-					{
-						Task copyTask = s.CopyToAsync(ms);
-						await copyTask;
-						dataModel.MaxIconContent = ms.ToArray();
-					}
-				}
-			}
+			dataModel.MaxIconContent = await FileUtil.ZipExtractData(targetFilePath, dataModel.MaxIconZipEntry);
 		}
 
 		// private async Task Decode_Signature()
@@ -214,7 +187,7 @@ namespace APKViewer.WPFApp
 
 		private void Decode_Hash()
 		{
-			FileHashCalcUtil.CalculateSHA1(targetFilePath, dataModel);
+			FileUtil.CalculateSHA1(targetFilePath, dataModel);
 		}
 
 		public APKDataModel GetDataModel()

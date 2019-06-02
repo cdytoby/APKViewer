@@ -33,5 +33,6 @@ namespace APKViewer.Localize
 
 		public string Msg_DragDropHere { get; set; }
 		public string Msg_JavaNotFound { get; set; }
+		public string Msg_AABNotSupport { get; set; }
 	}
 }

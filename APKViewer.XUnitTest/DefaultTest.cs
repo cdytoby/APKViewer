@@ -39,16 +39,16 @@ namespace APKViewer.XUnitTest
 			string numberC = "0x00150009";
 			string numberD = "00030000";
 
-			string result = DesktopCMDAAPTUtil.OpenGLVersionParse(numberA);
+			string result = OtherUtil.OpenGLVersionParse(numberA);
 			Console.WriteLine("resultA=" + result);
 			Assert.Equal("3.0", result);
-			result = DesktopCMDAAPTUtil.OpenGLVersionParse(numberB);
+			result = OtherUtil.OpenGLVersionParse(numberB);
 			Console.WriteLine("resultB=" + result);
 			Assert.Equal("3.1", result);
-			result = DesktopCMDAAPTUtil.OpenGLVersionParse(numberC);
+			result = OtherUtil.OpenGLVersionParse(numberC);
 			Console.WriteLine("resultC=" + result);
 			Assert.Equal("21.9", result);
-			result = DesktopCMDAAPTUtil.OpenGLVersionParse(numberD);
+			result = OtherUtil.OpenGLVersionParse(numberD);
 			Console.WriteLine("resultD=" + result);
 			Assert.Equal("3.0", result);
 		}

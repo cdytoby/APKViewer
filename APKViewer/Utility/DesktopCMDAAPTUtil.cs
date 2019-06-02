@@ -112,7 +112,7 @@ namespace APKViewer.Utility
 						targetModel.Feature_NotRequire.Add(featureNRDict[SUBKEY_NAME]);
 						break;
 					case KEY_GLES:
-						targetModel.OpenGLVersion = StringConstant.FieldHead_OpenGL + OpenGLVersionParse(value);
+						targetModel.OpenGLVersion = StringConstant.FieldHead_OpenGL + OtherUtil.OpenGLVersionParse(value);
 						break;
 					case KEY_NATIVE_CODE:
 						targetModel.Architecture.AddRange(SplitSubArray(value));
@@ -122,14 +122,6 @@ namespace APKViewer.Utility
 						break;
 				}
 			}
-		}
-
-		public static string OpenGLVersionParse(string originalValue)
-		{
-			int hexValue = Convert.ToInt32(originalValue, 16);
-			int versionMain = hexValue >> 0x00000010;
-			int versionSub = hexValue & 0xFFFF;
-			return versionMain + "." + versionSub;
 		}
 
 		private static (string, string) SplitKeyValue(string lineText)

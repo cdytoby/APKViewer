@@ -7,6 +7,7 @@
   "Head_MaxSDK": "目标SDK",
   "Head_ScreenSize": "屏幕尺寸",
   "Head_Densities": "屏幕dpi",
+  "Head_Architecture": "架构",
   "Head_Permission": "权限",
   "Head_Features": "功能",
   "Head_OpenGL": "OpenGL 版本",
@@ -19,6 +20,7 @@
   "Button_InstallApk": "安装apk",
   "Field_Feature_Required": "必需的：",
   "Field_Feature_NotRequired": "不必需的：",
-  "Msg_DragDropHere": "把apk文件拖放到此处.",
-  "Msg_JavaNotFound": "Java没有被找到，无法读取应用签名"
+  "Msg_DragDropHere": "把apk或aab文件拖放到此处.",
+  "Msg_JavaNotFound": "Java没有被找到，无法读取应用签名",
+  "Msg_AABNotSupport": "AAB文件不支持查看该项"
 }

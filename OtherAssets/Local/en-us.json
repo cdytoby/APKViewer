@@ -7,6 +7,7 @@
   "Head_MaxSDK": "Max SDK",
   "Head_ScreenSize": "Screen Size",
   "Head_Densities": "Densities",
+  "Head_Architecture": "Architecture",
   "Head_Permission": "Permissions",
   "Head_Features": "Features",
   "Head_OpenGL": "OpenGL Version",
@@ -19,6 +20,7 @@
   "Button_InstallApk": "Install APK",
   "Field_Feature_Required": "Required:",
   "Field_Feature_NotRequired": "Not required:",
-  "Msg_DragDropHere": "Drag and drop apk here.",
-  "Msg_JavaNotFound": "Java is not found, can't read apk signature."
+  "Msg_DragDropHere": "Drag and drop apk or aab here.",
+  "Msg_JavaNotFound": "Java is not found, can't read apk signature.",
+  "Msg_AABNotSupport": "Not supported for aab file."
 }

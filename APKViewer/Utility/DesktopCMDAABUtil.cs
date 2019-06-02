@@ -30,11 +30,8 @@ namespace APKViewer.Utility
 		private const string KEY_ATTRIBUTE_FEATURE_REQUIRED = "android:required";
 		private const string KEY_ATTRIBUTE_OPENGLVERSION = "android:glEsVersion";
 
-		private const string KEY_APPLABEL = "application-label";
-		private const string KEY_APPICON = "application-icon";
 		private const string KEY_DENSITY = "densities";
 		private const string KEY_DENSITY_ANY = "supports-any-density";
-
 
 		public static void ReadManifest(APKDataModel targetModel, string manifestResult)
 		{
@@ -170,7 +167,8 @@ namespace APKViewer.Utility
 				}
 				if (currentAttribute.Name.Equals(KEY_ATTRIBUTE_OPENGLVERSION))
 				{
-					targetModel.OpenGLVersion = DesktopCMDAAPTUtil.OpenGLVersionParse(currentAttribute.Value);
+					targetModel.OpenGLVersion = StringConstant.FieldHead_OpenGL +
+						OtherUtil.OpenGLVersionParse(currentAttribute.Value);
 					Console.WriteLine("Node OpenGL: " + targetModel.OpenGLVersion);
 					return;
 				}

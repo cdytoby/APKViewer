@@ -11,12 +11,6 @@ namespace APKViewer.WPFApp
 		{
 			return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 		}
-		public static bool javaTested;
-		public static bool javaExist;
 
-		public static bool JavaExist(string javaVersionResult)
-		{
-			return javaVersionResult.Contains("java version") || javaVersionResult.Contains("jdk version");
-		}
 	}
 }

@@ -15,7 +15,6 @@ namespace APKViewer.WPFApp
 {
 	public class WindowsAPKDecoder: IFileDecoder
 	{
-
 		private Uri targetFilePath;
 		private APKDataModel dataModel;
 
@@ -40,7 +39,6 @@ namespace APKViewer.WPFApp
 			Debug.WriteLine("WindowsAPKDecoder.Decode() decode start.");
 			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() decode start.");
 			dataModel = new APKDataModel();
-			dataModel.FileExtension = StringConstant.FileExtension_APK;
 
 			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() Decode_Badging start.");
 			await Decode_Badging();
@@ -72,39 +70,14 @@ namespace APKViewer.WPFApp
 
 		private async Task Decode_Icon()
 		{
-			if (string.IsNullOrEmpty(dataModel.MaxIconZipEntry))
-				return;
-			using (ZipArchive za = ZipFile.Open(targetFilePath.OriginalString, ZipArchiveMode.Read))
-			{
-				ZipArchiveEntry iconEntry = null;
-				try
-				{
-					iconEntry = za.GetEntry(dataModel.MaxIconZipEntry);
-				}
-				catch (Exception)
-				{
-					//do nothing
-				}
-				Debug.WriteLine("WindowsAPKDecoder.Decode_Icon() zip entry get. " + iconEntry.FullName);
-
-				if (iconEntry != null)
-				{
-					using (Stream s = iconEntry.Open())
-					using (MemoryStream ms = new MemoryStream())
-					{
-						Task copyTask = s.CopyToAsync(ms);
-						await copyTask;
-						dataModel.MaxIconContent = ms.ToArray();
-					}
-				}
-			}
+			dataModel.MaxIconContent = await FileUtil.ZipExtractData(targetFilePath, dataModel.MaxIconZipEntry);
 		}
 
 		private async Task Decode_Signature()
 		{
 			string processResult;
 
-			if (!AppUtility.javaTested)
+			if (!DesktopJavaUtil.javaTested)
 			{
 				// java -jar apksigner.jar verify --verbose --print-certs FDroid.apk
 				// java -version
@@ -115,11 +88,10 @@ namespace APKViewer.WPFApp
 					Arguments = "/c java -version"
 				};
 				processResult = await ProcessExecuter.ExecuteProcess(psiJavaVersion, true, statusReportEvent);
-				AppUtility.javaExist = AppUtility.JavaExist(processResult);
-				AppUtility.javaTested = true;
+				DesktopJavaUtil.SetJavaExist(processResult);
 			}
 
-			if (!AppUtility.javaExist)
+			if (!DesktopJavaUtil.javaExist)
 			{
 				dataModel.Signature = LocalizationCenter.currentDataModel.Msg_JavaNotFound;
 				return;
@@ -140,7 +112,7 @@ namespace APKViewer.WPFApp
 
 		private void Decode_Hash()
 		{
-			FileHashCalcUtil.CalculateSHA1(targetFilePath, dataModel);
+			FileUtil.CalculateSHA1(targetFilePath, dataModel);
 		}
 
 		public APKDataModel GetDataModel()
