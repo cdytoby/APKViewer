@@ -40,23 +40,18 @@ namespace APKViewer.Utility
 		{
 			if (targetModel == null)
 				targetModel = new APKDataModel();
-			if (targetModel.Permissions == null)
-				targetModel.Permissions = new List<string>();
-			if (targetModel.Densities == null)
-				targetModel.Densities = new List<string>();
-			if (targetModel.ScreenSize == null)
-				targetModel.ScreenSize = new List<string>();
-			if (targetModel.Feature_Require == null)
-				targetModel.Feature_Require = new List<string>();
-			if (targetModel.Feature_NotRequire == null)
-				targetModel.Feature_NotRequire = new List<string>();
-			if (targetModel.AppNameLangDict == null)
-				targetModel.AppNameLangDict = new Dictionary<string, string>();
 
-			XmlDocument targetDoc = new XmlDocument();
-			targetDoc.LoadXml(manifestResult);
+			try
+			{
+				XmlDocument targetDoc = new XmlDocument();
+				targetDoc.LoadXml(manifestResult);
 
-			ProcessNode(targetModel, targetDoc);
+				ProcessNode(targetModel, targetDoc);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("DesktopCMDAABUtil.ReadManifest() failed!");
+			}
 		}
 
 		private static void ProcessNode(APKDataModel targetModel, XmlNode currentNode)
@@ -207,5 +202,63 @@ namespace APKViewer.Utility
 			}
 		}
 
+		public static void ReadAppName(APKDataModel targetModel, string dumpResult)
+		{
+			if (string.IsNullOrWhiteSpace(dumpResult))
+				return;
+
+			string[] dumpResultLines = dumpResult.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+			foreach (string line in dumpResultLines)
+			{
+				if (string.IsNullOrWhiteSpace(line))
+					continue;
+				string trimedLine = line.Trim();
+				if (trimedLine.StartsWith("Package"))
+					continue;
+				if (trimedLine.StartsWith("0x"))
+					continue;
+
+				string[] splitLine = trimedLine.Split('\"');
+				if (splitLine.Length < 2)
+					continue;
+
+				string targetValue = splitLine[1];
+				// Debug.WriteLine("Feature Test targetValue=" + targetValue);
+				//todo multiple language AppName?
+				if (trimedLine.Contains("default"))
+				{
+					targetModel.AppName = targetValue;
+					targetModel.AppNameLangDict.Add("default", targetValue);
+				}
+			}
+		}
+
+		public static void ReadAppIconEntry(APKDataModel targetModel, string dumpResult)
+		{
+			if (string.IsNullOrWhiteSpace(dumpResult))
+				return;
+
+			string[] dumpResultLines = dumpResult.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+			foreach (string line in dumpResultLines.Reverse())
+			{
+				if (string.IsNullOrWhiteSpace(line))
+					continue;
+				string trimedLine = line.Trim();
+				if (trimedLine.StartsWith("Package"))
+					continue;
+				if (trimedLine.StartsWith("0x"))
+					continue;
+
+				string[] splitLine = trimedLine.Split(new[] { "[FILE]" }, StringSplitOptions.RemoveEmptyEntries);
+				if (splitLine.Length < 2)
+					continue;
+
+				string targetValue = splitLine[1];
+
+				targetModel.MaxIconZipEntry = "base/" + targetValue.Trim();
+				break;
+
+			}
+		}
 	}
 }

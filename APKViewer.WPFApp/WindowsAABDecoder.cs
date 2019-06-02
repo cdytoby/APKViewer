@@ -48,8 +48,12 @@ namespace APKViewer.WPFApp
 			{
 				statusReportEvent?.Invoke("WindowsAABDecoder.Decode() Decode_Manifest start.");
 				await Decode_Manifest();
-				// statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() Decode_Icon start.");
-				// await Decode_Icon();
+				statusReportEvent?.Invoke("WindowsAABDecoder.Decode() Decode_AppName start.");
+				await Decode_AppName();
+				statusReportEvent?.Invoke("WindowsAPKDecoder.Decode_AppIconEntry() Decode_AppIconEntry start.");
+				await Decode_AppIconEntry();
+				statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() Decode_Icon start.");
+				await Decode_Icon();
 				// statusReportEvent?.Invoke("WindowsAABDecoder.Decode() Decode_Signature start.");
 				// await Decode_Signature();
 			}
@@ -98,7 +102,9 @@ namespace APKViewer.WPFApp
 			string processResult = await ProcessExecuter.ExecuteProcess(psi, false, statusReportEvent);
 			while (!processResult.StartsWith("<"))
 			{
-				var lines = processResult.Split(new string[]{"\r\n"}, StringSplitOptions.None).Skip(1);
+				if (string.IsNullOrEmpty(processResult))
+					break;
+				var lines = processResult.Split(new string[] { "\r\n" }, StringSplitOptions.None).Skip(1);
 				processResult = string.Join(Environment.NewLine, lines.ToArray());
 			}
 			processResult = processResult.Trim();
@@ -110,35 +116,84 @@ namespace APKViewer.WPFApp
 			statusReportEvent?.Invoke("WindowsAABDecoder.Decode_Manifest(), end read manifest");
 		}
 
-		// private async Task Decode_Icon()
-		// {
-		// 	if (string.IsNullOrEmpty(dataModel.MaxIconZipEntry))
-		// 		return;
-		// 	using (ZipArchive za = ZipFile.Open(targetFilePath.OriginalString, ZipArchiveMode.Read))
-		// 	{
-		// 		ZipArchiveEntry iconEntry = null;
-		// 		try
-		// 		{
-		// 			iconEntry = za.GetEntry(dataModel.MaxIconZipEntry);
-		// 		}
-		// 		catch (Exception)
-		// 		{
-		// 			//do nothing
-		// 		}
-		// 		Debug.WriteLine("WindowsAPKDecoder.Decode_Icon() zip entry get. " + iconEntry.FullName);
-		//
-		// 		if (iconEntry != null)
-		// 		{
-		// 			using (Stream s = iconEntry.Open())
-		// 			using (MemoryStream ms = new MemoryStream())
-		// 			{
-		// 				Task copyTask = s.CopyToAsync(ms);
-		// 				await copyTask;
-		// 				dataModel.MaxIconContent = ms.ToArray();
-		// 			}
-		// 		}
-		// 	}
-		// }
+		private async Task Decode_AppName()
+		{
+			ProcessStartInfo psi = new ProcessStartInfo()
+			{
+				FileName = ExternalToolBinPath.GetBundleToolPath(),
+				Arguments = "dump resources --bundle=\"" + targetFilePath.OriginalString
+					+ "\" --resource=\"string/app_name\" --values=true"
+			};
+			statusReportEvent?.Invoke("WindowsAABDecoder.Decode_AppName(), path=" + targetFilePath.OriginalString);
+			string processResult = await ProcessExecuter.ExecuteProcess(psi, false, statusReportEvent);
+			while (!processResult.StartsWith("Package"))
+			{
+				if (string.IsNullOrEmpty(processResult))
+					break;
+				var lines = processResult.Split(new[] { "\r\n" }, StringSplitOptions.None).Skip(1);
+				processResult = string.Join(Environment.NewLine, lines.ToArray());
+			}
+			processResult = processResult.Trim();
+			statusReportEvent?.Invoke("WindowsAABDecoder.Decode_AppName(), result=" + processResult);
+
+			DesktopCMDAABUtil.ReadAppName(dataModel, processResult);
+		}
+
+		private async Task Decode_AppIconEntry()
+		{
+			ProcessStartInfo psi = new ProcessStartInfo()
+			{
+				FileName = ExternalToolBinPath.GetBundleToolPath(),
+				Arguments = "dump resources --bundle=\"" + targetFilePath.OriginalString
+					+ "\" --resource=\"drawable/app_icon\" --values=true"
+			};
+			statusReportEvent?.Invoke("WindowsAABDecoder.Decode_AppIconEntry(), path=" + targetFilePath.OriginalString);
+			string processResult = await ProcessExecuter.ExecuteProcess(psi, false, statusReportEvent);
+			while (!processResult.StartsWith("Package"))
+			{
+				if (string.IsNullOrEmpty(processResult))
+					break;
+				var lines = processResult.Split(new[] { "\r\n" }, StringSplitOptions.None).Skip(1);
+				processResult = string.Join(Environment.NewLine, lines.ToArray());
+			}
+			processResult = processResult.Trim();
+			statusReportEvent?.Invoke("WindowsAABDecoder.Decode_AppIconEntry(), result=" + processResult);
+
+			DesktopCMDAABUtil.ReadAppIconEntry(dataModel, processResult);
+		}
+
+		private async Task Decode_Icon()
+		{
+			if (string.IsNullOrEmpty(dataModel.MaxIconZipEntry))
+				return;
+
+			Debug.WriteLine("WindowsAABDecoder.Decode_Icon entry=" + dataModel.MaxIconZipEntry);
+
+			using (ZipArchive za = ZipFile.Open(targetFilePath.OriginalString, ZipArchiveMode.Read))
+			{
+				ZipArchiveEntry iconEntry = null;
+				try
+				{
+					iconEntry = za.GetEntry(dataModel.MaxIconZipEntry);
+				}
+				catch (Exception)
+				{
+					//do nothing
+				}
+				Debug.WriteLine("WindowsAPKDecoder.Decode_Icon() zip entry get. " + iconEntry.FullName);
+
+				if (iconEntry != null)
+				{
+					using (Stream s = iconEntry.Open())
+					using (MemoryStream ms = new MemoryStream())
+					{
+						Task copyTask = s.CopyToAsync(ms);
+						await copyTask;
+						dataModel.MaxIconContent = ms.ToArray();
+					}
+				}
+			}
+		}
 
 		// private async Task Decode_Signature()
 		// {

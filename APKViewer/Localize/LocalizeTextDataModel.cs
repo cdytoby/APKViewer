@@ -15,6 +15,7 @@ namespace APKViewer.Localize
 		public string Head_MaxSDK { get; set; }
 		public string Head_ScreenSize { get; set; }
 		public string Head_Densities { get; set; }
+		public string Head_Architecture { get; set; }
 		public string Head_Permission { get; set; }
 		public string Head_Features { get; set; }
 		public string Head_OpenGL { get; set; }

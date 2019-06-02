@@ -44,6 +44,7 @@
 				</Grid.ColumnDefinitions>
 
 				<StackPanel>
+					<!-- App Name -->
 					<DockPanel
 						Style="{StaticResource RowPanel_Default}">
 						<Label
@@ -53,6 +54,7 @@
 							Style="{StaticResource Textbox_FieldDefault}"
 							Text="{Binding AppName, Mode=OneWay}" />
 					</DockPanel>
+					<!-- Package Name -->
 					<DockPanel
 						Style="{StaticResource RowPanel_Default}">
 						<Label
@@ -62,6 +64,7 @@
 							Style="{StaticResource Textbox_FieldDefault}"
 							Text="{Binding PackageName, Mode=OneWay}" />
 					</DockPanel>
+					<!-- App Version -->
 					<DockPanel
 						Style="{StaticResource RowPanel_Default}">
 						<Label
@@ -71,6 +74,7 @@
 							Style="{StaticResource Textbox_FieldDefault}"
 							Text="{Binding AppVersion, Mode=OneWay}" />
 					</DockPanel>
+					<!-- Main and Max SDK -->
 					<DockPanel
 						Style="{StaticResource RowPanel_Default}">
 						<Label
@@ -90,6 +94,8 @@
 							Text="{Binding maxSDK, Mode=OneWay}" />
 					</DockPanel>
 				</StackPanel>
+
+				<!-- App Icon and Names localized -->
 				<StackPanel
 					Margin="3,0,3,0"
 					Grid.Column="1">
@@ -109,6 +115,7 @@
 				</StackPanel>
 			</Grid>
 
+			<!-- Screen Size -->
 			<DockPanel
 				Style="{StaticResource RowPanel_Default}">
 				<Label
@@ -118,6 +125,8 @@
 					Style="{StaticResource Textbox_FieldDefault}"
 					Text="{Binding screenSize, Mode=OneWay}" />
 			</DockPanel>
+
+			<!-- Screen Densities -->
 			<DockPanel
 				Style="{StaticResource RowPanel_Default}">
 				<Label
@@ -127,6 +136,19 @@
 					Style="{StaticResource Textbox_FieldDefault}"
 					Text="{Binding densities, Mode=OneWay}" />
 			</DockPanel>
+
+			<!-- Architecture -->
+			<DockPanel
+				Style="{StaticResource RowPanel_Default}">
+				<Label
+					Style="{StaticResource Label_FieldDefault}"
+					Content="{Binding localizeModel.Head_Architecture, Mode=OneWay}" />
+				<TextBox
+					Style="{StaticResource Textbox_FieldDefault}"
+					Text="{Binding architecture, Mode=OneWay}" />
+			</DockPanel>
+
+			<!-- OpenGL Version -->
 			<DockPanel
 				Visibility="{Binding openGLExist,
 					Converter={StaticResource booleanToVisibilityConverter}}"

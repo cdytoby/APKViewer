@@ -8,17 +8,18 @@ namespace APKViewer
     {
 		public string FileExtension { get; set; }
 		public string AppName { get; set; }
-		public Dictionary<string, string> AppNameLangDict { get; set; }
+		public Dictionary<string, string> AppNameLangDict { get; set; } = new Dictionary<string, string>();
 		public string PackageName { get; set; }
 		public string VersionString { get; set; }
 		public int VersionCode { get; set; }
 		public int MinSDKCode { get; set; }
 		public int MaxSDKCode { get; set; }
-		public List<string> ScreenSize { get; set; }
-		public List<string> Densities { get; set; }
-		public List<string> Permissions { get; set; }
-		public List<string> Feature_Require { get; set; }
-		public List<string> Feature_NotRequire { get; set; }
+		public List<string> ScreenSize { get; set; } = new List<string>();
+		public List<string> Densities { get; set; } = new List<string>();
+		public List<string> Permissions { get; set; } = new List<string>();
+		public List<string> Feature_Require { get; set; } = new List<string>();
+		public List<string> Feature_NotRequire { get; set; } = new List<string>();
+		public List<string> Architecture { get; set; } = new List<string>();
 		public string OpenGLVersion { get; set; }
 		public string Signature { get; set; }
 		public string SHA1Hash { get; set; }

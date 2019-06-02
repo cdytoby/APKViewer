@@ -37,6 +37,7 @@ namespace APKViewer
 		public string maxSDK => AndroidSDKData.GetFullString(targetAPKData?.MaxSDKCode ?? 0);
 		public string screenSize => StringGroupToString(targetAPKData?.ScreenSize, false);
 		public string densities => StringGroupToString(targetAPKData?.Densities, false);
+		public string architecture => StringGroupToString(targetAPKData?.Architecture, false);
 		public string permissions => StringGroupToString(targetAPKData?.Permissions);
 		public string features => GetFormattedFeatureString();
 		public string openGLString => targetAPKData?.OpenGLVersion;
@@ -67,18 +68,6 @@ namespace APKViewer
 		{
 			targetAPKData = new APKDataModel();
 			targetAPKData.FileExtension = StringConstant.FileExtension_APK;
-			if (targetAPKData.Permissions == null)
-				targetAPKData.Permissions = new List<string>();
-			if (targetAPKData.Densities == null)
-				targetAPKData.Densities = new List<string>();
-			if (targetAPKData.ScreenSize == null)
-				targetAPKData.ScreenSize = new List<string>();
-			if (targetAPKData.Feature_Require == null)
-				targetAPKData.Feature_Require = new List<string>();
-			if (targetAPKData.Feature_NotRequire == null)
-				targetAPKData.Feature_NotRequire = new List<string>();
-			if (targetAPKData.AppNameLangDict == null)
-				targetAPKData.AppNameLangDict = new Dictionary<string, string>();
 
 			targetAPKData.AppNameLangDict.Add("key1", "value1");
 			targetAPKData.AppNameLangDict.Add("key2", "value2");

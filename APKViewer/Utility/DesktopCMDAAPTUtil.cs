@@ -23,6 +23,7 @@ namespace APKViewer.Utility
 		private const string KEY_GLES = "uses-gl-es";
 		private const string KEY_FEATURE_REQUIRED = "uses-feature";
 		private const string KEY_FEATURE_NOTREQUIRED = "uses-feature-not-required";
+		private const string KEY_NATIVE_CODE = "native-code";
 
 		private const string SUBKEY_NAME = "name";
 		private const string SUBKEY_LABEL = "label";
@@ -35,18 +36,6 @@ namespace APKViewer.Utility
 		{
 			if (targetModel == null)
 				targetModel = new APKDataModel();
-			if (targetModel.Permissions == null)
-				targetModel.Permissions = new List<string>();
-			if (targetModel.Densities == null)
-				targetModel.Densities = new List<string>();
-			if (targetModel.ScreenSize == null)
-				targetModel.ScreenSize = new List<string>();
-			if (targetModel.Feature_Require == null)
-				targetModel.Feature_Require = new List<string>();
-			if (targetModel.Feature_NotRequire == null)
-				targetModel.Feature_NotRequire = new List<string>();
-			if (targetModel.AppNameLangDict == null)
-				targetModel.AppNameLangDict = new Dictionary<string, string>();
 
 			string[] textLines = badgingResult.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 			foreach (string line in textLines)
@@ -124,6 +113,9 @@ namespace APKViewer.Utility
 						break;
 					case KEY_GLES:
 						targetModel.OpenGLVersion = StringConstant.FieldHead_OpenGL + OpenGLVersionParse(value);
+						break;
+					case KEY_NATIVE_CODE:
+						targetModel.Architecture.AddRange(SplitSubArray(value));
 						break;
 					default:
 						//Console.WriteLine("Key not processed, key=" + key);
