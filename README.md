@@ -6,12 +6,13 @@ A simple APK Viewer, developed using .Net Standard and .Net Framework.
 
 ### Features
 
-- Drag and Drop apk file
+- Support apk and aab file
+- Drag and Drop file to open it
 - View basic information incl. package name, icon, version, sdk, etc
 - View Sign signiture
 - View APK hash
 - Open in Google Play Store
-- install using adb
+- install apk file using adb
 
 ### To all passerby
 
@@ -25,7 +26,6 @@ All bug fix will be done as soon as possible if I have time. Here are the featur
 
 - Multi-platform Support for MacOS and Linux. (I have zero experience on MacOS and Linux development)
 - UI Multi-language
-- xapk file support
 
 But I don't think I'll do the following features.
 - Rename file
@@ -47,6 +47,14 @@ The reason I do this because:
 This software is licensed under MIT License. 
 
 https://github.com/cdytoby/APKViewer/blob/master/LICENSE
+
+Bundletool is licensed under Apache License 2.0
+
+https://github.com/google/bundletool/blob/master/LICENSE
+
+ADB and AAPT is licensed under Apache License 2.0
+
+https://github.com/cdytoby/APKViewer/blob/master/ExternalTools/Windows/NOTICE.txt
 
 The app icon is from ionic-team, and it is modified by me.
 
