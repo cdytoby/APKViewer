@@ -22,5 +22,7 @@
   "Field_Feature_NotRequired": "Nicht erforderlich:",
   "Msg_DragDropHere": "Drag & Drop apk oder aab hierhin.",
   "Msg_JavaNotFound": "Java wird nicht gefunden.",
+  "Msg_JavaNotFound_AABFail": "Java wird nicht gefunden.",
+  "Msg_JavaNotFound_APKSignFail": "Java wird nicht gefunden.",
   "Msg_AABNotSupport": ""
 }

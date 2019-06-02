@@ -21,6 +21,8 @@
   "Field_Feature_Required": "Required:",
   "Field_Feature_NotRequired": "Not required:",
   "Msg_DragDropHere": "Drag and drop apk or aab here.",
-  "Msg_JavaNotFound": "Java is not found, can't read apk signature.",
+  "Msg_JavaNotFound": "Java is not found.",
+  "Msg_JavaNotFound_AABFail": "Java is not found, can't read aab manifest.",
+  "Msg_JavaNotFound_APKSignFail": "Java is not found, can't read apk signature.",
   "Msg_AABNotSupport": "Not supported for aab file."
 }

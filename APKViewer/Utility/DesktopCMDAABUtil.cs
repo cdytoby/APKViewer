@@ -29,6 +29,8 @@ namespace APKViewer.Utility
 		private const string KEY_ATTRIBUTE_SDK_MAX = "android:targetSdkVersion";
 		private const string KEY_ATTRIBUTE_FEATURE_REQUIRED = "android:required";
 		private const string KEY_ATTRIBUTE_OPENGLVERSION = "android:glEsVersion";
+		private const string KEY_ATTRIBUTE_APPLICATION_ICON = "android:icon";
+		private const string KEY_ATTRIBUTE_APPLICATION_LABEL = "android:label";
 
 		private const string KEY_DENSITY = "densities";
 		private const string KEY_DENSITY_ANY = "supports-any-density";
@@ -68,6 +70,9 @@ namespace APKViewer.Utility
 					break;
 				case KEY_PERMISSION:
 					ProcessAttribute_Permission(targetModel, currentNode.Attributes);
+					break;
+				case KEY_APPLICATION:
+					ProcessAttribute_Application(targetModel, currentNode.Attributes);
 					break;
 				default:
 					break;
@@ -199,6 +204,31 @@ namespace APKViewer.Utility
 				}
 			}
 		}
+
+		private static void ProcessAttribute_Application(APKDataModel targetModel,
+			XmlAttributeCollection attributeCollection)
+		{
+			if (attributeCollection == null)
+				return;
+
+			foreach (XmlAttribute currentAttribute in attributeCollection)
+			{
+				Console.WriteLine("Node attribute: " + currentAttribute.Name + " " + currentAttribute.Value);
+				switch (currentAttribute.Name)
+				{
+					case KEY_ATTRIBUTE_APPLICATION_ICON:
+						targetModel.AppIconResourceEntry = currentAttribute.Value.Trim('@');
+						break;
+					case KEY_ATTRIBUTE_APPLICATION_LABEL:
+						targetModel.AppNameResourceEntry = currentAttribute.Value.Trim('@');
+						break;
+					default:
+						break;
+				}
+			}
+		}
+
+		//todo add ProcessResourceDump()
 
 		public static void ReadAppName(APKDataModel targetModel, string dumpResult)
 		{

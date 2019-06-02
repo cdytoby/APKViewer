@@ -20,12 +20,10 @@ namespace APKViewer.WPFApp
 		private APKDataModel dataModel;
 
 		public event Action decodeFinishedEvent;
-		public event Action<string> statusReportEvent;
 
 		public WindowsAABDecoder()
 		{
 			dataModel = null;
-			statusReportEvent += (x) => Debug.WriteLine(x);
 		}
 
 		public void SetFilePath(Uri fileUri)
@@ -35,59 +33,43 @@ namespace APKViewer.WPFApp
 
 		public async Task Decode()
 		{
-			// bundletool dump manifest--bundle = ".\testaab-2019-05-14_16-08.aab"
-
-			statusReportEvent?.Invoke("WindowsAABDecoder.Decode() decode start.");
+			Debug.WriteLine("WindowsAABDecoder.Decode() decode start.");
 			dataModel = new APKDataModel();
 
-			statusReportEvent?.Invoke("WindowsAABDecoder.Decode() start test java.");
+			Debug.WriteLine("WindowsAABDecoder.Decode() start test java.");
 			await Decode_JavaTest();
 
 			if (DesktopJavaUtil.javaTested && DesktopJavaUtil.javaExist)
 			{
-				statusReportEvent?.Invoke("WindowsAABDecoder.Decode() Decode_Manifest start.");
+				Debug.WriteLine("WindowsAABDecoder.Decode() Decode_Manifest start.");
 				await Decode_Manifest();
-				statusReportEvent?.Invoke("WindowsAABDecoder.Decode() Decode_AppName start.");
+				Debug.WriteLine("WindowsAABDecoder.Decode() Decode_AppName start.");
 				await Decode_AppName();
-				statusReportEvent?.Invoke("WindowsAPKDecoder.Decode_AppIconEntry() Decode_AppIconEntry start.");
+				Debug.WriteLine("WindowsAPKDecoder.Decode_AppIconEntry() Decode_AppIconEntry start.");
 				await Decode_AppIconEntry();
-				statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() Decode_Icon start.");
+				Debug.WriteLine("WindowsAPKDecoder.Decode() Decode_Icon start.");
 				await Decode_Icon();
 				// statusReportEvent?.Invoke("WindowsAABDecoder.Decode() Decode_Signature start.");
 				// await Decode_Signature();
 			}
-			statusReportEvent?.Invoke("WindowsAABDecoder.Decode() Decode_Hash start.");
+			Debug.WriteLine("WindowsAABDecoder.Decode() Decode_Hash start.");
 			Decode_Hash();
 
 			dataModel.Signature = LocalizationCenter.currentDataModel.Msg_AABNotSupport;
 			dataModel.RawDumpSignature = LocalizationCenter.currentDataModel.Msg_AABNotSupport;
 
-			statusReportEvent?.Invoke("WindowsAABDecoder.Decode() decode finish.");
+			Debug.WriteLine("WindowsAABDecoder.Decode() decode finish.");
 			decodeFinishedEvent?.Invoke();
 		}
 
 		private async Task Decode_JavaTest()
 		{
-			string processResult = string.Empty;
-
-			if (!DesktopJavaUtil.javaTested)
-			{
-				// java -jar apksigner.jar verify --verbose --print-certs FDroid.apk
-				// java -version
-
-				ProcessStartInfo psiJavaVersion = new ProcessStartInfo()
-				{
-					FileName = "cmd.exe",
-					Arguments = "/c java -version"
-				};
-				processResult = await ProcessExecuter.ExecuteProcess(psiJavaVersion, true, statusReportEvent);
-				DesktopJavaUtil.SetJavaExist(processResult);
-			}
+			await AppUtility.TestJavaExist();
 
 			if (!DesktopJavaUtil.javaExist)
 			{
-				dataModel.RawDumpBadging = LocalizationCenter.currentDataModel.Msg_JavaNotFound;
-				dataModel.RawDumpSignature = LocalizationCenter.currentDataModel.Msg_JavaNotFound;
+				dataModel.AppName = LocalizationCenter.currentDataModel.Msg_JavaNotFound_AABFail;
+				dataModel.RawDumpBadging = LocalizationCenter.currentDataModel.Msg_JavaNotFound_AABFail;
 			}
 
 		}
@@ -99,8 +81,8 @@ namespace APKViewer.WPFApp
 				FileName = ExternalToolBinPath.GetBundleToolPath(),
 				Arguments = "dump manifest --bundle=\"" + targetFilePath.OriginalString + "\""
 			};
-			statusReportEvent?.Invoke("WindowsAABDecoder.Decode_Manifest(), path=" + targetFilePath.OriginalString);
-			string processResult = await ProcessExecuter.ExecuteProcess(psi, false, statusReportEvent);
+			Debug.WriteLine("WindowsAABDecoder.Decode_Manifest(), path=" + targetFilePath.OriginalString);
+			string processResult = await ProcessExecuter.ExecuteProcess(psi);
 			while (!processResult.StartsWith("<"))
 			{
 				if (string.IsNullOrEmpty(processResult))
@@ -109,12 +91,12 @@ namespace APKViewer.WPFApp
 				processResult = string.Join(Environment.NewLine, lines.ToArray());
 			}
 			processResult = processResult.Trim();
-			statusReportEvent?.Invoke("WindowsAABDecoder.Decode_Manifest(), result=" + processResult);
+			Debug.WriteLine("WindowsAABDecoder.Decode_Manifest(), result=" + processResult);
 
 			dataModel.RawDumpBadging = processResult;
-			statusReportEvent?.Invoke("WindowsAABDecoder.Decode_Manifest(), start read manifest");
+			Debug.WriteLine("WindowsAABDecoder.Decode_Manifest(), start read manifest");
 			DesktopCMDAABUtil.ReadManifest(dataModel, dataModel.RawDumpBadging);
-			statusReportEvent?.Invoke("WindowsAABDecoder.Decode_Manifest(), end read manifest");
+			Debug.WriteLine("WindowsAABDecoder.Decode_Manifest(), end read manifest");
 		}
 
 		private async Task Decode_AppName()
@@ -123,10 +105,10 @@ namespace APKViewer.WPFApp
 			{
 				FileName = ExternalToolBinPath.GetBundleToolPath(),
 				Arguments = "dump resources --bundle=\"" + targetFilePath.OriginalString
-					+ "\" --resource=\"string/app_name\" --values=true"
+					+ "\" --resource=\"" + dataModel.AppNameResourceEntry + "\" --values=true"
 			};
-			statusReportEvent?.Invoke("WindowsAABDecoder.Decode_AppName(), path=" + targetFilePath.OriginalString);
-			string processResult = await ProcessExecuter.ExecuteProcess(psi, false, statusReportEvent);
+			Debug.WriteLine("WindowsAABDecoder.Decode_AppName(), path=" + targetFilePath.OriginalString);
+			string processResult = await ProcessExecuter.ExecuteProcess(psi);
 			while (!processResult.StartsWith("Package"))
 			{
 				if (string.IsNullOrEmpty(processResult))
@@ -135,7 +117,7 @@ namespace APKViewer.WPFApp
 				processResult = string.Join(Environment.NewLine, lines.ToArray());
 			}
 			processResult = processResult.Trim();
-			statusReportEvent?.Invoke("WindowsAABDecoder.Decode_AppName(), result=" + processResult);
+			Debug.WriteLine("WindowsAABDecoder.Decode_AppName(), result=" + processResult);
 
 			DesktopCMDAABUtil.ReadAppName(dataModel, processResult);
 		}
@@ -146,10 +128,10 @@ namespace APKViewer.WPFApp
 			{
 				FileName = ExternalToolBinPath.GetBundleToolPath(),
 				Arguments = "dump resources --bundle=\"" + targetFilePath.OriginalString
-					+ "\" --resource=\"drawable/app_icon\" --values=true"
+					+ "\" --resource=\"" + dataModel.AppIconResourceEntry + "\" --values=true"
 			};
-			statusReportEvent?.Invoke("WindowsAABDecoder.Decode_AppIconEntry(), path=" + targetFilePath.OriginalString);
-			string processResult = await ProcessExecuter.ExecuteProcess(psi, false, statusReportEvent);
+			Debug.WriteLine("WindowsAABDecoder.Decode_AppIconEntry(), path=" + targetFilePath.OriginalString);
+			string processResult = await ProcessExecuter.ExecuteProcess(psi);
 			while (!processResult.StartsWith("Package"))
 			{
 				if (string.IsNullOrEmpty(processResult))
@@ -158,7 +140,7 @@ namespace APKViewer.WPFApp
 				processResult = string.Join(Environment.NewLine, lines.ToArray());
 			}
 			processResult = processResult.Trim();
-			statusReportEvent?.Invoke("WindowsAABDecoder.Decode_AppIconEntry(), result=" + processResult);
+			Debug.WriteLine("WindowsAABDecoder.Decode_AppIconEntry(), result=" + processResult);
 
 			DesktopCMDAABUtil.ReadAppIconEntry(dataModel, processResult);
 		}

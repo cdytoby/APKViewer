@@ -19,7 +19,6 @@ namespace APKViewer.WPFApp
 		private APKDataModel dataModel;
 
 		public event Action decodeFinishedEvent;
-		public event Action<string> statusReportEvent;
 
 		public WindowsAPKDecoder()
 		{
@@ -37,20 +36,18 @@ namespace APKViewer.WPFApp
 			//./aapt d badging "D:\Android\YahooWeatherProvider.apk"
 
 			Debug.WriteLine("WindowsAPKDecoder.Decode() decode start.");
-			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() decode start.");
 			dataModel = new APKDataModel();
 
-			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() Decode_Badging start.");
+			Debug.WriteLine("WindowsAPKDecoder.Decode() Decode_Badging start.");
 			await Decode_Badging();
-			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() Decode_Icon start.");
+			Debug.WriteLine("WindowsAPKDecoder.Decode() Decode_Icon start.");
 			await Decode_Icon();
-			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() Decode_Signature start.");
+			Debug.WriteLine("WindowsAPKDecoder.Decode() Decode_Signature start.");
 			await Decode_Signature();
-			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() Decode_Hash start.");
+			Debug.WriteLine("WindowsAPKDecoder.Decode() Decode_Hash start.");
 			Decode_Hash();
 
 			Debug.WriteLine("WindowsAPKDecoder.Decode() decode finish.");
-			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode() decode finish.");
 			decodeFinishedEvent?.Invoke();
 		}
 
@@ -61,8 +58,8 @@ namespace APKViewer.WPFApp
 				FileName = ExternalToolBinPath.GetAAPTPath(),
 				Arguments = " d badging \"" + targetFilePath.OriginalString + "\""
 			};
-			statusReportEvent?.Invoke("WindowsAPKDecoder.Decode_Badging(), path=" + targetFilePath.OriginalString);
-			string processResult = await ProcessExecuter.ExecuteProcess(psi, false, statusReportEvent);
+			Debug.WriteLine("WindowsAPKDecoder.Decode_Badging(), path=" + targetFilePath.OriginalString);
+			string processResult = await ProcessExecuter.ExecuteProcess(psi);
 
 			dataModel.RawDumpBadging = processResult;
 			DesktopCMDAAPTUtil.ReadBadging(dataModel, dataModel.RawDumpBadging);
@@ -75,25 +72,11 @@ namespace APKViewer.WPFApp
 
 		private async Task Decode_Signature()
 		{
-			string processResult;
-
-			if (!DesktopJavaUtil.javaTested)
-			{
-				// java -jar apksigner.jar verify --verbose --print-certs FDroid.apk
-				// java -version
-
-				ProcessStartInfo psiJavaVersion = new ProcessStartInfo()
-				{
-					FileName = "cmd.exe",
-					Arguments = "/c java -version"
-				};
-				processResult = await ProcessExecuter.ExecuteProcess(psiJavaVersion, true, statusReportEvent);
-				DesktopJavaUtil.SetJavaExist(processResult);
-			}
+			await AppUtility.TestJavaExist();
 
 			if (!DesktopJavaUtil.javaExist)
 			{
-				dataModel.Signature = LocalizationCenter.currentDataModel.Msg_JavaNotFound;
+				dataModel.Signature = LocalizationCenter.currentDataModel.Msg_JavaNotFound_APKSignFail;
 				return;
 			}
 
@@ -104,7 +87,7 @@ namespace APKViewer.WPFApp
 					" verify --verbose --print-certs" +
 					" \"" + targetFilePath.OriginalString + "\"",
 			};
-			processResult = await ProcessExecuter.ExecuteProcess(psiAPKSigner, false, statusReportEvent);
+			string processResult = await ProcessExecuter.ExecuteProcess(psiAPKSigner);
 
 			dataModel.RawDumpSignature = processResult;
 			DesktopCMDAPKSignerUtil.ReadAPKSignature(dataModel, processResult);

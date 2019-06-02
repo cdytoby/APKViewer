@@ -8,8 +8,8 @@
 	xmlns:data="clr-namespace:APKViewer;assembly=APKViewer"
 	mc:Ignorable="d"
 	Title="APKViewer"
-	Height="690"
-	MinHeight="660"
+	Height="720"
+	MinHeight="690"
 	Width="600"
 	MinWidth="600"
 	WindowStartupLocation="CenterScreen"
@@ -161,6 +161,7 @@
 					Text="{Binding openGLString, Mode=OneWay}" />
 			</DockPanel>
 
+			<!-- Permission -->
 			<DockPanel
 				Style="{StaticResource RowPanel_Default}"
 				Height="100">
@@ -173,6 +174,8 @@
 					VerticalScrollBarVisibility="Auto"
 					HorizontalScrollBarVisibility="Auto" />
 			</DockPanel>
+
+			<!-- Features -->
 			<DockPanel
 				Style="{StaticResource RowPanel_Default}"
 				Height="100">
@@ -185,6 +188,8 @@
 					VerticalScrollBarVisibility="Auto"
 					HorizontalScrollBarVisibility="Auto" />
 			</DockPanel>
+
+			<!-- Signature -->
 			<DockPanel
 				Style="{StaticResource RowPanel_Default}"
 				Height="100">
@@ -198,6 +203,8 @@
 					HorizontalScrollBarVisibility="Auto"
 					TextWrapping="Wrap" />
 			</DockPanel>
+
+			<!-- SHA1 -->
 			<DockPanel
 				Style="{StaticResource RowPanel_Default}">
 				<Label

@@ -6,6 +6,7 @@ namespace APKViewer
 {
     public class APKDataModel
     {
+		public string AppNameResourceEntry { get; set; }
 		public string AppName { get; set; }
 		public Dictionary<string, string> AppNameLangDict { get; set; } = new Dictionary<string, string>();
 		public string PackageName { get; set; }
@@ -22,6 +23,7 @@ namespace APKViewer
 		public string OpenGLVersion { get; set; }
 		public string Signature { get; set; }
 		public string SHA1Hash { get; set; }
+		public string AppIconResourceEntry { get; set; }
 		public string MaxIconZipEntry { get; set; }
 		public byte[] MaxIconContent { get; set; }
 

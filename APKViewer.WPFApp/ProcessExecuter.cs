@@ -7,8 +7,7 @@ namespace APKViewer.WPFApp
 {
 	public static class ProcessExecuter
 	{
-		public static async Task<string> ExecuteProcess(ProcessStartInfo startInfo, bool useBothErrorAndNormal = false,
-			Action<string> statusReportEvent = null)
+		public static async Task<string> ExecuteProcess(ProcessStartInfo startInfo, bool useBothErrorAndNormal = false)
 		{
 			// string result = string.Empty;
 
@@ -23,9 +22,6 @@ namespace APKViewer.WPFApp
 				process.StartInfo.RedirectStandardOutput = true;
 				process.StartInfo.RedirectStandardError = true;
 				process.EnableRaisingEvents = true;
-
-				statusReportEvent?.Invoke("ProcessExecuter.ExecuteProcess() setup: \r\n" +
-					process.StartInfo.FileName + " " + process.StartInfo.Arguments);
 
 				Debug.WriteLine("ProcessExecuter.ExecuteProcess() setup: \r\n" +
 					process.StartInfo.FileName + " " + process.StartInfo.Arguments);
@@ -65,7 +61,7 @@ namespace APKViewer.WPFApp
 				process.BeginOutputReadLine();
 				process.BeginErrorReadLine();
 
-				statusReportEvent?.Invoke("ProcessExecuter.ExecuteProcess() process started.");
+				Debug.WriteLine("ProcessExecuter.ExecuteProcess() process started.");
 
 				await tcs.Task;
 				await Task.Delay(50);
