@@ -13,7 +13,7 @@ namespace APKViewer.WPFApp
 			ProcessStartInfo psi = new ProcessStartInfo()
 			{
 				FileName = ExternalToolBinPath.GetADBPath(),
-				Arguments = " install " + fileUri.OriginalString
+				Arguments = " install -r \"" + fileUri.OriginalString + "\""
 			};
 			string processResult = await ProcessExecuter.ExecuteProcess(psi, true);
 
