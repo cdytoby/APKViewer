@@ -76,10 +76,16 @@ namespace APKViewer
 
 		public void SetDecoder(IFileDecoder newApkDecoder, IFileDecoder newAabDecoder)
 		{
-			apkDecoder = newApkDecoder;
-			apkDecoder.decodeFinishedEvent += GetDataFromDecoder;
-			aabDecoder = newAabDecoder;
-			aabDecoder.decodeFinishedEvent += GetDataFromDecoder;
+			if (newApkDecoder != null)
+			{
+				apkDecoder = newApkDecoder;
+				apkDecoder.decodeFinishedEvent += GetDataFromDecoder;
+			}
+			if (newAabDecoder != null)
+			{
+				aabDecoder = newAabDecoder;
+				aabDecoder.decodeFinishedEvent += GetDataFromDecoder;
+			}
 		}
 
 		public void SetInstaller(IApkInstaller newInstaller)
