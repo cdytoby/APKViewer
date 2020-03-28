@@ -97,7 +97,6 @@
     </ApplicationDefinition>
     <Compile Include="AppUtility.cs" />
     <Compile Include="DefaultImageConverter.cs" />
-    <Compile Include="ExternalToolBinPath.cs" />
     <Compile Include="RawDataDialog.xaml.cs">
       <DependentUpon>RawDataDialog.xaml</DependentUpon>
     </Compile>

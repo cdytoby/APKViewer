@@ -24,7 +24,7 @@ namespace APKViewer.WPFApp
 			//decoder.statusReportEvent += ShowTestLog;
 			bindedViewModel.SetDecoder(new DefaultAPKDecoder(cmdPathProvider), new DefaultAABDecoder(cmdPathProvider));
 			bindedViewModel.SetDialogService(this);
-			bindedViewModel.SetInstaller(new WindowsApkInstaller());
+			bindedViewModel.SetInstaller(new WindowsApkInstaller(cmdPathProvider));
 			bindedViewModel.SetMessageDialog(this);
 			overlayVisibilityBindingExpress = DropOverlay.GetBindingExpression(Grid.VisibilityProperty);
 

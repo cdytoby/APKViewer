@@ -6,13 +6,20 @@ namespace APKViewer.WPFApp
 {
 	public class WindowsApkInstaller: IApkInstaller
 	{
+		private ICmdPathProvider pathProvider;
+
 		public event Action<bool, string> installFinishedEvent;
+
+		public WindowsApkInstaller(ICmdPathProvider newPathProvider)
+		{
+			pathProvider = newPathProvider;
+		}
 
 		public async Task InstallApk(Uri fileUri)
 		{
 			ProcessStartInfo psi = new ProcessStartInfo()
 			{
-				FileName = ExternalToolBinPath.GetADBPath(),
+				FileName = pathProvider.GetADBPath(),
 				Arguments = " install -r \"" + fileUri.OriginalString + "\""
 			};
 			string processResult = await ProcessExecuter.ExecuteProcess(psi, true);
