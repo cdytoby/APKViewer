@@ -1,3 +1,6 @@
+using System.Diagnostics;
+using System.Threading.Tasks;
+
 namespace APKViewer.Utility
 {
 	public static class DesktopJavaUtil
@@ -14,6 +17,25 @@ namespace APKViewer.Utility
 		{
 			javaExist = JavaExist(javaVersionResult);
 			javaTested = true;
+		}
+
+		public static async Task TestJavaExist()
+		{
+			string processResult = string.Empty;
+
+			if (!javaTested)
+			{
+				// java -jar apksigner.jar verify --verbose --print-certs FDroid.apk
+				// java -version
+
+				ProcessStartInfo psiJavaVersion = new ProcessStartInfo()
+				{
+					FileName = "cmd.exe",
+					Arguments = "/c java -version"
+				};
+				processResult = await ProcessExecuter.ExecuteProcess(psiJavaVersion, true);
+				SetJavaExist(processResult);
+			}
 		}
 	}
 }

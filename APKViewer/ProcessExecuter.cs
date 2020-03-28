@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace APKViewer.WPFApp
+namespace APKViewer
 {
 	public static class ProcessExecuter
 	{

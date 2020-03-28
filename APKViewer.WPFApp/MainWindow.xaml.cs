@@ -14,13 +14,15 @@ namespace APKViewer.WPFApp
 	{
 		private APKViewModel bindedViewModel;
 		private BindingExpression overlayVisibilityBindingExpress;
+		private ICmdPathProvider cmdPathProvider;
 
 		public MainWindow()
 		{
 			InitializeComponent();
 			bindedViewModel = (APKViewModel)DataContext;
+			cmdPathProvider = new WindowsCmdPath();
 			//decoder.statusReportEvent += ShowTestLog;
-			bindedViewModel.SetDecoder(new WindowsAPKDecoder(), new WindowsAABDecoder());
+			bindedViewModel.SetDecoder(new DefaultAPKDecoder(cmdPathProvider), new DefaultAABDecoder(cmdPathProvider));
 			bindedViewModel.SetDialogService(this);
 			bindedViewModel.SetInstaller(new WindowsApkInstaller());
 			bindedViewModel.SetMessageDialog(this);

@@ -1,28 +1,24 @@
-﻿using APKViewer.Localize;
-using APKViewer.Utility;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace APKViewer.WPFApp
+using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using APKViewer.Localize;
+using APKViewer.Utility;
+
+namespace APKViewer
 {
-	public class WindowsAPKDecoder: IFileDecoder
+	public class DefaultAPKDecoder: IFileDecoder
 	{
+		private ICmdPathProvider pathProvider;
 		private Uri targetFilePath;
 		private APKDataModel dataModel;
 
 		public event Action decodeFinishedEvent;
 
-		public WindowsAPKDecoder()
+		public DefaultAPKDecoder(ICmdPathProvider newPathProvider)
 		{
 			dataModel = null;
+			pathProvider = newPathProvider;
 		}
 
 		public void SetFilePath(Uri fileUri)
@@ -32,22 +28,19 @@ namespace APKViewer.WPFApp
 
 		public async Task Decode()
 		{
-			//C:\CLIProgram\Android\AndroidSDK\build-tools\27.0.0\aapt.exe
-			//./aapt d badging "D:\Android\YahooWeatherProvider.apk"
-
-			Debug.WriteLine("WindowsAPKDecoder.Decode() decode start.");
+			Debug.WriteLine("DefaultAPKDecoder.Decode() decode start.");
 			dataModel = new APKDataModel();
 
-			Debug.WriteLine("WindowsAPKDecoder.Decode() Decode_Badging start.");
+			Debug.WriteLine("DefaultAPKDecoder.Decode() Decode_Badging start.");
 			await Decode_Badging();
-			Debug.WriteLine("WindowsAPKDecoder.Decode() Decode_Icon start.");
+			Debug.WriteLine("DefaultAPKDecoder.Decode() Decode_Icon start.");
 			await Decode_Icon();
-			Debug.WriteLine("WindowsAPKDecoder.Decode() Decode_Signature start.");
+			Debug.WriteLine("DefaultAPKDecoder.Decode() Decode_Signature start.");
 			await Decode_Signature();
-			Debug.WriteLine("WindowsAPKDecoder.Decode() Decode_Hash start.");
+			Debug.WriteLine("DefaultAPKDecoder.Decode() Decode_Hash start.");
 			Decode_Hash();
 
-			Debug.WriteLine("WindowsAPKDecoder.Decode() decode finish.");
+			Debug.WriteLine("DefaultAPKDecoder.Decode() decode finish.");
 			decodeFinishedEvent?.Invoke();
 		}
 
@@ -55,10 +48,10 @@ namespace APKViewer.WPFApp
 		{
 			ProcessStartInfo psi = new ProcessStartInfo()
 			{
-				FileName = ExternalToolBinPath.GetAAPTPath(),
+				FileName = pathProvider.GetAAPTPath(),
 				Arguments = " d badging \"" + targetFilePath.OriginalString + "\""
 			};
-			Debug.WriteLine("WindowsAPKDecoder.Decode_Badging(), path=" + targetFilePath.OriginalString);
+			Debug.WriteLine("DefaultAPKDecoder.Decode_Badging(), path=" + targetFilePath.OriginalString);
 			string processResult = await ProcessExecuter.ExecuteProcess(psi);
 
 			dataModel.RawDumpBadging = processResult;
@@ -72,7 +65,7 @@ namespace APKViewer.WPFApp
 
 		private async Task Decode_Signature()
 		{
-			await AppUtility.TestJavaExist();
+			await DesktopJavaUtil.TestJavaExist();
 
 			if (!DesktopJavaUtil.javaExist)
 			{
@@ -82,8 +75,8 @@ namespace APKViewer.WPFApp
 
 			ProcessStartInfo psiAPKSigner = new ProcessStartInfo
 			{
-				FileName = "java.exe",
-				Arguments = "-jar " + ExternalToolBinPath.GetAPKSignerPath() +
+				FileName = "java",
+				Arguments = "-jar " + pathProvider.GetAPKSignerPath() +
 					" verify --verbose --print-certs" +
 					" \"" + targetFilePath.OriginalString + "\"",
 			};
