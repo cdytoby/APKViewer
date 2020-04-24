@@ -20,7 +20,7 @@ namespace APKViewer.XUnitTest
 		{
 			//"C:\Users\cdytoby\Downloads\Ticket69\DEVSTUDIO_live_ios-2020-04-17_16-17.ipa"
 
-			string path = (@"C:\Users\cdytoby\Downloads\IPACollection\GoodNotes (v5.4.20 v556159.427633366 unk PI DY FW iPhone5S Univ 64bit os120 ok13)-user_hidden.bfi.ipa");
+			string path = (@"C:\Users\cdytoby\Downloads\IPACollection\WhatsApp (v2.20.42 v2.20.42.1 unk PI DY FW iPhone4S 64bit os90 ok13)-user_hidden.bfi.ipa");
 			Uri pathUri = new Uri(path);
 
 			DefaultIPADecoder decoder = new DefaultIPADecoder();

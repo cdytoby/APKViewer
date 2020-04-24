@@ -64,6 +64,7 @@ namespace APKViewer
 						await sourceStream.CopyToAsync(byteStream);
 						rootDoc = (NSDictionary)PropertyListParser.Parse(byteStream.ToArray());
 						dataModel.RawDumpBadging = rootDoc.ToXmlPropertyList();
+						Console.WriteLine("DefaultIPADecoder.Decode() raw: \r\n" + dataModel.RawDumpBadging);
 					}
 
 					if (rootDoc != null)
