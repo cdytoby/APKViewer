@@ -32,10 +32,10 @@ namespace APKViewer.Utility
 		private const string SUBKEY_VERSIONNAME = "versionName";
 		private const string SUBKEY_BUILDPLATFORMNAME = "platformBuildVersionName";
 
-		public static void ReadBadging(APKDataModel targetModel, string badgingResult)
+		public static void ReadBadging(PackageDataModel targetModel, string badgingResult)
 		{
 			if (targetModel == null)
-				targetModel = new APKDataModel();
+				targetModel = new PackageDataModel();
 
 			string[] textLines = badgingResult.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 			foreach (string line in textLines)
@@ -74,9 +74,7 @@ namespace APKViewer.Utility
 					case KEY_PACKAGEGROUP:
 						Dictionary<string, string> packageDict = SplitSubDict(value);
 						targetModel.PackageName = packageDict[SUBKEY_NAME];
-						int tempVC = 0;
-						int.TryParse(packageDict[SUBKEY_VERSIONCODE], out tempVC);
-						targetModel.VersionCode = tempVC;
+						targetModel.VersionCode = packageDict[SUBKEY_VERSIONCODE];
 						targetModel.VersionString = packageDict[SUBKEY_VERSIONNAME];
 						break;
 					case KEY_MINSDK:

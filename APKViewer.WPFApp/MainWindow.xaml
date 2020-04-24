@@ -28,7 +28,7 @@
 	</Window.Resources>
 
 	<Window.DataContext>
-		<data:APKViewModel />
+		<data:MainWindowViewModel />
 	</Window.DataContext>
 
 	<Grid

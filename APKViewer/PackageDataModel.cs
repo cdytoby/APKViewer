@@ -4,14 +4,14 @@ using System.Text;
 
 namespace APKViewer
 {
-    public class APKDataModel
+    public class PackageDataModel
     {
 		public string AppNameResourceEntry { get; set; }
 		public string AppName { get; set; }
 		public Dictionary<string, string> AppNameLangDict { get; set; } = new Dictionary<string, string>();
 		public string PackageName { get; set; }
 		public string VersionString { get; set; }
-		public int VersionCode { get; set; }
+		public string VersionCode { get; set; }
 		public int MinSDKCode { get; set; }
 		public int MaxSDKCode { get; set; }
 		public List<string> ScreenSize { get; set; } = new List<string>();

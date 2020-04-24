@@ -18,16 +18,25 @@ namespace APKViewer.XUnitTest
 		[Fact]
 		public void Test()
 		{
-			//"D:\Download\aabplayground\CAI_dev_android-2019-04-23_14-31.apk"
+			//"C:\Users\cdytoby\Downloads\Ticket69\DEVSTUDIO_live_ios-2020-04-17_16-17.ipa"
 
-			string result = Path.GetExtension(@"D:\Download\aabplayground\CAI_dev_android-2019-04-23_14-31.apk");
-			Console.WriteLine("result=" + result);
+			string path = (@"C:\Users\cdytoby\Downloads\IPACollection\GoodNotes (v5.4.20 v556159.427633366 unk PI DY FW iPhone5S Univ 64bit os120 ok13)-user_hidden.bfi.ipa");
+			Uri pathUri = new Uri(path);
+
+			DefaultIPADecoder decoder = new DefaultIPADecoder();
+			decoder.SetFilePath(pathUri);
+			decoder.decodeProgressCallbackEvent += () =>
+			{
+				Console.WriteLine(decoder.GetDataModel().RawDumpBadging);
+				Console.WriteLine(decoder.GetDataModel().AppName);
+			};
+			decoder.Decode().Wait();
 		}
 
 		[Fact]
 		public void TestAABManifest()
 		{
-			string result= File.ReadAllText(@"D:\Download\aabplayground\dumpmanifest.xml");
+			string result = File.ReadAllText(@"D:\Download\aabplayground\dumpmanifest.xml");
 			DesktopCMDAABUtil.ReadManifest(null, result);
 		}
 

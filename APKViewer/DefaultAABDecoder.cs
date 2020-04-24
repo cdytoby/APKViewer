@@ -11,9 +11,9 @@ namespace APKViewer
 	{
 		private ICmdPathProvider pathProvider;
 		private Uri targetFilePath;
-		private APKDataModel dataModel;
+		private PackageDataModel dataModel;
 
-		public event Action decodeFinishedEvent;
+		public event Action decodeProgressCallbackEvent;
 
 		public DefaultAABDecoder(ICmdPathProvider newPathProvider)
 		{
@@ -29,7 +29,7 @@ namespace APKViewer
 		public async Task Decode()
 		{
 			Debug.WriteLine("DefaultAABDecoder.Decode() decode start.");
-			dataModel = new APKDataModel();
+			dataModel = new PackageDataModel();
 
 			Debug.WriteLine("DefaultAABDecoder.Decode() start test java.");
 			await Decode_JavaTest();
@@ -54,7 +54,7 @@ namespace APKViewer
 			dataModel.RawDumpSignature = LocalizationCenter.currentDataModel.Msg_AABNotSupport;
 
 			Debug.WriteLine("DefaultAABDecoder.Decode() decode finish.");
-			decodeFinishedEvent?.Invoke();
+			decodeProgressCallbackEvent?.Invoke();
 		}
 
 		private async Task Decode_JavaTest()
@@ -150,7 +150,7 @@ namespace APKViewer
 			FileUtil.CalculateSHA1(targetFilePath, dataModel);
 		}
 
-		public APKDataModel GetDataModel()
+		public PackageDataModel GetDataModel()
 		{
 			return dataModel;
 		}

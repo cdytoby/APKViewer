@@ -9,11 +9,11 @@ namespace APKViewer.Utility
 		private const char SPLITTER_MAINKEYVALUE = ':';
 		private const string SIGNATURE_HEAD = "Verifies";
 
-		public static void ReadAPKSignature(APKDataModel targetModel, string signResult)
+		public static void ReadAPKSignature(PackageDataModel targetModel, string signResult)
 		{
 			StringBuilder finalResult=new StringBuilder();
 			if (targetModel == null)
-				targetModel = new APKDataModel();
+				targetModel = new PackageDataModel();
 
 			string[] textLines = signResult.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 

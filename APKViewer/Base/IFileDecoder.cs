@@ -7,11 +7,11 @@ namespace APKViewer
 {
     public interface IFileDecoder
     {
-		event Action decodeFinishedEvent;
+		event Action decodeProgressCallbackEvent;
 
 		void SetFilePath(Uri fileUri);
 		Task Decode();
 
-		APKDataModel GetDataModel();
+		PackageDataModel GetDataModel();
 	}
 }

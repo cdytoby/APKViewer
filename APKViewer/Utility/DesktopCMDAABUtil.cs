@@ -35,10 +35,10 @@ namespace APKViewer.Utility
 		private const string KEY_DENSITY = "densities";
 		private const string KEY_DENSITY_ANY = "supports-any-density";
 
-		public static void ReadManifest(APKDataModel targetModel, string manifestResult)
+		public static void ReadManifest(PackageDataModel targetModel, string manifestResult)
 		{
 			if (targetModel == null)
-				targetModel = new APKDataModel();
+				targetModel = new PackageDataModel();
 
 			try
 			{
@@ -53,7 +53,7 @@ namespace APKViewer.Utility
 			}
 		}
 
-		private static void ProcessNode(APKDataModel targetModel, XmlNode currentNode)
+		private static void ProcessNode(PackageDataModel targetModel, XmlNode currentNode)
 		{
 			Console.WriteLine("Node name:  " + currentNode.Name);
 			switch (currentNode.Name)
@@ -88,7 +88,7 @@ namespace APKViewer.Utility
 			}
 		}
 
-		private static void ProcessAttribute_Default(APKDataModel targetModel,
+		private static void ProcessAttribute_Default(PackageDataModel targetModel,
 			XmlAttributeCollection attributeCollection)
 		{
 			if (attributeCollection == null)
@@ -106,8 +106,7 @@ namespace APKViewer.Utility
 						targetModel.VersionString = currentAttribute.Value;
 						break;
 					case KEY_ATTRIBUTE_MANIFEST_VERSIONCODE:
-						int.TryParse(currentAttribute.Value, out int tempVersionCode);
-						targetModel.VersionCode = tempVersionCode;
+						targetModel.VersionCode = currentAttribute.Value;
 						break;
 					case KEY_ATTRIBUTE_SDK_MIN:
 						int.TryParse(currentAttribute.Value, out int tempSDKMinVersion);
@@ -124,7 +123,7 @@ namespace APKViewer.Utility
 			}
 		}
 
-		private static void ProcessAttribute_Screens(APKDataModel targetModel,
+		private static void ProcessAttribute_Screens(PackageDataModel targetModel,
 			XmlAttributeCollection attributeCollection)
 		{
 			if (attributeCollection == null)
@@ -151,7 +150,7 @@ namespace APKViewer.Utility
 			Console.WriteLine("Node ScreenSize: " + string.Concat(targetModel.ScreenSize));
 		}
 
-		private static void ProcessAttribute_Feature(APKDataModel targetModel,
+		private static void ProcessAttribute_Feature(PackageDataModel targetModel,
 			XmlAttributeCollection attributeCollection)
 		{
 			if (attributeCollection == null)
@@ -189,7 +188,7 @@ namespace APKViewer.Utility
 			}
 		}
 
-		private static void ProcessAttribute_Permission(APKDataModel targetModel,
+		private static void ProcessAttribute_Permission(PackageDataModel targetModel,
 			XmlAttributeCollection attributeCollection)
 		{
 			if (attributeCollection == null)
@@ -205,7 +204,7 @@ namespace APKViewer.Utility
 			}
 		}
 
-		private static void ProcessAttribute_Application(APKDataModel targetModel,
+		private static void ProcessAttribute_Application(PackageDataModel targetModel,
 			XmlAttributeCollection attributeCollection)
 		{
 			if (attributeCollection == null)
@@ -230,7 +229,7 @@ namespace APKViewer.Utility
 
 		//todo add ProcessResourceDump()
 
-		public static void ReadAppName(APKDataModel targetModel, string dumpResult)
+		public static void ReadAppName(PackageDataModel targetModel, string dumpResult)
 		{
 			if (string.IsNullOrWhiteSpace(dumpResult))
 				return;
@@ -261,7 +260,7 @@ namespace APKViewer.Utility
 			}
 		}
 
-		public static void ReadAppIconEntry(APKDataModel targetModel, string dumpResult)
+		public static void ReadAppIconEntry(PackageDataModel targetModel, string dumpResult)
 		{
 			if (string.IsNullOrWhiteSpace(dumpResult))
 				return;

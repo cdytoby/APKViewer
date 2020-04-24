@@ -12,17 +12,17 @@ namespace APKViewer.WPFApp
 {
 	public partial class MainWindow: Window, IOpenRawDialogService, IMessageBoxService
 	{
-		private APKViewModel bindedViewModel;
+		private MainWindowViewModel bindedViewModel;
 		private BindingExpression overlayVisibilityBindingExpress;
 		private ICmdPathProvider cmdPathProvider;
 
 		public MainWindow()
 		{
 			InitializeComponent();
-			bindedViewModel = (APKViewModel)DataContext;
+			bindedViewModel = (MainWindowViewModel)DataContext;
 			cmdPathProvider = new WindowsCmdPath();
 			//decoder.statusReportEvent += ShowTestLog;
-			bindedViewModel.SetDecoder(new DefaultAPKDecoder(cmdPathProvider), new DefaultAABDecoder(cmdPathProvider));
+			bindedViewModel.SetDecoder(new DefaultAPKDecoder(cmdPathProvider), new DefaultAABDecoder(cmdPathProvider), new DefaultIPADecoder());
 			bindedViewModel.SetDialogService(this);
 			bindedViewModel.SetInstaller(new WindowsApkInstaller(cmdPathProvider));
 			bindedViewModel.SetMessageDialog(this);
@@ -58,8 +58,7 @@ namespace APKViewer.WPFApp
 				{
 					foreach (string fileName in files)
 					{
-						if (fileName.EndsWith(StringConstant.FileExtension_APK)||
-							fileName.EndsWith(StringConstant.FileExtension_AAB))
+						if (bindedViewModel.FileAllowed(fileName))
 						{
 							bindedViewModel.SetNewFile(new Uri(fileName));
 							break;

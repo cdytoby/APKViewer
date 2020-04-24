@@ -11,9 +11,9 @@ namespace APKViewer
 	{
 		private ICmdPathProvider pathProvider;
 		private Uri targetFilePath;
-		private APKDataModel dataModel;
+		private PackageDataModel dataModel;
 
-		public event Action decodeFinishedEvent;
+		public event Action decodeProgressCallbackEvent;
 
 		public DefaultAPKDecoder(ICmdPathProvider newPathProvider)
 		{
@@ -29,19 +29,22 @@ namespace APKViewer
 		public async Task Decode()
 		{
 			Debug.WriteLine("DefaultAPKDecoder.Decode() decode start.");
-			dataModel = new APKDataModel();
+			dataModel = new PackageDataModel();
 
 			Debug.WriteLine("DefaultAPKDecoder.Decode() Decode_Badging start.");
 			await Decode_Badging();
+			decodeProgressCallbackEvent?.Invoke();
 			Debug.WriteLine("DefaultAPKDecoder.Decode() Decode_Icon start.");
 			await Decode_Icon();
+			decodeProgressCallbackEvent?.Invoke();
 			Debug.WriteLine("DefaultAPKDecoder.Decode() Decode_Signature start.");
 			await Decode_Signature();
+			decodeProgressCallbackEvent?.Invoke();
 			Debug.WriteLine("DefaultAPKDecoder.Decode() Decode_Hash start.");
 			Decode_Hash();
 
 			Debug.WriteLine("DefaultAPKDecoder.Decode() decode finish.");
-			decodeFinishedEvent?.Invoke();
+			decodeProgressCallbackEvent?.Invoke();
 		}
 
 		private async Task Decode_Badging()
@@ -91,7 +94,7 @@ namespace APKViewer
 			FileUtil.CalculateSHA1(targetFilePath, dataModel);
 		}
 
-		public APKDataModel GetDataModel()
+		public PackageDataModel GetDataModel()
 		{
 			return dataModel;
 		}

@@ -19,7 +19,7 @@ namespace APKViewer.WPFApp
 	/// </summary>
 	public partial class RawDataDialog : Window
 	{
-		public RawDataDialog(APKViewModel viewModel)
+		public RawDataDialog(MainWindowViewModel viewModel)
 		{
 			DataContext = viewModel;
 			InitializeComponent();

@@ -11,13 +11,13 @@ namespace APKViewer.Utility
 {
 	public static class FileUtil
 	{
-		public static void CalculateSHA1(Uri fileUri, APKDataModel dataModel)
+		public static void CalculateSHA1(Uri fileUri, PackageDataModel dataModel)
 		{
 			using (SHA1 sha = SHA1.Create())
 			{
 				using (FileStream stream = File.OpenRead(fileUri.OriginalString))
 				{
-					dataModel.SHA1Hash = BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "");
+					dataModel.SHA1Hash = System.BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "");
 				}
 			}
 		}
