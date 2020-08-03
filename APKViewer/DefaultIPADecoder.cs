@@ -69,6 +69,7 @@ namespace APKViewer
 
 					if (rootDoc != null)
 					{
+						//Core Method, read data
 						PListCilUtil.ReadNSData(dataModel, rootDoc);
 					}
 				}

@@ -30,9 +30,13 @@ namespace APKViewer
 			tableDictionary = JsonConvert.DeserializeObject<Dictionary<int, (string, string)>>(sourceTable);
 		}
 
-		public static string GetFullString(int sdkInt)
+		public static string GetFullString(string sdkStr)
 		{
-			if (sdkInt <= 0)
+			if (string.IsNullOrWhiteSpace(sdkStr))
+				return string.Empty;
+			int sdkInt = 0;
+			bool parseSuccess = int.TryParse(sdkStr, out sdkInt);
+			if (!parseSuccess || sdkInt <= 0)
 				return string.Empty;
 			if (!tableDictionary.ContainsKey(sdkInt))
 				return "API " + sdkInt;

@@ -12,7 +12,7 @@ using APKViewer.Localize;
 
 namespace APKViewer
 {
-	public class MainWindowViewModel : BindableModelBase
+	public class MainWindowViewModel: BindableModelBase
 	{
 		private IApkInstaller apkInstaller;
 		private IOpenRawDialogService dialogService;
@@ -35,8 +35,28 @@ namespace APKViewer
 		public string AppName => targetPackageData?.AppName;
 		public string AppVersion => GetVersionString();
 		public string PackageName => targetPackageData?.PackageName;
-		public string minSDK => AndroidSDKData.GetFullString(targetPackageData?.MinSDKCode ?? 0);
-		public string maxSDK => AndroidSDKData.GetFullString(targetPackageData?.MaxSDKCode ?? 0);
+		public string minSDK
+		{
+			get
+			{
+				if (fileExtension.Equals(StringConstant.FileExtension_APK) ||
+					fileExtension.Equals(StringConstant.FileExtension_AAB))
+					return AndroidSDKData.GetFullString(targetPackageData?.MinSDKCode);
+				else
+					return targetPackageData.MinSDKCode;
+			}
+		}
+		public string maxSDK
+		{
+			get
+			{
+				if (fileExtension.Equals(StringConstant.FileExtension_APK) ||
+					fileExtension.Equals(StringConstant.FileExtension_AAB))
+					return AndroidSDKData.GetFullString(targetPackageData?.MaxSDKCode);
+				else
+					return targetPackageData.MaxSDKCode;
+			}
+		}
 		public string screenSize => StringGroupToString(targetPackageData?.ScreenSize, false);
 		public string densities => StringGroupToString(targetPackageData?.Densities, false);
 		public string architecture => StringGroupToString(targetPackageData?.Architecture, false);
@@ -95,7 +115,7 @@ namespace APKViewer
 
 		public bool FileAllowed(string testFileName)
 		{
-			foreach(string _ext in decoderDict.Keys)
+			foreach (string _ext in decoderDict.Keys)
 			{
 				if (testFileName.EndsWith(_ext))
 					return true;
@@ -139,7 +159,7 @@ namespace APKViewer
 				currentFileDecoder.decodeProgressCallbackEvent -= GetDataFromDecoder;
 
 			currentFileDecoder = decoderDict[fileExtension];
-			if(currentFileDecoder!=null)
+			if (currentFileDecoder != null)
 			{
 				currentFileDecoder.decodeProgressCallbackEvent += GetDataFromDecoder;
 				currentFileDecoder.SetFilePath(newFileUri);
@@ -196,7 +216,7 @@ namespace APKViewer
 							return x.Value;
 						return x.Key + ": " + x.Value;
 					}
-				);
+					);
 				foreach (string s in newStringIEnum)
 				{
 					m_appNameList.Add(s);

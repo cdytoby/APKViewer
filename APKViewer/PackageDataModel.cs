@@ -12,8 +12,8 @@ namespace APKViewer
 		public string PackageName { get; set; }
 		public string VersionString { get; set; }
 		public string VersionCode { get; set; }
-		public int MinSDKCode { get; set; }
-		public int MaxSDKCode { get; set; }
+		public string MinSDKCode { get; set; }
+		public string MaxSDKCode { get; set; }
 		public List<string> ScreenSize { get; set; } = new List<string>();
 		public List<string> Densities { get; set; } = new List<string>();
 		public List<string> Permissions { get; set; } = new List<string>();

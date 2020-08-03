@@ -78,10 +78,10 @@ namespace APKViewer.Utility
 						targetModel.VersionString = packageDict[SUBKEY_VERSIONNAME];
 						break;
 					case KEY_MINSDK:
-						targetModel.MinSDKCode = int.Parse(value);
+						targetModel.MinSDKCode = value;
 						break;
 					case KEY_TARGETSDK:
-						targetModel.MaxSDKCode = int.Parse(value);
+						targetModel.MaxSDKCode = value;
 						break;
 					case KEY_APP:
 						Dictionary<string, string> labelDict = SplitSubDict(value);

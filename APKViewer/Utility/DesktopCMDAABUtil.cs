@@ -109,12 +109,10 @@ namespace APKViewer.Utility
 						targetModel.VersionCode = currentAttribute.Value;
 						break;
 					case KEY_ATTRIBUTE_SDK_MIN:
-						int.TryParse(currentAttribute.Value, out int tempSDKMinVersion);
-						targetModel.MinSDKCode = tempSDKMinVersion;
+						targetModel.MinSDKCode = currentAttribute.Value;
 						break;
 					case KEY_ATTRIBUTE_SDK_MAX:
-						int.TryParse(currentAttribute.Value, out int tempSDKMaxVersion);
-						targetModel.MaxSDKCode = tempSDKMaxVersion;
+						targetModel.MaxSDKCode = currentAttribute.Value;
 						break;
 
 					default:
