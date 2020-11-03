@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using APKViewer.Localize;
 using APKViewer.Utility;
 
-namespace APKViewer
+namespace APKViewer.Decoders
 {
 	public class DefaultAABDecoder: IFileDecoder
 	{

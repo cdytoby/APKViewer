@@ -253,10 +253,21 @@
 				FontWeight="Bold"
 				FontSize="40"
 				HorizontalAlignment="Center"
-				Margin="0,100,0,0"
+				Margin="0,80,0,0"
 				Visibility="{Binding Path=isNotDecoding, Mode=OneWay,
 					Converter={StaticResource booleanToVisibilityConverter}}"
 				/>
+
+            <Label
+                Content="{Binding localizedSupportFiles, Mode=OneWay}"
+                Foreground="White"
+                FontWeight="Bold"
+                FontSize="40"
+                HorizontalAlignment="Center"
+                Margin="0,200,0,0"
+                Visibility="{Binding Path=isNotDecoding, Mode=OneWay,
+					Converter={StaticResource booleanToVisibilityConverter}}"
+            />
 
 			<Image
 				VerticalAlignment="Center"

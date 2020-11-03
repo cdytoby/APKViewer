@@ -32,6 +32,7 @@ namespace APKViewer.Localize
 		public string Field_Feature_NotRequired { get; set; }
 
 		public string Msg_DragDropHere { get; set; }
+		public string Msg_SupportFile { get; set; }
 		public string Msg_JavaNotFound { get; set; }
 		public string Msg_JavaNotFound_AABFail { get; set; }
 		public string Msg_JavaNotFound_APKSignFail { get; set; }

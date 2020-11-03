@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using APKViewer.Localize;
 using APKViewer.Utility;
 
-namespace APKViewer
+namespace APKViewer.Decoders
 {
 	public class DefaultAPKDecoder: IFileDecoder
 	{
@@ -83,7 +83,7 @@ namespace APKViewer
 					" verify --verbose --print-certs" +
 					" \"" + targetFilePath.OriginalString + "\"",
 			};
-			string processResult = await ProcessExecuter.ExecuteProcess(psiAPKSigner);
+			string processResult = await ProcessExecuter.ExecuteProcess(psiAPKSigner, false, false);
 
 			dataModel.RawDumpSignature = processResult;
 			DesktopCMDAPKSignerUtil.ReadAPKSignature(dataModel, processResult);

@@ -22,6 +22,8 @@ namespace APKViewer
 		private IFileDecoder currentFileDecoder;
 
 		public LocalizeTextDataModel localizeModel => LocalizationCenter.currentDataModel;
+		public string localizedSupportFiles =>
+			string.Format(localizeModel.Msg_SupportFile, string.Join(",", decoderDict.Keys));
 
 		public PackageDataModel targetPackageData { get; protected set; }
 		public Uri fileLocation { get; protected set; }
@@ -111,6 +113,8 @@ namespace APKViewer
 			{
 				decoderDict.Add(StringConstant.FileExtension_IPA, newIpaDecoder);
 			}
+
+			OnPropertyChanged(nameof(localizedSupportFiles));
 		}
 
 		public bool FileAllowed(string testFileName)

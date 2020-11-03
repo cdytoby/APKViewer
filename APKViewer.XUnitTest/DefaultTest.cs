@@ -1,6 +1,7 @@
 using APKViewer.Utility;
 using System;
 using System.IO;
+using APKViewer.Decoders;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;

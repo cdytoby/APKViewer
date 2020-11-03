@@ -11,7 +11,7 @@ using Claunia.PropertyList;
 using APKViewer.Localize;
 using APKViewer.Utility;
 
-namespace APKViewer
+namespace APKViewer.Decoders
 {
 	public class DefaultIPADecoder : IFileDecoder
 	{
