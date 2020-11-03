@@ -1,12 +1,12 @@
 # APKViewer
 
-A simple APK and AAB file viewer, developed using .Net Standard and .Net Framework.
+A simple apk file viewer, developed using .Net Standard and .Net Framework.
 
 ![alt text](/ReadmeAssets/ScreenShot_Main.png)
 
 ### Features
 
-- Support apk and aab file
+- Support apk, aab and ipa file (ipa is not yet fully supported)
 - Drag and Drop file to open it
 - View basic information incl. package name, icon, version, sdk, etc
 - View Sign signiture
