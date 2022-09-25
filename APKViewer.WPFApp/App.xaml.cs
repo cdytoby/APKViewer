@@ -7,25 +7,60 @@ using System.Linq;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Navigation;
+using APKViewer.Decoders;
+using APKViewer.WPFApp.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace APKViewer.WPFApp
 {
 	public partial class App: Application
 	{
-		protected override void OnStartup(StartupEventArgs e)
+		private IHostBuilder hostBuilder;
+		private IHost host;
+		// private ILogger logger;
+
+		public App()
 		{
-			base.OnStartup(e);
-			LoadAndroidSDKTable();
-			LoadLocalization();
+			hostBuilder = new HostBuilder()
+				.ConfigureServices(DiConfigure);
 		}
 
-		private static void LoadAndroidSDKTable()
+		private void DiConfigure(IServiceCollection serviceCollection)
+		{
+			serviceCollection.AddSingleton<ICmdPathProvider, WindowsCmdPath>();
+			serviceCollection.AddSingleton<IApkInstaller, WindowsApkInstaller>();
+			serviceCollection.AddSingleton<IFileDecoder, DefaultAPKDecoder>();
+			serviceCollection.AddSingleton<IFileDecoder, DefaultAABDecoder>();
+			serviceCollection.AddSingleton<IFileDecoder, DefaultIPADecoder>();
+			serviceCollection.AddSingleton<AndroidSDKData>();
+			serviceCollection.AddSingleton<IMessageBoxService, WindowsMessageBox>();
+			serviceCollection.AddSingleton<IOpenRawDialogService, WindowsRawDataDialog>();
+
+			serviceCollection.AddSingleton<MainWindowViewModel>();
+			serviceCollection.AddSingleton<MainWindow>();
+		}
+
+		private async void App_OnStartup(object sender, StartupEventArgs e)
+		{
+			host = hostBuilder.Build();
+			await host.StartAsync();
+			
+			LoadAndroidSDKTable(host.Services);
+			LoadLocalization();
+			
+			MainWindow mainWindow = host.Services.GetService<MainWindow>();
+			mainWindow.Show();
+		}
+
+		private void LoadAndroidSDKTable(IServiceProvider services)
 		{
 			Console.WriteLine("App.LoadAndroidSDKTable() Ready to load sdk table from current directory.");
 			string filePath = Path.Combine(AppUtility.GetCurrentExePath(), AndroidSDKData.FILE_ANDROIDTABLE);
 			if (File.Exists(filePath))
 			{
-				AndroidSDKData.SetTableFullString(File.ReadAllText(filePath));
+				services.GetService<AndroidSDKData>().SetTableFullString(File.ReadAllText(filePath));
 			}
 		}
 
@@ -56,6 +91,11 @@ namespace APKViewer.WPFApp
 			}
 
 			LocalizationCenter.SetLocalizationData(langCode, File.ReadAllText(localFilePath));
+		}
+
+		private async void App_OnExit(object sender, ExitEventArgs e)
+		{
+			await host.StopAsync();
 		}
 	}
 }

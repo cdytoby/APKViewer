@@ -34,7 +34,7 @@ namespace APKViewer.XUnitTest
 		[Fact]
 		public void RequestAndroidSDKTable()
 		{
-			string result = AndroidSDKData.RequestTableJsonString();
+			string result = AndroidSDKData.RequestDefaultAndroidTableJsonString();
 			_output.WriteLine(result);
 			File.WriteAllText(Path.Combine(workingDirectory, jsonFile), result);
 		}

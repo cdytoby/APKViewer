@@ -7,30 +7,24 @@ using System.Text;
 
 namespace APKViewer
 {
-	public static class AndroidSDKData
+	public class AndroidSDKData
 	{
-		private const string DEFAULT_SDK_RESOURCE_NAME = "APKViewer.SDKData.DefaultData.json";
 		public const string FILE_ANDROIDTABLE = "AndroidVersionTable.json";
+		private const string DEFAULT_SDK_RESOURCE_NAME = "APKViewer.SDKData.DefaultData.json";
 
-		private static Dictionary<int, (string, string)> tableDictionary = new Dictionary<int, (string, string)>();
+		private Dictionary<int, (string, string)> tableDictionary = new();
 
-		static AndroidSDKData()
+		public AndroidSDKData()
 		{
-			Assembly assembly = Assembly.GetExecutingAssembly();
-
-			using (Stream stream = assembly.GetManifestResourceStream(DEFAULT_SDK_RESOURCE_NAME))
-			using (StreamReader reader = new StreamReader(stream))
-			{
-				SetTableFullString(reader.ReadToEnd());
-			}
+			SetTableFullString(RequestDefaultAndroidTableJsonString());
 		}
 
-		public static void SetTableFullString(string sourceTable)
+		public void SetTableFullString(string sourceTable)
 		{
 			tableDictionary = JsonConvert.DeserializeObject<Dictionary<int, (string, string)>>(sourceTable);
 		}
 
-		public static string GetFullString(string sdkStr)
+		public string GetFullString(string sdkStr)
 		{
 			if (string.IsNullOrWhiteSpace(sdkStr))
 				return string.Empty;
@@ -39,19 +33,17 @@ namespace APKViewer
 			if (!parseSuccess || sdkInt <= 0)
 				return string.Empty;
 			if (!tableDictionary.ContainsKey(sdkInt))
-				return "API " + sdkInt;
-			return "API " + sdkInt + " Android " + tableDictionary[sdkInt].Item1 + " " + tableDictionary[sdkInt].Item2;
+				return $"API {sdkInt}";
+			return $"API {sdkInt} Android {tableDictionary[sdkInt].Item1} {tableDictionary[sdkInt].Item2}";
 		}
 
-		public static string RequestTableJsonString()
+		public static string RequestDefaultAndroidTableJsonString()
 		{
 			Assembly assembly = Assembly.GetExecutingAssembly();
 
-			using (Stream stream = assembly.GetManifestResourceStream(DEFAULT_SDK_RESOURCE_NAME))
-			using (StreamReader reader = new StreamReader(stream))
-			{
-				return reader.ReadToEnd();
-			}
+			using Stream stream = assembly.GetManifestResourceStream(DEFAULT_SDK_RESOURCE_NAME);
+			using StreamReader reader = new StreamReader(stream);
+			return reader.ReadToEnd();
 		}
 	}
 }

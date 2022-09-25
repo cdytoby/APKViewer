@@ -7,26 +7,23 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using APKViewer.Decoders;
 
 namespace APKViewer.WPFApp
 {
-	public partial class MainWindow: Window, IOpenRawDialogService, IMessageBoxService
+	public partial class MainWindow: Window
 	{
-		private MainWindowViewModel bindedViewModel;
+		public MainWindowViewModel viewModel { get; }
+		
 		private BindingExpression overlayVisibilityBindingExpress;
 		private ICmdPathProvider cmdPathProvider;
 
-		public MainWindow()
+		public MainWindow(MainWindowViewModel newViewModel, ICmdPathProvider newCmdProvider)
 		{
+			viewModel = newViewModel;
 			InitializeComponent();
-			bindedViewModel = (MainWindowViewModel)DataContext;
-			cmdPathProvider = new WindowsCmdPath();
+			
+			cmdPathProvider = newCmdProvider;
 			//decoder.statusReportEvent += ShowTestLog;
-			bindedViewModel.SetDecoder(new DefaultAPKDecoder(cmdPathProvider), new DefaultAABDecoder(cmdPathProvider), new DefaultIPADecoder());
-			bindedViewModel.SetDialogService(this);
-			bindedViewModel.SetInstaller(new WindowsApkInstaller(cmdPathProvider));
-			bindedViewModel.SetMessageDialog(this);
 			overlayVisibilityBindingExpress = DropOverlay.GetBindingExpression(Grid.VisibilityProperty);
 
 			OpenFileArgProcess();
@@ -46,7 +43,7 @@ namespace APKViewer.WPFApp
 				Debug.WriteLine("MainWindow.OpenFileArgProcess(), Get arg= " + arg);
 			}
 			if (envArgs.Length > 1)
-				bindedViewModel.SetNewFile(new Uri(envArgs[1]));
+				viewModel.SetNewFile(new Uri(envArgs[1]));
 		}
 
 		private void FileDrop(object sender, DragEventArgs e)
@@ -59,9 +56,9 @@ namespace APKViewer.WPFApp
 				{
 					foreach (string fileName in files)
 					{
-						if (bindedViewModel.FileAllowed(fileName))
+						if (viewModel.FileAllowed(fileName))
 						{
-							bindedViewModel.SetNewFile(new Uri(fileName));
+							viewModel.SetNewFile(new Uri(fileName));
 							break;
 						}
 					}
@@ -79,18 +76,6 @@ namespace APKViewer.WPFApp
 		private void FileDragLeave(object sender, DragEventArgs e)
 		{
 			DropOverlay.SetBinding(Grid.VisibilityProperty, overlayVisibilityBindingExpress.ParentBinding);
-		}
-
-		public void OpenViewRawDialog()
-		{
-			RawDataDialog dialog = new RawDataDialog(bindedViewModel);
-			dialog.ShowDialog();
-		}
-
-		public bool OpenDialog(string message)
-		{
-			MessageBoxResult result = MessageBox.Show(message, String.Empty, MessageBoxButton.OK);
-			return result == MessageBoxResult.Yes || result == MessageBoxResult.OK;
 		}
 	}
 }

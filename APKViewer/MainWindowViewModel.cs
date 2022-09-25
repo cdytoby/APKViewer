@@ -17,6 +17,7 @@ namespace APKViewer
 		private IApkInstaller apkInstaller;
 		private IOpenRawDialogService dialogService;
 		private IMessageBoxService messageBoxService;
+		private AndroidSDKData sdkData;
 
 		private Dictionary<string, IFileDecoder> decoderDict;
 		private IFileDecoder currentFileDecoder;
@@ -25,40 +26,53 @@ namespace APKViewer
 		public string localizedSupportFiles =>
 			string.Format(localizeModel.Msg_SupportFile, string.Join(",", decoderDict.Keys));
 
-		public PackageDataModel targetPackageData { get; protected set; }
-		public Uri fileLocation { get; protected set; }
-		public string fileExtension { get; protected set; }
-		public bool isDecoding { get; protected set; }
+		public PackageDataModel targetPackageData { get; private set; }
+		public Uri fileLocation { get; private set; }
+		public string fileExtension { get; private set; }
+		public bool isDecoding { get; private set; }
 		public bool isNotDecoding => !isDecoding;
-		public bool isInstalling { get; protected set; }
+		public bool isInstalling { get; private set; }
 
 		public bool isDataEmpty => targetPackageData == null;
 
 		public string AppName => targetPackageData?.AppName;
 		public string AppVersion => GetVersionString();
 		public string PackageName => targetPackageData?.PackageName;
+
 		public string minSDK
 		{
 			get
 			{
-				if (fileExtension.Equals(StringConstant.FileExtension_APK) ||
-					fileExtension.Equals(StringConstant.FileExtension_AAB))
-					return AndroidSDKData.GetFullString(targetPackageData?.MinSDKCode);
-				else
-					return targetPackageData.MinSDKCode;
+				switch (fileExtension)
+				{
+					case null:
+						return string.Empty;
+					case StringConstant.FileExtension_APK:
+					case StringConstant.FileExtension_AAB:
+						return sdkData.GetFullString(targetPackageData?.MinSDKCode);
+					default:
+						return targetPackageData?.MinSDKCode;
+				}
 			}
 		}
+
 		public string maxSDK
 		{
 			get
 			{
-				if (fileExtension.Equals(StringConstant.FileExtension_APK) ||
-					fileExtension.Equals(StringConstant.FileExtension_AAB))
-					return AndroidSDKData.GetFullString(targetPackageData?.MaxSDKCode);
-				else
-					return targetPackageData.MaxSDKCode;
+				switch (fileExtension)
+				{
+					case null:
+						return string.Empty;
+					case StringConstant.FileExtension_APK:
+					case StringConstant.FileExtension_AAB:
+						return sdkData.GetFullString(targetPackageData?.MaxSDKCode);
+					default:
+						return targetPackageData?.MaxSDKCode;
+				}
 			}
 		}
+
 		public string screenSize => StringGroupToString(targetPackageData?.ScreenSize, false);
 		public string densities => StringGroupToString(targetPackageData?.Densities, false);
 		public string architecture => StringGroupToString(targetPackageData?.Architecture, false);
@@ -72,20 +86,43 @@ namespace APKViewer
 		public byte[] iconPngByte => targetPackageData?.MaxIconContent;
 
 		private ObservableCollection<string> m_appNameList;
-		public string selectedAppName { get; protected set; }
+		public string selectedAppName { get; private set; }
 		public ObservableCollection<string> appNameList => GetAppNameList();
 
 		public string rawBadging => targetPackageData?.RawDumpBadging;
 		public string rawSignature => targetPackageData?.RawDumpSignature;
 
-		public Command openPlayStore => new Command(OpenGooglePlayStore, CanExecutionActionBase);
-		public Command openRawView => new Command(OpenRawViewDialog, CanExecutionActionBase);
-		public Command installApk => new Command(InstallApk, CanInstallApk);
+		public Command openPlayStore => new(OpenGooglePlayStore, CanExecutionActionBase);
+		public Command openRawView => new(OpenRawViewDialog, CanExecutionActionBase);
+		public Command installApk => new(InstallApk, CanInstallApk);
 
-		public MainWindowViewModel()
+		public MainWindowViewModel(IEnumerable<IFileDecoder> availableFileDecoders, IApkInstaller newInstaller,
+			AndroidSDKData newSdkData, IOpenRawDialogService newService, IMessageBoxService newMessageBoxService)
 		{
 			m_appNameList = new ObservableCollection<string>();
+
+			sdkData = newSdkData;
+			dialogService = newService;
+			messageBoxService = newMessageBoxService;
+
 			decoderDict = new Dictionary<string, IFileDecoder>();
+			if (availableFileDecoders != null)
+			{
+				foreach (IFileDecoder fileDecoder in availableFileDecoders)
+				{
+					foreach (string fileType in fileDecoder.acceptedFileType)
+					{
+						if (!string.IsNullOrEmpty(fileType))
+						{
+							decoderDict.Add(fileType, fileDecoder);
+						}
+
+					}
+				}
+			}
+
+			apkInstaller = newInstaller;
+			apkInstaller.installFinishedEvent += ApkInstallFinished;
 			//SetupMockupDataModel();
 		}
 
@@ -99,24 +136,6 @@ namespace APKViewer
 			targetPackageData.AppNameLangDict.Add("key4", "value4");
 		}
 
-		public void SetDecoder(IFileDecoder newApkDecoder, IFileDecoder newAabDecoder, IFileDecoder newIpaDecoder)
-		{
-			if (newApkDecoder != null)
-			{
-				decoderDict.Add(StringConstant.FileExtension_APK, newApkDecoder);
-			}
-			if (newAabDecoder != null)
-			{
-				decoderDict.Add(StringConstant.FileExtension_AAB, newAabDecoder);
-			}
-			if (newIpaDecoder != null)
-			{
-				decoderDict.Add(StringConstant.FileExtension_IPA, newIpaDecoder);
-			}
-
-			OnPropertyChanged(nameof(localizedSupportFiles));
-		}
-
 		public bool FileAllowed(string testFileName)
 		{
 			foreach (string _ext in decoderDict.Keys)
@@ -125,22 +144,6 @@ namespace APKViewer
 					return true;
 			}
 			return false;
-		}
-
-		public void SetInstaller(IApkInstaller newInstaller)
-		{
-			apkInstaller = newInstaller;
-			apkInstaller.installFinishedEvent += ApkInstallFinished;
-		}
-
-		public void SetDialogService(IOpenRawDialogService newService)
-		{
-			dialogService = newService;
-		}
-
-		public void SetMessageDialog(IMessageBoxService newMessageBoxService)
-		{
-			messageBoxService = newMessageBoxService;
 		}
 
 		private void ApkInstallFinished(bool success, string message)
@@ -220,7 +223,7 @@ namespace APKViewer
 							return x.Value;
 						return x.Key + ": " + x.Value;
 					}
-					);
+				);
 				foreach (string s in newStringIEnum)
 				{
 					m_appNameList.Add(s);
@@ -237,7 +240,7 @@ namespace APKViewer
 
 		private void OpenRawViewDialog()
 		{
-			dialogService?.OpenViewRawDialog();
+			dialogService?.OpenViewRawDialog(this);
 		}
 
 		private void OpenGooglePlayStore()
@@ -268,16 +271,15 @@ namespace APKViewer
 			if (stringIEnum == null)
 				return string.Empty;
 			string result = string.Empty;
-			using (IEnumerator<string> enumerator = stringIEnum.GetEnumerator())
+			using IEnumerator<string> enumerator = stringIEnum.GetEnumerator();
+
+			bool last = !enumerator.MoveNext();
+			while (!last)
 			{
-				bool last = !enumerator.MoveNext();
-				while (!last)
-				{
-					result += enumerator.Current;
-					last = !enumerator.MoveNext();
-					if (!last)
-						result += newLine ? Environment.NewLine : " ";
-				}
+				result += enumerator.Current;
+				last = !enumerator.MoveNext();
+				if (!last)
+					result += newLine ? Environment.NewLine : " ";
 			}
 			//foreach (string line in stringIEnum)
 			//{

@@ -1,4 +1,3 @@
-
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -13,6 +12,7 @@ namespace APKViewer.Decoders
 		private Uri targetFilePath;
 		private PackageDataModel dataModel;
 
+		public string[] acceptedFileType { get; } = { "apk" };
 		public event Action decodeProgressCallbackEvent;
 
 		public DefaultAPKDecoder(ICmdPathProvider newPathProvider)
