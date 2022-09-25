@@ -17,6 +17,7 @@ namespace APKViewer
 		private IApkInstaller apkInstaller;
 		private IOpenRawDialogService dialogService;
 		private IMessageBoxService messageBoxService;
+		private AndroidSDKData sdkData;
 
 		private Dictionary<string, IFileDecoder> decoderDict;
 		private IFileDecoder currentFileDecoder;
@@ -44,7 +45,7 @@ namespace APKViewer
 			{
 				if (fileExtension.Equals(StringConstant.FileExtension_APK) ||
 					fileExtension.Equals(StringConstant.FileExtension_AAB))
-					return AndroidSDKData.GetFullString(targetPackageData?.MinSDKCode);
+					return sdkData.GetFullString(targetPackageData?.MinSDKCode);
 				else
 					return targetPackageData.MinSDKCode;
 			}
@@ -56,7 +57,7 @@ namespace APKViewer
 			{
 				if (fileExtension.Equals(StringConstant.FileExtension_APK) ||
 					fileExtension.Equals(StringConstant.FileExtension_AAB))
-					return AndroidSDKData.GetFullString(targetPackageData?.MaxSDKCode);
+					return sdkData.GetFullString(targetPackageData?.MaxSDKCode);
 				else
 					return targetPackageData.MaxSDKCode;
 			}
@@ -75,7 +76,7 @@ namespace APKViewer
 		public byte[] iconPngByte => targetPackageData?.MaxIconContent;
 
 		private ObservableCollection<string> m_appNameList;
-		public string selectedAppName { get; protected set; }
+		public string selectedAppName { get; private set; }
 		public ObservableCollection<string> appNameList => GetAppNameList();
 
 		public string rawBadging => targetPackageData?.RawDumpBadging;
@@ -85,10 +86,12 @@ namespace APKViewer
 		public Command openRawView => new Command(OpenRawViewDialog, CanExecutionActionBase);
 		public Command installApk => new Command(InstallApk, CanInstallApk);
 
-		public MainWindowViewModel(IEnumerable<IFileDecoder> availableFileDecoders, IApkInstaller newInstaller)
+		public MainWindowViewModel(IEnumerable<IFileDecoder> availableFileDecoders, 
+			IApkInstaller newInstaller, AndroidSDKData newSdkData)
 		{
 			m_appNameList = new ObservableCollection<string>();
-			
+
+			sdkData = newSdkData;
 			decoderDict = new Dictionary<string, IFileDecoder>();
 			if (availableFileDecoders != null)
 			{

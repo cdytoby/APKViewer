@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using APKViewer.Decoders;
 
 namespace APKViewer.WPFApp
 {
 	public partial class MainWindow: Window, IOpenRawDialogService, IMessageBoxService
 	{
-		public MainWindowViewModel viewModel { get; private set; }
+		public MainWindowViewModel viewModel { get; }
 		
 		private BindingExpression overlayVisibilityBindingExpress;
 		private ICmdPathProvider cmdPathProvider;

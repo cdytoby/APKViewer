@@ -33,6 +33,7 @@ namespace APKViewer.WPFApp
 			serviceCollection.AddSingleton<IFileDecoder, DefaultAPKDecoder>();
 			serviceCollection.AddSingleton<IFileDecoder, DefaultAABDecoder>();
 			serviceCollection.AddSingleton<IFileDecoder, DefaultIPADecoder>();
+			serviceCollection.AddSingleton<AndroidSDKData>();
 
 			serviceCollection.AddSingleton<MainWindowViewModel>();
 			serviceCollection.AddSingleton<MainWindow>();
@@ -42,21 +43,21 @@ namespace APKViewer.WPFApp
 		{
 			host = hostBuilder.Build();
 			await host.StartAsync();
-
-			LoadAndroidSDKTable();
+			
+			LoadAndroidSDKTable(host.Services);
 			LoadLocalization();
 			
 			MainWindow mainWindow = host.Services.GetService<MainWindow>();
 			mainWindow.Show();
 		}
 
-		private static void LoadAndroidSDKTable()
+		private void LoadAndroidSDKTable(IServiceProvider services)
 		{
 			Console.WriteLine("App.LoadAndroidSDKTable() Ready to load sdk table from current directory.");
 			string filePath = Path.Combine(AppUtility.GetCurrentExePath(), AndroidSDKData.FILE_ANDROIDTABLE);
 			if (File.Exists(filePath))
 			{
-				AndroidSDKData.SetTableFullString(File.ReadAllText(filePath));
+				services.GetService<AndroidSDKData>().SetTableFullString(File.ReadAllText(filePath));
 			}
 		}
 
