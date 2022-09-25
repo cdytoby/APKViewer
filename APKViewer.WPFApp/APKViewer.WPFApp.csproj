@@ -8,6 +8,16 @@
         <LangVersion>10</LangVersion>
         <AssemblyName>APKViewer.WPFApp</AssemblyName>
         <RootNamespace>APKViewer.WPFApp</RootNamespace>
+        <RunPostBuildEvent>Always</RunPostBuildEvent>
+        <ApplicationIcon>ImageAssets\AppIcon.ico</ApplicationIcon>
+        <IsPackable>false</IsPackable>
+        <PackageVersion>1.7.0</PackageVersion>
+        <Authors>cdytoby</Authors>
+        <AssemblyVersion>1.7.0</AssemblyVersion>
+        <FileVersion>1.7.0</FileVersion>
+        <Product>APKViewer</Product>
+        <PackageProjectUrl>https://github.com/cdytoby/APKViewer</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/cdytoby/APKViewer</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
@@ -26,11 +36,15 @@
       <PackageReference Include="PropertyChanged.Fody" Version="4.0.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Resource Include="ImageAssets\Loading.png" />
+    </ItemGroup>
+
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
       <Exec Command="XCOPY /S /Y /R &quot;$(SolutionDir)\OtherAssets\*&quot; &quot;$(TargetDir)&quot;&#xA;XCOPY /Y /R &quot;$(SolutionDir)\ExternalTools\Windows\*&quot; &quot;$(TargetDir)\ExternalTools\&quot;" />
     </Target>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-      <Exec Command="XCOPY /S /Y /R &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\Release\&quot;&#xA;MOVE &quot;$(SolutionDir)\Release\$(TargetFileName)&quot; &quot;$(SolutionDir)\Release\APKViewer.exe&quot;" />
+      <Exec Command="XCOPY /S /Y /R &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\Release\&quot;&#xA;MOVE &quot;$(SolutionDir)\Release\$(TargetName).exe&quot; &quot;$(SolutionDir)\Release\APKViewer.exe&quot;" />
     </Target>
 </Project>
