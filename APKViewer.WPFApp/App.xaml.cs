@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Navigation;
 using APKViewer.Decoders;
+using APKViewer.WPFApp.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -34,6 +35,8 @@ namespace APKViewer.WPFApp
 			serviceCollection.AddSingleton<IFileDecoder, DefaultAABDecoder>();
 			serviceCollection.AddSingleton<IFileDecoder, DefaultIPADecoder>();
 			serviceCollection.AddSingleton<AndroidSDKData>();
+			serviceCollection.AddSingleton<IMessageBoxService, WindowsMessageBox>();
+			serviceCollection.AddSingleton<IOpenRawDialogService, WindowsRawDataDialog>();
 
 			serviceCollection.AddSingleton<MainWindowViewModel>();
 			serviceCollection.AddSingleton<MainWindow>();

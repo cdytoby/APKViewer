@@ -6,6 +6,6 @@ namespace APKViewer
 {
     public interface IOpenRawDialogService
     {
-		void OpenViewRawDialog();
+		void OpenViewRawDialog(MainWindowViewModel viewModel);
     }
 }
