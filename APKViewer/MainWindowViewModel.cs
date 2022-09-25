@@ -37,6 +37,7 @@ namespace APKViewer
 		public string AppName => targetPackageData?.AppName;
 		public string AppVersion => GetVersionString();
 		public string PackageName => targetPackageData?.PackageName;
+
 		public string minSDK
 		{
 			get
@@ -48,6 +49,7 @@ namespace APKViewer
 					return targetPackageData.MinSDKCode;
 			}
 		}
+
 		public string maxSDK
 		{
 			get
@@ -59,6 +61,7 @@ namespace APKViewer
 					return targetPackageData.MaxSDKCode;
 			}
 		}
+
 		public string screenSize => StringGroupToString(targetPackageData?.ScreenSize, false);
 		public string densities => StringGroupToString(targetPackageData?.Densities, false);
 		public string architecture => StringGroupToString(targetPackageData?.Architecture, false);
@@ -82,10 +85,28 @@ namespace APKViewer
 		public Command openRawView => new Command(OpenRawViewDialog, CanExecutionActionBase);
 		public Command installApk => new Command(InstallApk, CanInstallApk);
 
-		public MainWindowViewModel()
+		public MainWindowViewModel(IEnumerable<IFileDecoder> availableFileDecoders, IApkInstaller newInstaller)
 		{
 			m_appNameList = new ObservableCollection<string>();
+			
 			decoderDict = new Dictionary<string, IFileDecoder>();
+			if (availableFileDecoders != null)
+			{
+				foreach (IFileDecoder fileDecoder in availableFileDecoders)
+				{
+					foreach (string fileType in fileDecoder.acceptedFileType)
+					{
+						if (!string.IsNullOrEmpty(fileType))
+						{
+							decoderDict.Add(fileType, fileDecoder);
+						}
+
+					}
+				}
+			}
+			
+			apkInstaller = newInstaller;
+			apkInstaller.installFinishedEvent += ApkInstallFinished;
 			//SetupMockupDataModel();
 		}
 
@@ -99,24 +120,6 @@ namespace APKViewer
 			targetPackageData.AppNameLangDict.Add("key4", "value4");
 		}
 
-		public void SetDecoder(IFileDecoder newApkDecoder, IFileDecoder newAabDecoder, IFileDecoder newIpaDecoder)
-		{
-			if (newApkDecoder != null)
-			{
-				decoderDict.Add(StringConstant.FileExtension_APK, newApkDecoder);
-			}
-			if (newAabDecoder != null)
-			{
-				decoderDict.Add(StringConstant.FileExtension_AAB, newAabDecoder);
-			}
-			if (newIpaDecoder != null)
-			{
-				decoderDict.Add(StringConstant.FileExtension_IPA, newIpaDecoder);
-			}
-
-			OnPropertyChanged(nameof(localizedSupportFiles));
-		}
-
 		public bool FileAllowed(string testFileName)
 		{
 			foreach (string _ext in decoderDict.Keys)
@@ -125,12 +128,6 @@ namespace APKViewer
 					return true;
 			}
 			return false;
-		}
-
-		public void SetInstaller(IApkInstaller newInstaller)
-		{
-			apkInstaller = newInstaller;
-			apkInstaller.installFinishedEvent += ApkInstallFinished;
 		}
 
 		public void SetDialogService(IOpenRawDialogService newService)
@@ -220,7 +217,7 @@ namespace APKViewer
 							return x.Value;
 						return x.Key + ": " + x.Value;
 					}
-					);
+				);
 				foreach (string s in newStringIEnum)
 				{
 					m_appNameList.Add(s);
@@ -268,16 +265,15 @@ namespace APKViewer
 			if (stringIEnum == null)
 				return string.Empty;
 			string result = string.Empty;
-			using (IEnumerator<string> enumerator = stringIEnum.GetEnumerator())
+			using IEnumerator<string> enumerator = stringIEnum.GetEnumerator();
+			
+			bool last = !enumerator.MoveNext();
+			while (!last)
 			{
-				bool last = !enumerator.MoveNext();
-				while (!last)
-				{
-					result += enumerator.Current;
-					last = !enumerator.MoveNext();
-					if (!last)
-						result += newLine ? Environment.NewLine : " ";
-				}
+				result += enumerator.Current;
+				last = !enumerator.MoveNext();
+				if (!last)
+					result += newLine ? Environment.NewLine : " ";
 			}
 			//foreach (string line in stringIEnum)
 			//{

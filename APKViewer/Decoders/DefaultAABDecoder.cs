@@ -13,6 +13,7 @@ namespace APKViewer.Decoders
 		private Uri targetFilePath;
 		private PackageDataModel dataModel;
 
+		public string[] acceptedFileType { get; } = { "aab" };
 		public event Action decodeProgressCallbackEvent;
 
 		public DefaultAABDecoder(ICmdPathProvider newPathProvider)

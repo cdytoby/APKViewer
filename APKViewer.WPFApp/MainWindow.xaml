@@ -16,7 +16,8 @@
 	AllowDrop="True"
 	DragDrop.Drop="FileDrop"
 	DragDrop.DragEnter="FileDragEnter"
-	DragDrop.DragLeave="FileDragLeave">
+	DragDrop.DragLeave="FileDragLeave"
+	DataContext="{Binding RelativeSource={RelativeSource Self}, Path=viewModel}">
 	<!--
 	
 	DragDrop.DragOver="FileDragEnter"
@@ -26,10 +27,6 @@
 		<ResourceDictionary
 			Source="DefaultStyle.xaml" />
 	</Window.Resources>
-
-	<Window.DataContext>
-		<data:MainWindowViewModel />
-	</Window.DataContext>
 
 	<Grid
 		Background="Transparent">
@@ -110,8 +107,7 @@
 						IsEditable="True"
 						IsReadOnly="True"
 						SelectedItem="{Binding selectedAppName, Mode=OneWay}"
-						ItemsSource="{Binding appNameList}"
-						/>
+						ItemsSource="{Binding appNameList}" />
 				</StackPanel>
 			</Grid>
 
@@ -212,7 +208,7 @@
 					Content="{Binding localizeModel.Head_Hash_SHA1, Mode=OneWay}" />
 				<TextBox
 					Style="{StaticResource Textbox_FieldDefault}"
-					Text="{Binding hashString, Mode=OneWay}"/>
+					Text="{Binding hashString, Mode=OneWay}" />
 			</DockPanel>
 		</StackPanel>
 
@@ -255,19 +251,17 @@
 				HorizontalAlignment="Center"
 				Margin="0,80,0,0"
 				Visibility="{Binding Path=isNotDecoding, Mode=OneWay,
-					Converter={StaticResource booleanToVisibilityConverter}}"
-				/>
+					Converter={StaticResource booleanToVisibilityConverter}}" />
 
-            <Label
-                Content="{Binding localizedSupportFiles, Mode=OneWay}"
-                Foreground="White"
-                FontWeight="Bold"
-                FontSize="40"
-                HorizontalAlignment="Center"
-                Margin="0,200,0,0"
-                Visibility="{Binding Path=isNotDecoding, Mode=OneWay,
-					Converter={StaticResource booleanToVisibilityConverter}}"
-            />
+			<Label
+				Content="{Binding localizedSupportFiles, Mode=OneWay}"
+				Foreground="White"
+				FontWeight="Bold"
+				FontSize="40"
+				HorizontalAlignment="Center"
+				Margin="0,200,0,0"
+				Visibility="{Binding Path=isNotDecoding, Mode=OneWay,
+					Converter={StaticResource booleanToVisibilityConverter}}" />
 
 			<Image
 				VerticalAlignment="Center"

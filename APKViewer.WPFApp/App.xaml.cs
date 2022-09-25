@@ -7,16 +7,47 @@ using System.Linq;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Navigation;
+using APKViewer.Decoders;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace APKViewer.WPFApp
 {
 	public partial class App: Application
 	{
-		protected override void OnStartup(StartupEventArgs e)
+		private IHostBuilder hostBuilder;
+		private IHost host;
+		// private ILogger logger;
+
+		public App()
 		{
-			base.OnStartup(e);
+			hostBuilder = new HostBuilder()
+				.ConfigureServices(DiConfigure);
+		}
+
+		private void DiConfigure(IServiceCollection serviceCollection)
+		{
+			serviceCollection.AddSingleton<ICmdPathProvider, WindowsCmdPath>();
+			serviceCollection.AddSingleton<IApkInstaller, WindowsApkInstaller>();
+			serviceCollection.AddSingleton<IFileDecoder, DefaultAPKDecoder>();
+			serviceCollection.AddSingleton<IFileDecoder, DefaultAABDecoder>();
+			serviceCollection.AddSingleton<IFileDecoder, DefaultIPADecoder>();
+
+			serviceCollection.AddSingleton<MainWindowViewModel>();
+			serviceCollection.AddSingleton<MainWindow>();
+		}
+
+		private async void App_OnStartup(object sender, StartupEventArgs e)
+		{
+			host = hostBuilder.Build();
+			await host.StartAsync();
+
 			LoadAndroidSDKTable();
 			LoadLocalization();
+			
+			MainWindow mainWindow = host.Services.GetService<MainWindow>();
+			mainWindow.Show();
 		}
 
 		private static void LoadAndroidSDKTable()
@@ -56,6 +87,11 @@ namespace APKViewer.WPFApp
 			}
 
 			LocalizationCenter.SetLocalizationData(langCode, File.ReadAllText(localFilePath));
+		}
+
+		private async void App_OnExit(object sender, ExitEventArgs e)
+		{
+			await host.StopAsync();
 		}
 	}
 }

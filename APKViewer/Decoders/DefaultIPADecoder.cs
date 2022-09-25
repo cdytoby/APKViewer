@@ -18,6 +18,7 @@ namespace APKViewer.Decoders
 		private Uri targetFilePath;
 		private PackageDataModel dataModel;
 
+		public string[] acceptedFileType { get; } = { "ipa" };
 		public event Action decodeProgressCallbackEvent;
 
 		public void SetFilePath(Uri fileUri)

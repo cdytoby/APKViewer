@@ -13,20 +13,20 @@ namespace APKViewer.WPFApp
 {
 	public partial class MainWindow: Window, IOpenRawDialogService, IMessageBoxService
 	{
-		private MainWindowViewModel bindedViewModel;
+		public MainWindowViewModel viewModel { get; private set; }
+		
 		private BindingExpression overlayVisibilityBindingExpress;
 		private ICmdPathProvider cmdPathProvider;
 
-		public MainWindow()
+		public MainWindow(MainWindowViewModel newViewModel, ICmdPathProvider newCmdProvider)
 		{
+			viewModel = newViewModel;
 			InitializeComponent();
-			bindedViewModel = (MainWindowViewModel)DataContext;
-			cmdPathProvider = new WindowsCmdPath();
+			
+			cmdPathProvider = newCmdProvider;
 			//decoder.statusReportEvent += ShowTestLog;
-			bindedViewModel.SetDecoder(new DefaultAPKDecoder(cmdPathProvider), new DefaultAABDecoder(cmdPathProvider), new DefaultIPADecoder());
-			bindedViewModel.SetDialogService(this);
-			bindedViewModel.SetInstaller(new WindowsApkInstaller(cmdPathProvider));
-			bindedViewModel.SetMessageDialog(this);
+			viewModel.SetDialogService(this);
+			viewModel.SetMessageDialog(this);
 			overlayVisibilityBindingExpress = DropOverlay.GetBindingExpression(Grid.VisibilityProperty);
 
 			OpenFileArgProcess();
@@ -46,7 +46,7 @@ namespace APKViewer.WPFApp
 				Debug.WriteLine("MainWindow.OpenFileArgProcess(), Get arg= " + arg);
 			}
 			if (envArgs.Length > 1)
-				bindedViewModel.SetNewFile(new Uri(envArgs[1]));
+				viewModel.SetNewFile(new Uri(envArgs[1]));
 		}
 
 		private void FileDrop(object sender, DragEventArgs e)
@@ -59,9 +59,9 @@ namespace APKViewer.WPFApp
 				{
 					foreach (string fileName in files)
 					{
-						if (bindedViewModel.FileAllowed(fileName))
+						if (viewModel.FileAllowed(fileName))
 						{
-							bindedViewModel.SetNewFile(new Uri(fileName));
+							viewModel.SetNewFile(new Uri(fileName));
 							break;
 						}
 					}
@@ -83,7 +83,7 @@ namespace APKViewer.WPFApp
 
 		public void OpenViewRawDialog()
 		{
-			RawDataDialog dialog = new RawDataDialog(bindedViewModel);
+			RawDataDialog dialog = new RawDataDialog(viewModel);
 			dialog.ShowDialog();
 		}
 

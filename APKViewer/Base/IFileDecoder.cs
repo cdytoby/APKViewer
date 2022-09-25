@@ -7,6 +7,8 @@ namespace APKViewer
 {
     public interface IFileDecoder
     {
+		string[] acceptedFileType { get; }
+		
 		event Action decodeProgressCallbackEvent;
 
 		void SetFilePath(Uri fileUri);
